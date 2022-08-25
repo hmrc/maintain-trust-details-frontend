@@ -16,6 +16,7 @@
 
 package navigation
 
+import config.AppConfig
 import controllers.maintain.routes._
 import controllers.routes.SessionExpiredController
 import models.TrusteesBased._
@@ -24,10 +25,9 @@ import models.UserAnswers
 import pages.Page
 import pages.maintain._
 import play.api.mvc.Call
-
 import javax.inject.Inject
 
-class TrustDetailsNavigator @Inject()() extends Navigator {
+class TrustDetailsNavigator @Inject()(appConfig: AppConfig) extends Navigator {
 
   override def nextPage(page: Page, userAnswers: UserAnswers): Call = {
     routes()(page)(userAnswers)
@@ -40,7 +40,8 @@ class TrustDetailsNavigator @Inject()() extends Navigator {
   private def simpleNavigation(): PartialFunction[Page, UserAnswers => Call] = {
     case OwnsUkLandOrPropertyPage => _ => RecordedOnEeaRegisterController.onPageLoad()
     case BusinessRelationshipInUkPage => navigateAwayFromBusinessRelationshipInUkQuestion
-    case GoverningCountryPage => _ => AdministeredInUkController.onPageLoad()
+    case GoverningCountryPage => _ => routeToSchedule3aExempt()
+    case Schedule3aExemptYesNoPage => _ => AdministeredInUkController.onPageLoad()
     case AdministrationCountryPage => navigateToSetUpAfterSettlorDiedIfRegisteredWithDeceasedSettlor
     case HoldoverReliefClaimedPage | EfrbsStartDatePage => _ => firstQuestionAfterTrustTypeQuestions
     case WhyDeedOfVariationCreatedPage => _ => firstQuestionAfterTrustTypeQuestions
@@ -51,7 +52,7 @@ class TrustDetailsNavigator @Inject()() extends Navigator {
   private def conditionalNavigation(): PartialFunction[Page, UserAnswers => Call] = {
     case RecordedOnEeaRegisterPage => navigateAwayFromRecordedOnEeaRegisterQuestion
     case SetUpAfterSettlorDiedPage => navigateAwayFromSetUpAfterSettlorDiedQuestion
-    case GovernedByUkLawPage => yesNoNav(_, GovernedByUkLawPage, AdministeredInUkController.onPageLoad(), GoverningCountryController.onPageLoad())
+    case GovernedByUkLawPage => yesNoNav(_, GovernedByUkLawPage, routeToSchedule3aExempt(), GoverningCountryController.onPageLoad())
     case AdministeredInUkPage => ua => yesNoNav(ua, AdministeredInUkPage, navigateToSetUpAfterSettlorDiedIfRegisteredWithDeceasedSettlor(ua), AdministrationCountryController.onPageLoad())
     case TypeOfTrustPage => navigateAwayFromTypeOfTrustQuestion
     case EfrbsYesNoPage => yesNoNav(_, EfrbsYesNoPage, EfrbsStartDateController.onPageLoad(), firstQuestionAfterTrustTypeQuestions)
@@ -123,6 +124,14 @@ class TrustDetailsNavigator @Inject()() extends Navigator {
       case Some(NoTrusteesUkBased) => BusinessRelationshipInUkController.onPageLoad()
       case Some(InternationalAndUkBasedTrustees) => SettlorsUkBasedController.onPageLoad()
       case _ => SessionExpiredController.onPageLoad
+    }
+  }
+
+  private def routeToSchedule3aExempt() : Call = {
+    if (appConfig.schedule3aExemptEnabled) {
+      Schedule3aExemptYesNoController.onPageLoad()
+    } else {
+      AdministeredInUkController.onPageLoad()
     }
   }
 

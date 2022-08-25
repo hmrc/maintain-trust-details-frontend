@@ -17,14 +17,23 @@
 package navigation
 
 import base.SpecBase
+import config.AppConfig
 import models.TrusteesBased._
 import models.{DeedOfVariation, TypeOfTrust}
+import org.mockito.Mockito.when
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.maintain._
 
 class TrustDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks {
 
   private val navigator: TrustDetailsNavigator = injector.instanceOf[TrustDetailsNavigator]
+
+  private class Schedule3aExemptTest(schedule3aExemptEnabled: Boolean) {
+    val appConfig: AppConfig = mock[AppConfig]
+
+    when(appConfig.schedule3aExemptEnabled).thenReturn(schedule3aExemptEnabled)
+    val navigator = new TrustDetailsNavigator(appConfig)
+  }
 
   "TrustDetailsNavigator" when {
 
@@ -71,12 +80,24 @@ class TrustDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks {
       "Governed by UK law page" when {
         val page = GovernedByUkLawPage
 
-        "Yes -> Administered in the UK page" in {
-          val answers = baseAnswers
-            .set(page, true).success.value
+        "Schedule3aExempt toggle is off" when {
+          "Yes -> Administered in the UK page" in new Schedule3aExemptTest(false) {
+            private val answers = baseAnswers
+              .set(page, true).success.value
 
-          navigator.nextPage(page, answers)
-            .mustBe(controllers.maintain.routes.AdministeredInUkController.onPageLoad())
+            navigator.nextPage(page, answers)
+              .mustBe(controllers.maintain.routes.AdministeredInUkController.onPageLoad())
+          }
+        }
+
+        "Schedule3aExempt toggle is on" when {
+          "Yes -> Schedule3aExemptYesNo page" in new Schedule3aExemptTest(true) {
+            private val answers = baseAnswers
+              .set(page, true).success.value
+
+            navigator.nextPage(page, answers)
+              .mustBe(controllers.maintain.routes.Schedule3aExemptYesNoController.onPageLoad())
+          }
         }
 
         "No -> Governing country page" in {
@@ -93,9 +114,31 @@ class TrustDetailsNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks {
         }
       }
 
-      "Governing country page -> Administered in the UK page" in {
-        navigator.nextPage(GoverningCountryPage, baseAnswers)
-          .mustBe(controllers.maintain.routes.AdministeredInUkController.onPageLoad())
+      "Governing country page" when {
+        val page = GoverningCountryPage
+
+        "Schedule3aExempt toggle is off" when {
+          "Governing country page -> Administered in the UK page" in new Schedule3aExemptTest(false) {
+            navigator.nextPage(page, baseAnswers)
+              .mustBe(controllers.maintain.routes.AdministeredInUkController.onPageLoad())
+          }
+        }
+
+        "Schedule3aExempt toggle is on" when {
+          "Governing country page -> Schedule3aExemptYesNo page" in new Schedule3aExemptTest(true) {
+            navigator.nextPage(page, baseAnswers)
+              .mustBe(controllers.maintain.routes.Schedule3aExemptYesNoController.onPageLoad())
+          }
+        }
+      }
+
+      "Schedule3aExemptYesNo page" when {
+        val page = Schedule3aExemptYesNoPage
+
+        "Schedule3aExemptYesNo page -> Administered in the UK page" in {
+          navigator.nextPage(page, baseAnswers)
+            .mustBe(controllers.maintain.routes.AdministeredInUkController.onPageLoad())
+        }
       }
 
       "Administered in the UK page" when {

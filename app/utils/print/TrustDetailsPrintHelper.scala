@@ -35,6 +35,7 @@ class TrustDetailsPrintHelper @Inject()(answerRowConverter: AnswerRowConverter) 
         bound.dateQuestion(StartDatePage, "startDate", None, canEdit = false),
         bound.yesNoQuestion(GovernedByUkLawPage, "governedByUkLawYesNo", Some(GovernedByUkLawController.onPageLoad().url)),
         bound.countryQuestion(GoverningCountryPage, "governingCountry", Some(GoverningCountryController.onPageLoad().url)),
+        bound.yesNoQuestion(Schedule3aExemptYesNoPage, "schedule3aExemptYesNo", Some(Schedule3aExemptYesNoController.onPageLoad().url)),
         bound.yesNoQuestion(AdministeredInUkPage, "administeredInUkYesNo", Some(AdministeredInUkController.onPageLoad().url)),
         bound.countryQuestion(AdministrationCountryPage, "administrationCountry", Some(AdministrationCountryController.onPageLoad().url)),
         bound.yesNoQuestion(SetUpAfterSettlorDiedPage, "setUpAfterSettlorDiedYesNo", Some(SetUpAfterSettlorDiedController.onPageLoad().url)),
