@@ -44,7 +44,6 @@ class TrustDetailsPrintHelperSpec extends SpecBase {
           .set(StartDatePage, LocalDate.parse("2000-01-01")).success.value
           .set(GovernedByUkLawPage, false).success.value
           .set(GoverningCountryPage, "DE").success.value
-          .set(Schedule3aExemptYesNoPage, true).success.value
           .set(AdministeredInUkPage, false).success.value
           .set(AdministrationCountryPage, "FR").success.value
           .set(SetUpAfterSettlorDiedPage, false).success.value
@@ -64,6 +63,7 @@ class TrustDetailsPrintHelperSpec extends SpecBase {
           .set(SettlorBenefitsFromAssetsPage, false).success.value
           .set(ForPurposeOfSection218Page, true).success.value
           .set(AgentCreatedTrustPage, true).success.value
+          .set(Schedule3aExemptYesNoPage, true).success.value
 
         val result = printHelper(userAnswers)
 
@@ -74,7 +74,6 @@ class TrustDetailsPrintHelperSpec extends SpecBase {
             AnswerRow(messages("startDate.checkYourAnswersLabel"), Html("1 January 2000"), canEdit = false, changeUrl = None),
             AnswerRow(messages("governedByUkLawYesNo.checkYourAnswersLabel"), Html("No"), Some(GovernedByUkLawController.onPageLoad().url)),
             AnswerRow(messages("governingCountry.checkYourAnswersLabel"), Html("Germany"), Some(GoverningCountryController.onPageLoad().url)),
-            AnswerRow(messages("schedule3aExemptYesNo.checkYourAnswersLabel"), Html("Yes"), Some(Schedule3aExemptYesNoController.onPageLoad().url)),
             AnswerRow(messages("administeredInUkYesNo.checkYourAnswersLabel"), Html("No"), Some(AdministeredInUkController.onPageLoad().url)),
             AnswerRow(messages("administrationCountry.checkYourAnswersLabel"), Html("France"), Some(AdministrationCountryController.onPageLoad().url)),
             AnswerRow(messages("setUpAfterSettlorDiedYesNo.checkYourAnswersLabel"), Html("No"), Some(SetUpAfterSettlorDiedController.onPageLoad().url)),
@@ -93,7 +92,8 @@ class TrustDetailsPrintHelperSpec extends SpecBase {
             AnswerRow(messages("businessRelationshipInUkYesNo.checkYourAnswersLabel"), Html("Yes"), Some(BusinessRelationshipInUkController.onPageLoad().url)),
             AnswerRow(messages("settlorBenefitsFromAssetsYesNo.checkYourAnswersLabel"), Html("No"), Some(SettlorBenefitsFromAssetsController.onPageLoad().url)),
             AnswerRow(messages("forPurposeOfSection218YesNo.checkYourAnswersLabel"), Html("Yes"), Some(ForPurposeOfSection218Controller.onPageLoad().url)),
-            AnswerRow(messages("agentCreatedTrustYesNo.checkYourAnswersLabel"), Html("Yes"), Some(AgentCreatedTrustController.onPageLoad().url))
+            AnswerRow(messages("agentCreatedTrustYesNo.checkYourAnswersLabel"), Html("Yes"), Some(AgentCreatedTrustController.onPageLoad().url)),
+            AnswerRow(messages("schedule3aExemptYesNo.checkYourAnswersLabel"), Html("Yes"), Some(Schedule3aExemptYesNoController.onPageLoad().url))
           ),
           sectionKey = None
         )

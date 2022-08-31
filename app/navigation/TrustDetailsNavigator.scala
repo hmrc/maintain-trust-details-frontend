@@ -40,27 +40,27 @@ class TrustDetailsNavigator @Inject()(appConfig: AppConfig) extends Navigator {
   private def simpleNavigation(): PartialFunction[Page, UserAnswers => Call] = {
     case OwnsUkLandOrPropertyPage => _ => RecordedOnEeaRegisterController.onPageLoad()
     case BusinessRelationshipInUkPage => navigateAwayFromBusinessRelationshipInUkQuestion
-    case GoverningCountryPage => _ => routeToSchedule3aExempt()
-    case Schedule3aExemptYesNoPage => _ => AdministeredInUkController.onPageLoad()
+    case GoverningCountryPage => _ => AdministeredInUkController.onPageLoad()
+    case Schedule3aExemptYesNoPage => _ => CheckDetailsController.onPageLoad()
     case AdministrationCountryPage => navigateToSetUpAfterSettlorDiedIfRegisteredWithDeceasedSettlor
     case HoldoverReliefClaimedPage | EfrbsStartDatePage => _ => firstQuestionAfterTrustTypeQuestions
     case WhyDeedOfVariationCreatedPage => _ => firstQuestionAfterTrustTypeQuestions
     case CreatedUnderScotsLawPage => _ => PreviouslyResidentOffshoreController.onPageLoad()
-    case PreviouslyResidentOffshoreCountryPage | AgentCreatedTrustPage => _ => CheckDetailsController.onPageLoad()
+    case PreviouslyResidentOffshoreCountryPage | AgentCreatedTrustPage => _ => routeToSchedule3aExempt()
   }
 
   private def conditionalNavigation(): PartialFunction[Page, UserAnswers => Call] = {
     case RecordedOnEeaRegisterPage => navigateAwayFromRecordedOnEeaRegisterQuestion
     case SetUpAfterSettlorDiedPage => navigateAwayFromSetUpAfterSettlorDiedQuestion
-    case GovernedByUkLawPage => yesNoNav(_, GovernedByUkLawPage, routeToSchedule3aExempt(), GoverningCountryController.onPageLoad())
+    case GovernedByUkLawPage => yesNoNav(_, GovernedByUkLawPage, AdministeredInUkController.onPageLoad(), GoverningCountryController.onPageLoad())
     case AdministeredInUkPage => ua => yesNoNav(ua, AdministeredInUkPage, navigateToSetUpAfterSettlorDiedIfRegisteredWithDeceasedSettlor(ua), AdministrationCountryController.onPageLoad())
     case TypeOfTrustPage => navigateAwayFromTypeOfTrustQuestion
     case EfrbsYesNoPage => yesNoNav(_, EfrbsYesNoPage, EfrbsStartDateController.onPageLoad(), firstQuestionAfterTrustTypeQuestions)
     case WhereTrusteesBasedPage => navigateAwayFromWhereTrusteesBasedQuestion
     case SettlorsUkBasedPage => yesNoNav(_, SettlorsUkBasedPage, CreatedUnderScotsLawController.onPageLoad(), BusinessRelationshipInUkController.onPageLoad())
-    case PreviouslyResidentOffshorePage => yesNoNav(_, PreviouslyResidentOffshorePage, PreviouslyResidentOffshoreCountryController.onPageLoad(), CheckDetailsController.onPageLoad())
-    case SettlorBenefitsFromAssetsPage => yesNoNav(_, SettlorBenefitsFromAssetsPage, CheckDetailsController.onPageLoad(), ForPurposeOfSection218Controller.onPageLoad())
-    case ForPurposeOfSection218Page => yesNoNav(_, ForPurposeOfSection218Page, AgentCreatedTrustController.onPageLoad(), CheckDetailsController.onPageLoad())
+    case PreviouslyResidentOffshorePage => yesNoNav(_, PreviouslyResidentOffshorePage, PreviouslyResidentOffshoreCountryController.onPageLoad(),routeToSchedule3aExempt())
+    case SettlorBenefitsFromAssetsPage => yesNoNav(_, SettlorBenefitsFromAssetsPage, routeToSchedule3aExempt(), ForPurposeOfSection218Controller.onPageLoad())
+    case ForPurposeOfSection218Page => yesNoNav(_, ForPurposeOfSection218Page, AgentCreatedTrustController.onPageLoad(), routeToSchedule3aExempt())
   }
 
   private def navigateToSetUpAfterSettlorDiedIfRegisteredWithDeceasedSettlor(ua: UserAnswers): Call = {
@@ -131,7 +131,7 @@ class TrustDetailsNavigator @Inject()(appConfig: AppConfig) extends Navigator {
     if (appConfig.schedule3aExemptEnabled) {
       Schedule3aExemptYesNoController.onPageLoad()
     } else {
-      AdministeredInUkController.onPageLoad()
+      CheckDetailsController.onPageLoad()
     }
   }
 

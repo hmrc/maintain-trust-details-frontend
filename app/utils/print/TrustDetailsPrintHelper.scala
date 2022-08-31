@@ -35,7 +35,6 @@ class TrustDetailsPrintHelper @Inject()(answerRowConverter: AnswerRowConverter) 
         bound.dateQuestion(StartDatePage, "startDate", None, canEdit = false),
         bound.yesNoQuestion(GovernedByUkLawPage, "governedByUkLawYesNo", Some(GovernedByUkLawController.onPageLoad().url)),
         bound.countryQuestion(GoverningCountryPage, "governingCountry", Some(GoverningCountryController.onPageLoad().url)),
-        bound.yesNoQuestion(Schedule3aExemptYesNoPage, "schedule3aExemptYesNo", Some(Schedule3aExemptYesNoController.onPageLoad().url)),
         bound.yesNoQuestion(AdministeredInUkPage, "administeredInUkYesNo", Some(AdministeredInUkController.onPageLoad().url)),
         bound.countryQuestion(AdministrationCountryPage, "administrationCountry", Some(AdministrationCountryController.onPageLoad().url)),
         bound.yesNoQuestion(SetUpAfterSettlorDiedPage, "setUpAfterSettlorDiedYesNo", Some(SetUpAfterSettlorDiedController.onPageLoad().url)),
@@ -54,7 +53,8 @@ class TrustDetailsPrintHelper @Inject()(answerRowConverter: AnswerRowConverter) 
         bound.yesNoQuestion(BusinessRelationshipInUkPage, "businessRelationshipInUkYesNo", Some(BusinessRelationshipInUkController.onPageLoad().url)),
         bound.yesNoQuestion(SettlorBenefitsFromAssetsPage, "settlorBenefitsFromAssetsYesNo", Some(SettlorBenefitsFromAssetsController.onPageLoad().url)),
         bound.yesNoQuestion(ForPurposeOfSection218Page, "forPurposeOfSection218YesNo", Some(ForPurposeOfSection218Controller.onPageLoad().url)),
-        bound.yesNoQuestion(AgentCreatedTrustPage, "agentCreatedTrustYesNo", Some(AgentCreatedTrustController.onPageLoad().url))
+        bound.yesNoQuestion(AgentCreatedTrustPage, "agentCreatedTrustYesNo", Some(AgentCreatedTrustController.onPageLoad().url)),
+        bound.yesNoQuestion(Schedule3aExemptYesNoPage, "schedule3aExemptYesNo", Some(Schedule3aExemptYesNoController.onPageLoad().url))
       )
     } else {
       Seq(
