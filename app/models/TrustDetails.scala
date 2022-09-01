@@ -28,6 +28,7 @@ final case class TrustDetailsType(startDate: LocalDate,
                                   trustRecorded: Option[Boolean],
                                   trustUKRelation: Option[Boolean],
                                   trustUKResident: Option[Boolean],
+                                  schedule3aExempt: Option[Boolean],
                                   typeOfTrust: Option[TypeOfTrust],
                                   deedOfVariation: Option[DeedOfVariation],
                                   interVivos: Option[Boolean],
@@ -75,7 +76,8 @@ sealed trait TrustDetails
 case class NonMigratingTrustDetails(trustUKProperty: Boolean,
                                     trustRecorded: Boolean,
                                     trustUKRelation: Option[Boolean],
-                                    trustUKResident: Boolean) extends TrustDetails
+                                    trustUKResident: Boolean,
+                                    schedule3aExempt: Option[Boolean]) extends TrustDetails
 
 object NonMigratingTrustDetails {
   implicit val format: Format[NonMigratingTrustDetails] = Json.format[NonMigratingTrustDetails]

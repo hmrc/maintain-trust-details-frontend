@@ -198,7 +198,8 @@ class TrustDetailsMapper {
       OwnsUkLandOrPropertyPage.path.read[Boolean] and
         RecordedOnEeaRegisterPage.path.read[Boolean] and
         businessRelationshipInUkReads and
-        TrustResidentInUkPage.path.read[Boolean]
+        TrustResidentInUkPage.path.read[Boolean] and
+        Schedule3aExemptYesNoPage.path.readNullable[Boolean]
       )(NonMigratingTrustDetails.apply _)
   }
 

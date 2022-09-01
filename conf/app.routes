@@ -45,6 +45,9 @@ POST       /administered-in-uk                  controllers.maintain.Administere
 GET        /administration-country              controllers.maintain.AdministrationCountryController.onPageLoad()
 POST       /administration-country              controllers.maintain.AdministrationCountryController.onSubmit()
 
+GET        /schedule3a-exemption                controllers.maintain.Schedule3aExemptYesNoController.onPageLoad()
+POST       /schedule3a-exemption                controllers.maintain.Schedule3aExemptYesNoController.onSubmit()
+
 GET        /set-up-after-settlor-died           controllers.maintain.SetUpAfterSettlorDiedController.onPageLoad()
 POST       /set-up-after-settlor-died           controllers.maintain.SetUpAfterSettlorDiedController.onSubmit()
 
