@@ -30,15 +30,14 @@ import views.html.maintain.Schedule3aExemptYesNoView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class Schedule3aExemptYesNoController @Inject()(
-                                           override val messagesApi: MessagesApi,
-                                           yesNoFormProvider: YesNoFormProvider,
-                                           repository: PlaybackRepository,
-                                           navigator: Navigator,
-                                           actions: StandardActionSets,
-                                           val controllerComponents: MessagesControllerComponents,
-                                           view: Schedule3aExemptYesNoView
-                                         )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class Schedule3aExemptYesNoController @Inject()(override val messagesApi: MessagesApi,
+                                                yesNoFormProvider: YesNoFormProvider,
+                                                repository: PlaybackRepository,
+                                                navigator: Navigator,
+                                                actions: StandardActionSets,
+                                                val controllerComponents: MessagesControllerComponents,
+                                                view: Schedule3aExemptYesNoView
+                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private val form: Form[Boolean] = yesNoFormProvider.withPrefix("schedule3aExemptYesNo")
 

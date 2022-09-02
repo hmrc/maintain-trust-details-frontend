@@ -54,8 +54,7 @@ class AppConfig @Inject()(config: Configuration,
 
   lazy val trustsUrl: String = servicesConfig.baseUrl("trusts")
 
-  lazy val schedule3aExemptEnabled: Boolean =
-    config.get[Boolean]("microservice.services.features.schedule3aExempt.enabled")
+  lazy val schedule3aExemptEnabled: Boolean = config.get[Boolean]("microservice.services.features.schedule3aExempt.enabled")
 
   lazy val logoutAudit: Boolean = config.get[Boolean]("features.auditing.logout")
 

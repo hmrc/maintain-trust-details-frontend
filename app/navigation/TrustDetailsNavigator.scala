@@ -58,7 +58,7 @@ class TrustDetailsNavigator @Inject()(appConfig: AppConfig) extends Navigator {
     case EfrbsYesNoPage => yesNoNav(_, EfrbsYesNoPage, EfrbsStartDateController.onPageLoad(), firstQuestionAfterTrustTypeQuestions)
     case WhereTrusteesBasedPage => navigateAwayFromWhereTrusteesBasedQuestion
     case SettlorsUkBasedPage => yesNoNav(_, SettlorsUkBasedPage, CreatedUnderScotsLawController.onPageLoad(), BusinessRelationshipInUkController.onPageLoad())
-    case PreviouslyResidentOffshorePage => yesNoNav(_, PreviouslyResidentOffshorePage, PreviouslyResidentOffshoreCountryController.onPageLoad(),routeToSchedule3aExempt())
+    case PreviouslyResidentOffshorePage => yesNoNav(_, PreviouslyResidentOffshorePage, PreviouslyResidentOffshoreCountryController.onPageLoad(), routeToSchedule3aExempt())
     case SettlorBenefitsFromAssetsPage => yesNoNav(_, SettlorBenefitsFromAssetsPage, routeToSchedule3aExempt(), ForPurposeOfSection218Controller.onPageLoad())
     case ForPurposeOfSection218Page => yesNoNav(_, ForPurposeOfSection218Page, AgentCreatedTrustController.onPageLoad(), routeToSchedule3aExempt())
   }
