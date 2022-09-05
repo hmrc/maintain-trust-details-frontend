@@ -16,6 +16,7 @@
 
 package controllers.maintain
 
+import config.AppConfig
 import controllers.actions.StandardActionSets
 import forms.YesNoFormProvider
 import navigation.Navigator
@@ -26,8 +27,8 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.maintain.BusinessRelationshipInUkView
-
 import javax.inject.Inject
+
 import scala.concurrent.{ExecutionContext, Future}
 
 class BusinessRelationshipInUkController @Inject()(
@@ -63,8 +64,8 @@ class BusinessRelationshipInUkController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessRelationshipInUkPage, value))
-            _              <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(BusinessRelationshipInUkPage,updatedAnswers))
+            _ <- repository.set(updatedAnswers)
+          } yield Redirect(navigator.nextPage(BusinessRelationshipInUkPage, updatedAnswers))
         }
       )
   }

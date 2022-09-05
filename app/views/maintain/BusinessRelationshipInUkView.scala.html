@@ -18,7 +18,7 @@
 @import views.html.components.{Heading, ErrorSummary, BulletList, InputYesNo, SubmitButton}
 
 @this(
-    main_template: MainTemplate,
+    mainTemplate: MainTemplate,
     formHelper: FormWithCSRF,
     errorSummary: ErrorSummary,
     heading: Heading,
@@ -29,7 +29,7 @@
 
 @(form: Form[_])(implicit request: Request[_], messages: Messages)
 
-@main_template(
+@mainTemplate(
     title = s"${errorPrefix(form)} ${messages("businessRelationshipInUkYesNo.title")}",
     showBackLink = true
 ) {

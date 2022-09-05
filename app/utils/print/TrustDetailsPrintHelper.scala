@@ -60,7 +60,8 @@ class TrustDetailsPrintHelper @Inject()(answerRowConverter: AnswerRowConverter) 
       Seq(
         bound.yesNoQuestion(OwnsUkLandOrPropertyPage, "ownsUkLandOrPropertyYesNo", Some(OwnsUkLandOrPropertyController.onPageLoad().url)),
         bound.yesNoQuestion(RecordedOnEeaRegisterPage, "recordedOnEeaRegisterYesNo", Some(RecordedOnEeaRegisterController.onPageLoad().url)),
-        bound.yesNoQuestion(BusinessRelationshipInUkPage, "businessRelationshipInUkYesNo", Some(BusinessRelationshipInUkController.onPageLoad().url))
+        bound.yesNoQuestion(BusinessRelationshipInUkPage, "businessRelationshipInUkYesNo", Some(BusinessRelationshipInUkController.onPageLoad().url)),
+        bound.yesNoQuestion(Schedule3aExemptYesNoPage, "schedule3aExemptYesNo", Some(Schedule3aExemptYesNoController.onPageLoad().url))
       )
     }
 

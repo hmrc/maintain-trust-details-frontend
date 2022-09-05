@@ -18,7 +18,9 @@ package controllers.maintain
 
 import controllers.actions.StandardActionSets
 import forms.YesNoFormProvider
+
 import javax.inject.Inject
+
 import navigation.Navigator
 import pages.maintain.Schedule3aExemptYesNoPage
 import play.api.data.Form
@@ -26,6 +28,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+
 import views.html.maintain.Schedule3aExemptYesNoView
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -63,9 +66,7 @@ class Schedule3aExemptYesNoController @Inject()(override val messagesApi: Messag
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(Schedule3aExemptYesNoPage, value))
             _ <- repository.set(updatedAnswers)
-          } yield {
-            Redirect(navigator.nextPage(Schedule3aExemptYesNoPage, updatedAnswers))
-          }
+          } yield Redirect(navigator.nextPage(Schedule3aExemptYesNoPage, updatedAnswers))
         }
       )
   }
