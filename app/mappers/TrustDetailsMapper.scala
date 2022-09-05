@@ -181,7 +181,8 @@ class TrustDetailsMapper {
         deedOfVariationReads and
         interVivosReads and
         efrbsStartDateReads and
-        SettlorsUkBasedPage.path.readNullable[Boolean]
+        SettlorsUkBasedPage.path.readNullable[Boolean] and
+        Schedule3aExemptYesNoPage.path.readNullable[Boolean]
       )(MigratingTrustDetails.apply _)
   }
 

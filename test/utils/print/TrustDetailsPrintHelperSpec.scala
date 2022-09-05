@@ -63,6 +63,7 @@ class TrustDetailsPrintHelperSpec extends SpecBase {
           .set(SettlorBenefitsFromAssetsPage, false).success.value
           .set(ForPurposeOfSection218Page, true).success.value
           .set(AgentCreatedTrustPage, true).success.value
+          .set(Schedule3aExemptYesNoPage, true).success.value
 
         val result = printHelper(userAnswers)
 
@@ -91,7 +92,8 @@ class TrustDetailsPrintHelperSpec extends SpecBase {
             AnswerRow(messages("businessRelationshipInUkYesNo.checkYourAnswersLabel"), Html("Yes"), Some(BusinessRelationshipInUkController.onPageLoad().url)),
             AnswerRow(messages("settlorBenefitsFromAssetsYesNo.checkYourAnswersLabel"), Html("No"), Some(SettlorBenefitsFromAssetsController.onPageLoad().url)),
             AnswerRow(messages("forPurposeOfSection218YesNo.checkYourAnswersLabel"), Html("Yes"), Some(ForPurposeOfSection218Controller.onPageLoad().url)),
-            AnswerRow(messages("agentCreatedTrustYesNo.checkYourAnswersLabel"), Html("Yes"), Some(AgentCreatedTrustController.onPageLoad().url))
+            AnswerRow(messages("agentCreatedTrustYesNo.checkYourAnswersLabel"), Html("Yes"), Some(AgentCreatedTrustController.onPageLoad().url)),
+            AnswerRow(messages("schedule3aExemptYesNo.checkYourAnswersLabel"), Html("Yes"), Some(Schedule3aExemptYesNoController.onPageLoad().url))
           ),
           sectionKey = None
         )
