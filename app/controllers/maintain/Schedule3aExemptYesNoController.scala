@@ -18,6 +18,9 @@ package controllers.maintain
 
 import controllers.actions.StandardActionSets
 import forms.YesNoFormProvider
+
+import javax.inject.Inject
+
 import navigation.Navigator
 import pages.maintain.Schedule3aExemptYesNoPage
 import play.api.data.Form
@@ -25,20 +28,19 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.PlaybackRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import views.html.maintain.Schedule3aExemptView
-import javax.inject.Inject
+
+import views.html.maintain.Schedule3aExemptYesNoView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class Schedule3aExemptYesNoController @Inject()(
-                                                    override val messagesApi: MessagesApi,
-                                                    repository: PlaybackRepository,
-                                                    yesNoFormProvider: YesNoFormProvider,
-                                                    navigator: Navigator,
-                                                    actions: StandardActionSets,
-                                                    val controllerComponents: MessagesControllerComponents,
-                                                    view: Schedule3aExemptView
-                                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class Schedule3aExemptYesNoController @Inject()(override val messagesApi: MessagesApi,
+                                                yesNoFormProvider: YesNoFormProvider,
+                                                repository: PlaybackRepository,
+                                                navigator: Navigator,
+                                                actions: StandardActionSets,
+                                                val controllerComponents: MessagesControllerComponents,
+                                                view: Schedule3aExemptYesNoView
+                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private val form: Form[Boolean] = yesNoFormProvider.withPrefix("schedule3aExemptYesNo")
 
