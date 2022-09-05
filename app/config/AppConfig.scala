@@ -33,8 +33,6 @@ class AppConfig @Inject()(config: Configuration,
 
   val welshLanguageSupportEnabled: Boolean = config.getOptional[Boolean]("features.welsh-language-support").getOrElse(false)
 
-  lazy val schedule3aExemptEnabled: Boolean = config.get[Boolean]("microservice.services.features.schedule3aExempt.enabled")
-
   val en: String = "en"
   val cy: String = "cy"
   val defaultLanguage: Lang = Lang(en)
