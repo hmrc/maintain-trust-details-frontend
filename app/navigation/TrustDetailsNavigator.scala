@@ -39,7 +39,7 @@ class TrustDetailsNavigator @Inject()(appConfig: AppConfig) extends Navigator {
 
   private def simpleNavigation(): PartialFunction[Page, UserAnswers => Call] = {
     case OwnsUkLandOrPropertyPage => _ => RecordedOnEeaRegisterController.onPageLoad()
-    case BusinessRelationshipInUkPage => ua => navigateToSchedule3aExemptQuestion(ua)
+    case BusinessRelationshipInUkPage => ua => navigateAwayFromBusinessRelationshipInUkQuestion(ua)
     case GoverningCountryPage => _ => AdministeredInUkController.onPageLoad()
     case Schedule3aExemptYesNoPage => _ => CheckDetailsController.onPageLoad()
     case AdministrationCountryPage => navigateToSetUpAfterSettlorDiedIfRegisteredWithDeceasedSettlor
@@ -84,10 +84,18 @@ class TrustDetailsNavigator @Inject()(appConfig: AppConfig) extends Navigator {
       WhereTrusteesBasedController.onPageLoad()
     } else {
       if (ua.get(TrustResidentInUkPage).contains(true)) {
-        CheckDetailsController.onPageLoad()
+        navigateToSchedule3aExemptQuestion(ua)
       } else {
         BusinessRelationshipInUkController.onPageLoad()
       }
+    }
+  }
+
+  private def navigateAwayFromBusinessRelationshipInUkQuestion(ua: UserAnswers): Call = {
+    if (ua.migratingFromNonTaxableToTaxable) {
+      SettlorBenefitsFromAssetsController.onPageLoad()
+    } else {
+      navigateToSchedule3aExemptQuestion(ua)
     }
   }
 
