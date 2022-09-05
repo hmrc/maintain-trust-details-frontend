@@ -16,7 +16,6 @@
 
 package controllers.maintain
 
-import config.AppConfig
 import controllers.actions.StandardActionSets
 import forms.YesNoFormProvider
 import navigation.Navigator

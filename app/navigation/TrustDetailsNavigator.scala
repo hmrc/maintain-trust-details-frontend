@@ -39,15 +39,14 @@ class TrustDetailsNavigator @Inject()(appConfig: AppConfig) extends Navigator {
 
   private def simpleNavigation(): PartialFunction[Page, UserAnswers => Call] = {
     case OwnsUkLandOrPropertyPage => _ => RecordedOnEeaRegisterController.onPageLoad()
-    case BusinessRelationshipInUkPage => navigateToSchedule3aExemptQuestion
-    case Schedule3aExemptYesNoPage => navigateAwayFromSchedule3aExemptQuestion
+    case BusinessRelationshipInUkPage => ua => navigateToSchedule3aExemptQuestion(ua)
     case GoverningCountryPage => _ => AdministeredInUkController.onPageLoad()
     case Schedule3aExemptYesNoPage => _ => CheckDetailsController.onPageLoad()
     case AdministrationCountryPage => navigateToSetUpAfterSettlorDiedIfRegisteredWithDeceasedSettlor
     case HoldoverReliefClaimedPage | EfrbsStartDatePage => _ => firstQuestionAfterTrustTypeQuestions
     case WhyDeedOfVariationCreatedPage => _ => firstQuestionAfterTrustTypeQuestions
     case CreatedUnderScotsLawPage => _ => PreviouslyResidentOffshoreController.onPageLoad()
-    case PreviouslyResidentOffshoreCountryPage | AgentCreatedTrustPage => _ => routeToSchedule3aExempt()
+    case PreviouslyResidentOffshoreCountryPage | AgentCreatedTrustPage => ua => navigateToSchedule3aExemptQuestion(ua)
   }
 
   private def conditionalNavigation(): PartialFunction[Page, UserAnswers => Call] = {
@@ -59,9 +58,9 @@ class TrustDetailsNavigator @Inject()(appConfig: AppConfig) extends Navigator {
     case EfrbsYesNoPage => yesNoNav(_, EfrbsYesNoPage, EfrbsStartDateController.onPageLoad(), firstQuestionAfterTrustTypeQuestions)
     case WhereTrusteesBasedPage => navigateAwayFromWhereTrusteesBasedQuestion
     case SettlorsUkBasedPage => yesNoNav(_, SettlorsUkBasedPage, CreatedUnderScotsLawController.onPageLoad(), BusinessRelationshipInUkController.onPageLoad())
-    case PreviouslyResidentOffshorePage => yesNoNav(_, PreviouslyResidentOffshorePage, PreviouslyResidentOffshoreCountryController.onPageLoad(), routeToSchedule3aExempt())
-    case SettlorBenefitsFromAssetsPage => yesNoNav(_, SettlorBenefitsFromAssetsPage, routeToSchedule3aExempt(), ForPurposeOfSection218Controller.onPageLoad())
-    case ForPurposeOfSection218Page => yesNoNav(_, ForPurposeOfSection218Page, AgentCreatedTrustController.onPageLoad(), routeToSchedule3aExempt())
+    case PreviouslyResidentOffshorePage => ua => yesNoNav(ua, PreviouslyResidentOffshorePage, PreviouslyResidentOffshoreCountryController.onPageLoad(), navigateToSchedule3aExemptQuestion(ua))
+    case SettlorBenefitsFromAssetsPage => ua => yesNoNav(ua, SettlorBenefitsFromAssetsPage, navigateToSchedule3aExemptQuestion(ua), ForPurposeOfSection218Controller.onPageLoad())
+    case ForPurposeOfSection218Page => ua => yesNoNav(ua, ForPurposeOfSection218Page, AgentCreatedTrustController.onPageLoad(), navigateToSchedule3aExemptQuestion(ua))
   }
 
   private def navigateToSetUpAfterSettlorDiedIfRegisteredWithDeceasedSettlor(ua: UserAnswers): Call = {
@@ -92,19 +91,11 @@ class TrustDetailsNavigator @Inject()(appConfig: AppConfig) extends Navigator {
     }
   }
 
-  private def navigateAwayFromSchedule3aExemptQuestion(ua: UserAnswers): Call = {
-    if (ua.migratingFromNonTaxableToTaxable) {
-      SettlorBenefitsFromAssetsController.onPageLoad()
-    } else {
-      CheckDetailsController.onPageLoad()
-    }
-  }
-
   private def navigateToSchedule3aExemptQuestion(ua: UserAnswers): Call = {
-    if (appConfig.schedule3aExemptEnabled && ua.get(Schedule3aExemptYesNoPage).isDefined) {
+    if (appConfig.schedule3aExemptEnabled && (ua.get(Schedule3aExemptYesNoPage).isDefined || ua.migratingFromNonTaxableToTaxable)) {
       Schedule3aExemptYesNoController.onPageLoad()
     } else {
-      navigateAwayFromSchedule3aExemptQuestion(ua)
+      CheckDetailsController.onPageLoad()
     }
   }
 
@@ -133,14 +124,6 @@ class TrustDetailsNavigator @Inject()(appConfig: AppConfig) extends Navigator {
       case Some(NoTrusteesUkBased) => BusinessRelationshipInUkController.onPageLoad()
       case Some(InternationalAndUkBasedTrustees) => SettlorsUkBasedController.onPageLoad()
       case _ => SessionExpiredController.onPageLoad
-    }
-  }
-
-  private def routeToSchedule3aExempt() : Call = {
-    if (appConfig.schedule3aExemptEnabled) {
-      Schedule3aExemptYesNoController.onPageLoad()
-    } else {
-      CheckDetailsController.onPageLoad()
     }
   }
 
