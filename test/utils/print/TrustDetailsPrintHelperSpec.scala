@@ -104,6 +104,7 @@ class TrustDetailsPrintHelperSpec extends SpecBase {
           .set(OwnsUkLandOrPropertyPage, true).success.value
           .set(RecordedOnEeaRegisterPage, false).success.value
           .set(BusinessRelationshipInUkPage, true).success.value
+          .set(Schedule3aExemptYesNoPage, false).success.value
 
         val result = printHelper(userAnswers)
 
@@ -112,7 +113,8 @@ class TrustDetailsPrintHelperSpec extends SpecBase {
           rows = Seq(
             AnswerRow(messages("ownsUkLandOrPropertyYesNo.checkYourAnswersLabel"), Html("Yes"), Some(OwnsUkLandOrPropertyController.onPageLoad().url)),
             AnswerRow(messages("recordedOnEeaRegisterYesNo.checkYourAnswersLabel"), Html("No"), Some(RecordedOnEeaRegisterController.onPageLoad().url)),
-            AnswerRow(messages("businessRelationshipInUkYesNo.checkYourAnswersLabel"), Html("Yes"), Some(BusinessRelationshipInUkController.onPageLoad().url))
+            AnswerRow(messages("businessRelationshipInUkYesNo.checkYourAnswersLabel"), Html("Yes"), Some(BusinessRelationshipInUkController.onPageLoad().url)),
+            AnswerRow(messages("schedule3aExemptYesNo.checkYourAnswersLabel"), Html("No"), Some(Schedule3aExemptYesNoController.onPageLoad().url))
           ),
           sectionKey = None
         )

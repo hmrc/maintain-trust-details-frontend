@@ -51,6 +51,7 @@ class TrustDetailsMapperSpec extends SpecBase {
               .set(RecordedOnEeaRegisterPage, true).success.value
               .set(BusinessRelationshipInUkPage, true).success.value
               .set(TrustResidentInUkPage, false).success.value
+              .set(Schedule3aExemptYesNoPage, true).success.value
 
             val result = mapper(userAnswers)
 
@@ -58,7 +59,8 @@ class TrustDetailsMapperSpec extends SpecBase {
               trustUKProperty = true,
               trustRecorded = true,
               trustUKRelation = Some(true),
-              trustUKResident = false
+              trustUKResident = false,
+              schedule3aExempt = Some(true)
             ))
           }
 
@@ -434,7 +436,6 @@ class TrustDetailsMapperSpec extends SpecBase {
 
           val userAnswers = baseAnswers.copy(registeredWithDeceasedSettlor = false)
             .set(GovernedByUkLawPage, false).success.value
-            .set(Schedule3aExemptYesNoPage, true).success.value
             .set(AdministeredInUkPage, true).success.value
             .set(TypeOfTrustPage, DeedOfVariationTrustOrFamilyArrangement).success.value
             .set(WhyDeedOfVariationCreatedPage, ReplacedWillTrust).success.value
@@ -443,6 +444,7 @@ class TrustDetailsMapperSpec extends SpecBase {
             .set(WhereTrusteesBasedPage, AllTrusteesUkBased).success.value
             .set(CreatedUnderScotsLawPage, true).success.value
             .set(PreviouslyResidentOffshorePage, false).success.value
+            .set(Schedule3aExemptYesNoPage, true).success.value
 
           val result = mapper.areAnswersSubmittable(userAnswers)
 
@@ -453,7 +455,6 @@ class TrustDetailsMapperSpec extends SpecBase {
 
           val userAnswers = baseAnswers.copy(registeredWithDeceasedSettlor = false)
             .set(GovernedByUkLawPage, true).success.value
-            .set(Schedule3aExemptYesNoPage, false).success.value
             .set(AdministeredInUkPage, false).success.value
             .set(TypeOfTrustPage, DeedOfVariationTrustOrFamilyArrangement).success.value
             .set(WhyDeedOfVariationCreatedPage, ReplacedWillTrust).success.value
@@ -462,6 +463,7 @@ class TrustDetailsMapperSpec extends SpecBase {
             .set(WhereTrusteesBasedPage, AllTrusteesUkBased).success.value
             .set(CreatedUnderScotsLawPage, true).success.value
             .set(PreviouslyResidentOffshorePage, false).success.value
+            .set(Schedule3aExemptYesNoPage, false).success.value
 
           val result = mapper.areAnswersSubmittable(userAnswers)
 
@@ -472,7 +474,6 @@ class TrustDetailsMapperSpec extends SpecBase {
 
           val userAnswers = baseAnswers.copy(registeredWithDeceasedSettlor = false)
             .set(GovernedByUkLawPage, true).success.value
-            .set(Schedule3aExemptYesNoPage, true).success.value
             .set(AdministeredInUkPage, true).success.value
             .set(TypeOfTrustPage, InterVivosSettlement).success.value
             .set(OwnsUkLandOrPropertyPage, true).success.value
@@ -480,6 +481,7 @@ class TrustDetailsMapperSpec extends SpecBase {
             .set(WhereTrusteesBasedPage, AllTrusteesUkBased).success.value
             .set(CreatedUnderScotsLawPage, true).success.value
             .set(PreviouslyResidentOffshorePage, false).success.value
+            .set(Schedule3aExemptYesNoPage, true).success.value
 
           val result = mapper.areAnswersSubmittable(userAnswers)
 
@@ -490,7 +492,6 @@ class TrustDetailsMapperSpec extends SpecBase {
 
           val userAnswers = baseAnswers.copy(registeredWithDeceasedSettlor = false)
             .set(GovernedByUkLawPage, true).success.value
-            .set(Schedule3aExemptYesNoPage, false).success.value
             .set(AdministeredInUkPage, true).success.value
             .set(TypeOfTrustPage, EmploymentRelated).success.value
             .set(OwnsUkLandOrPropertyPage, true).success.value
@@ -498,6 +499,7 @@ class TrustDetailsMapperSpec extends SpecBase {
             .set(WhereTrusteesBasedPage, AllTrusteesUkBased).success.value
             .set(CreatedUnderScotsLawPage, true).success.value
             .set(PreviouslyResidentOffshorePage, false).success.value
+            .set(Schedule3aExemptYesNoPage, false).success.value
 
           val result = mapper.areAnswersSubmittable(userAnswers)
 
@@ -508,7 +510,6 @@ class TrustDetailsMapperSpec extends SpecBase {
 
           val userAnswers = baseAnswers.copy(registeredWithDeceasedSettlor = false)
             .set(GovernedByUkLawPage, true).success.value
-            .set(Schedule3aExemptYesNoPage, true).success.value
             .set(AdministeredInUkPage, true).success.value
             .set(TypeOfTrustPage, EmploymentRelated).success.value
             .set(EfrbsYesNoPage, true).success.value
@@ -517,6 +518,7 @@ class TrustDetailsMapperSpec extends SpecBase {
             .set(WhereTrusteesBasedPage, AllTrusteesUkBased).success.value
             .set(CreatedUnderScotsLawPage, true).success.value
             .set(PreviouslyResidentOffshorePage, false).success.value
+            .set(Schedule3aExemptYesNoPage, true).success.value
 
           val result = mapper.areAnswersSubmittable(userAnswers)
 
@@ -527,7 +529,6 @@ class TrustDetailsMapperSpec extends SpecBase {
 
           val userAnswers = baseAnswers.copy(registeredWithDeceasedSettlor = true)
             .set(GovernedByUkLawPage, true).success.value
-            .set(Schedule3aExemptYesNoPage, false).success.value
             .set(AdministeredInUkPage, true).success.value
             .set(SetUpAfterSettlorDiedPage, true).success.value
             .set(OwnsUkLandOrPropertyPage, true).success.value
@@ -535,6 +536,7 @@ class TrustDetailsMapperSpec extends SpecBase {
             .set(WhereTrusteesBasedPage, InternationalAndUkBasedTrustees).success.value
             .set(CreatedUnderScotsLawPage, true).success.value
             .set(PreviouslyResidentOffshorePage, false).success.value
+            .set(Schedule3aExemptYesNoPage, false).success.value
 
           val result = mapper.areAnswersSubmittable(userAnswers)
 
@@ -545,7 +547,6 @@ class TrustDetailsMapperSpec extends SpecBase {
 
           val userAnswers = baseAnswers.copy(registeredWithDeceasedSettlor = true)
             .set(GovernedByUkLawPage, true).success.value
-            .set(Schedule3aExemptYesNoPage, true).success.value
             .set(AdministeredInUkPage, true).success.value
             .set(SetUpAfterSettlorDiedPage, true).success.value
             .set(OwnsUkLandOrPropertyPage, true).success.value
@@ -553,6 +554,7 @@ class TrustDetailsMapperSpec extends SpecBase {
             .set(WhereTrusteesBasedPage, AllTrusteesUkBased).success.value
             .set(CreatedUnderScotsLawPage, true).success.value
             .set(PreviouslyResidentOffshorePage, true).success.value
+            .set(Schedule3aExemptYesNoPage, true).success.value
 
           val result = mapper.areAnswersSubmittable(userAnswers)
 
@@ -563,7 +565,6 @@ class TrustDetailsMapperSpec extends SpecBase {
 
           val userAnswers = baseAnswers.copy(registeredWithDeceasedSettlor = true)
             .set(GovernedByUkLawPage, true).success.value
-            .set(Schedule3aExemptYesNoPage, false).success.value
             .set(AdministeredInUkPage, true).success.value
             .set(SetUpAfterSettlorDiedPage, true).success.value
             .set(OwnsUkLandOrPropertyPage, true).success.value
@@ -571,6 +572,7 @@ class TrustDetailsMapperSpec extends SpecBase {
             .set(WhereTrusteesBasedPage, NoTrusteesUkBased).success.value
             .set(BusinessRelationshipInUkPage, true).success.value
             .set(SettlorBenefitsFromAssetsPage, false).success.value
+            .set(Schedule3aExemptYesNoPage, false).success.value
 
           val result = mapper.areAnswersSubmittable(userAnswers)
 
@@ -581,7 +583,6 @@ class TrustDetailsMapperSpec extends SpecBase {
 
           val userAnswers = baseAnswers.copy(registeredWithDeceasedSettlor = true)
             .set(GovernedByUkLawPage, true).success.value
-            .set(Schedule3aExemptYesNoPage, true).success.value
             .set(AdministeredInUkPage, true).success.value
             .set(SetUpAfterSettlorDiedPage, true).success.value
             .set(OwnsUkLandOrPropertyPage, true).success.value
@@ -590,6 +591,7 @@ class TrustDetailsMapperSpec extends SpecBase {
             .set(BusinessRelationshipInUkPage, true).success.value
             .set(SettlorBenefitsFromAssetsPage, false).success.value
             .set(ForPurposeOfSection218Page, true).success.value
+            .set(Schedule3aExemptYesNoPage, true).success.value
 
           val result = mapper.areAnswersSubmittable(userAnswers)
 
