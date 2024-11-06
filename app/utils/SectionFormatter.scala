@@ -18,18 +18,28 @@ package utils
 
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{HtmlContent, Text}
-import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{Key, SummaryListRow, Value}
-import viewmodels.AnswerSection
+import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{ActionItem, Actions, Key, SummaryListRow, Value}
+import viewmodels.{AnswerRow, AnswerSection}
 
 object SectionFormatter {
 
-  def formatAnswerSection(answerSection: AnswerSection)(implicit messages: Messages): Seq[SummaryListRow] = {
-    answerSection.rows.map { row =>
-      SummaryListRow(
-        key = Key(classes = "govuk-!-width-two-thirds", content = Text(messages(row.label, row.labelArg: _*))),
-        value = Value(classes = "govuk-!-width-one-half", content = HtmlContent(row.answer)),
-        actions = None
-      )
+  def formatAnswerSection(section: AnswerSection)(implicit messages: Messages): Seq[SummaryListRow] = {
+    section.rows.zipWithIndex.map {
+      case (row: AnswerRow, i: Int) =>
+        SummaryListRow(
+          key = Key(classes = "govuk-!-width-two-thirds", content = Text(messages(row.label, row.labelArg))),
+          value = Value(classes = "govuk-!-width-one-half", content = HtmlContent(row.answer)),
+          actions = if(row.canEdit)
+          {
+            Option(Actions(items = Seq(ActionItem(
+            href = row.changeUrl.getOrElse(""),
+            classes = s"change-link-$i",
+            visuallyHiddenText = Some(messages(row.label)),
+            content = Text(messages("site.edit"))
+          ))))
+          }
+          else None
+        )
     }
   }
 }
