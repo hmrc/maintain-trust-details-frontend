@@ -32,8 +32,8 @@ class SectionFormatterSpec extends SpecBase{
       val answerSection: AnswerSection = AnswerSection(
         headingKey = None,
         rows = Seq(
-          AnswerRow("When was the trust created?", Html("1 January 2000"), canEdit = false, changeUrl = Some("")),
-          AnswerRow("Is the trust governed by UK law?", Html("No"), Some(""))),
+          AnswerRow(messages("startDate.checkYourAnswersLabel"), Html("1 January 2000"), canEdit = false, changeUrl = Some("/change-url")),
+          AnswerRow(messages("governedByUkLawYesNo.checkYourAnswersLabel"), Html("No"), Some("/change-url"))),
         sectionKey = None
       )
     val result = SectionFormatter.formatAnswerSection(answerSection)
@@ -51,7 +51,7 @@ class SectionFormatterSpec extends SpecBase{
             content = Text("Is the trust governed by UK law?")
           ),
           value = Value(classes = "govuk-!-width-one-half", content = HtmlContent("No")),
-          actions = Option(Actions(items = Seq(ActionItem(href =  "",
+          actions = Option(Actions(items = Seq(ActionItem(href =  "/change-url",
             classes = s"change-link-1",
             visuallyHiddenText = Some("Is the trust governed by UK law?"),
             content = Text(messages("site.edit"))
