@@ -29,16 +29,15 @@ object SectionFormatter {
         SummaryListRow(
           key = Key(classes = "govuk-!-width-two-thirds", content = Text(messages(row.label, row.labelArg))),
           value = Value(classes = "govuk-!-width-one-half", content = HtmlContent(row.answer)),
-          actions = if(row.canEdit)
+          actions = Option.when(row.canEdit)
           {
-            Option(Actions(items = Seq(ActionItem(
+            Actions(items = Seq(ActionItem(
             href = row.changeUrl.getOrElse(""),
             classes = s"change-link-$i",
             visuallyHiddenText = Some(messages(row.label)),
             content = Text(messages("site.edit"))
-          ))))
+          )))
           }
-          else None
         )
     }
   }
