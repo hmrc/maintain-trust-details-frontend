@@ -24,10 +24,10 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{ActionItem, Key, 
 import viewmodels.{AnswerRow, AnswerSection}
 
 class SectionFormatterSpec extends SpecBase {
+
   "SectionFormatter" must {
 
     "format section as series of summary list rows" in {
-
 
       val answerSection: AnswerSection = AnswerSection(
         headingKey = None,
@@ -63,5 +63,3 @@ class SectionFormatterSpec extends SpecBase {
     }
   }
 }
-
-
