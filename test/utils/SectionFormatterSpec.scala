@@ -23,7 +23,7 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{HtmlContent, Text}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{ActionItem, Key, SummaryListRow, Value}
 import viewmodels.{AnswerRow, AnswerSection}
 
-class SectionFormatterSpec extends SpecBase{
+class SectionFormatterSpec extends SpecBase {
   "SectionFormatter" must {
 
     "format section as series of summary list rows" in {
@@ -36,10 +36,12 @@ class SectionFormatterSpec extends SpecBase{
           AnswerRow(messages("governedByUkLawYesNo.checkYourAnswersLabel"), Html("No"), Some("/change-url"))),
         sectionKey = None
       )
-    val result = SectionFormatter.formatAnswerSection(answerSection)
+
+      val result = SectionFormatter.formatAnswerSection(answerSection)
+
       result mustEqual Seq(
         SummaryListRow(
-          key = Key( classes = "govuk-!-width-two-thirds",
+          key = Key(classes = "govuk-!-width-two-thirds",
             content = Text("When was the trust created?")
           ),
           value = Value(classes = "govuk-!-width-one-half", content = HtmlContent("1 January 2000")),
@@ -51,7 +53,7 @@ class SectionFormatterSpec extends SpecBase{
             content = Text("Is the trust governed by UK law?")
           ),
           value = Value(classes = "govuk-!-width-one-half", content = HtmlContent("No")),
-          actions = Option(Actions(items = Seq(ActionItem(href =  "/change-url",
+          actions = Option(Actions(items = Seq(ActionItem(href = "/change-url",
             classes = s"change-link-1",
             visuallyHiddenText = Some("Is the trust governed by UK law?"),
             content = Text(messages("site.edit"))
@@ -61,4 +63,5 @@ class SectionFormatterSpec extends SpecBase{
     }
   }
 }
+
 
