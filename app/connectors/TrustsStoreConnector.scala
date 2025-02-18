@@ -34,7 +34,6 @@ class TrustsStoreConnector @Inject()(http: HttpClientV2, config: AppConfig) {
                       (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
     val fullUrl: String = s"$baseUrl/maintain/tasks/update-trust-details/$identifier"
     http.post(url"$fullUrl").withBody(Json.toJson(taskStatus)).execute[HttpResponse]
-    //http.POST[TaskStatus, HttpResponse](url, taskStatus)
   }
 
 }

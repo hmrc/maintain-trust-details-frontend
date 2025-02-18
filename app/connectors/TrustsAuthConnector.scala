@@ -46,11 +46,6 @@ class TrustsAuthConnectorImpl @Inject()(http: HttpClientV2, config: AppConfig)
         warnLog(s"unable to authenticate agent due to an exception ${e.getMessage}")
         TrustsAuthInternalServerError
     }
-//    http.GET[TrustsAuthResponse](s"$baseUrl/agent-authorised").recover {
-//      case e =>
-//        warnLog(s"unable to authenticate agent due to an exception ${e.getMessage}")
-//        TrustsAuthInternalServerError
-//    }
   }
 
   override def authorisedForIdentifier(identifier: String)
@@ -61,10 +56,5 @@ class TrustsAuthConnectorImpl @Inject()(http: HttpClientV2, config: AppConfig)
         warnLog(s"unable to authenticate organisation for $identifier due to an exception ${e.getMessage}", Some(identifier))
         TrustsAuthInternalServerError
     }
-//    http.GET[TrustsAuthResponse](s"$baseUrl/authorised/$identifier").recover {
-//      case e =>
-//        warnLog(s"unable to authenticate organisation for $identifier due to an exception ${e.getMessage}", Some(identifier))
-//        TrustsAuthInternalServerError
-//    }
   }
 }
