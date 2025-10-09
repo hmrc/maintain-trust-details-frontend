@@ -1,5 +1,3 @@
-  import uk.gov.hmrc.DefaultBuildSettings.integrationTestSettings
-
 val appName = "maintain-trust-details-frontend"
 
 ThisBuild / scalaVersion := "2.13.16"
@@ -46,8 +44,6 @@ lazy val microservice = Project(appName, file("."))
       "-Wconf:cat=unused-imports&src=views/.*:s"
     )
   )
-  .configs(IntegrationTest)
-  .settings(integrationTestSettings())
 
 lazy val testSettings: Seq[Def.Setting[?]] = Seq(
   fork := true,
