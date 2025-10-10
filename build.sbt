@@ -1,3 +1,5 @@
+import uk.gov.hmrc.DefaultBuildSettings
+
 val appName = "maintain-trust-details-frontend"
 
 ThisBuild / scalaVersion := "2.13.16"
@@ -53,3 +55,7 @@ lazy val testSettings: Seq[Def.Setting[?]] = Seq(
   )
 )
 
+lazy val it = project
+  .enablePlugins(PlayScala)
+  .dependsOn(microservice % "test->test")
+  .settings(DefaultBuildSettings.itSettings())

@@ -1,3 +1,3 @@
 #!/bin/bash
 
-sbt clean compile coverage test coverageOff coverageReport dependencyUpdates
+sbt clean compile coverage test it/Test/test coverageOff coverageReport dependencyUpdates
