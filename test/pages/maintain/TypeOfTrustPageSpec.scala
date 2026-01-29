@@ -35,49 +35,46 @@ class TypeOfTrustPageSpec extends PageBehaviours {
     beRemovable[TypeOfTrust](TypeOfTrustPage)
 
     "implement cleanup logic" when {
-      "something other than InterVivosSettlement selected" in {
+      "something other than InterVivosSettlement selected" in
+        forAll(arbitrary[TypeOfTrust].suchThat(_ != InterVivosSettlement)) { typeOfTrust =>
+          val userAnswers = emptyUserAnswers
+            .set(HoldoverReliefClaimedPage, true)
+            .success
+            .value
 
-        forAll(arbitrary[TypeOfTrust].suchThat(_ != InterVivosSettlement)) {
-          typeOfTrust =>
+          val cleanAnswers = userAnswers.set(TypeOfTrustPage, typeOfTrust).success.value
 
-            val userAnswers = emptyUserAnswers
-              .set(HoldoverReliefClaimedPage, true).success.value
-
-            val cleanAnswers = userAnswers.set(TypeOfTrustPage, typeOfTrust).success.value
-
-            cleanAnswers.get(HoldoverReliefClaimedPage) mustBe None
+          cleanAnswers.get(HoldoverReliefClaimedPage) mustBe None
         }
-      }
 
-      "something other than EmploymentRelated selected" in {
+      "something other than EmploymentRelated selected" in
+        forAll(arbitrary[TypeOfTrust].suchThat(_ != EmploymentRelated)) { typeOfTrust =>
+          val userAnswers = emptyUserAnswers
+            .set(EfrbsYesNoPage, true)
+            .success
+            .value
+            .set(EfrbsStartDatePage, LocalDate.parse("1996-02-03"))
+            .success
+            .value
 
-        forAll(arbitrary[TypeOfTrust].suchThat(_ != EmploymentRelated)) {
-          typeOfTrust =>
+          val cleanAnswers = userAnswers.set(TypeOfTrustPage, typeOfTrust).success.value
 
-            val userAnswers = emptyUserAnswers
-              .set(EfrbsYesNoPage, true).success.value
-              .set(EfrbsStartDatePage, LocalDate.parse("1996-02-03")).success.value
-
-            val cleanAnswers = userAnswers.set(TypeOfTrustPage, typeOfTrust).success.value
-
-            cleanAnswers.get(EfrbsYesNoPage) mustBe None
-            cleanAnswers.get(EfrbsStartDatePage) mustBe None
+          cleanAnswers.get(EfrbsYesNoPage)     mustBe None
+          cleanAnswers.get(EfrbsStartDatePage) mustBe None
         }
-      }
 
-      "something other than DeedOfVariationTrustOrFamilyArrangement selected" in {
+      "something other than DeedOfVariationTrustOrFamilyArrangement selected" in
+        forAll(arbitrary[TypeOfTrust].suchThat(_ != DeedOfVariationTrustOrFamilyArrangement)) { typeOfTrust =>
+          val userAnswers = emptyUserAnswers
+            .set(WhyDeedOfVariationCreatedPage, ReplacedWillTrust)
+            .success
+            .value
 
-        forAll(arbitrary[TypeOfTrust].suchThat(_ != DeedOfVariationTrustOrFamilyArrangement)) {
-          typeOfTrust =>
+          val cleanAnswers = userAnswers.set(TypeOfTrustPage, typeOfTrust).success.value
 
-            val userAnswers = emptyUserAnswers
-              .set(WhyDeedOfVariationCreatedPage, ReplacedWillTrust).success.value
-
-            val cleanAnswers = userAnswers.set(TypeOfTrustPage, typeOfTrust).success.value
-
-            cleanAnswers.get(WhyDeedOfVariationCreatedPage) mustBe None
+          cleanAnswers.get(WhyDeedOfVariationCreatedPage) mustBe None
         }
-      }
     }
   }
+
 }

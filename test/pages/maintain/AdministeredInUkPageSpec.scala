@@ -33,8 +33,12 @@ class AdministeredInUkPageSpec extends PageBehaviours {
       "YES selected" in {
 
         val userAnswers = emptyUserAnswers
-          .set(AdministeredInUkPage, false).success.value
-          .set(AdministrationCountryPage, "FR").success.value
+          .set(AdministeredInUkPage, false)
+          .success
+          .value
+          .set(AdministrationCountryPage, "FR")
+          .success
+          .value
 
         val cleanAnswers = userAnswers.set(AdministeredInUkPage, true).success.value
 
@@ -42,4 +46,5 @@ class AdministeredInUkPageSpec extends PageBehaviours {
       }
     }
   }
+
 }

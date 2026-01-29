@@ -25,19 +25,22 @@ import scala.concurrent.duration.DurationInt
 
 class ErrorHandlerSpec extends SpecBase {
 
-  private val messageApi: MessagesApi = app.injector.instanceOf[MessagesApi]
-  private val errorTemplate: ErrorTemplate = app.injector.instanceOf[ErrorTemplate]
+  private val messageApi: MessagesApi                 = app.injector.instanceOf[MessagesApi]
+  private val errorTemplate: ErrorTemplate            = app.injector.instanceOf[ErrorTemplate]
   private val errorNotFoundTemplate: PageNotFoundView = app.injector.instanceOf[PageNotFoundView]
-  private val errorHandler: ErrorHandler = new ErrorHandler(errorTemplate,errorNotFoundTemplate, messageApi)
+  private val errorHandler: ErrorHandler              = new ErrorHandler(errorTemplate, errorNotFoundTemplate, messageApi)
 
   "ErrorHandler" must {
 
     "return an error page" in {
-      val result = Await.result(errorHandler.standardErrorTemplate(
-        pageTitle = "pageTitle",
-        heading = "service.name",
-        message = "message"
-      )(fakeRequest), 1.seconds)
+      val result = Await.result(
+        errorHandler.standardErrorTemplate(
+          pageTitle = "pageTitle",
+          heading = "service.name",
+          message = "message"
+        )(fakeRequest),
+        1.seconds
+      )
 
       result.body must include("pageTitle")
       result.body must include("Manage a trust")
@@ -47,10 +50,10 @@ class ErrorHandlerSpec extends SpecBase {
     "return a not found template" in {
       val result = Await.result(errorHandler.notFoundTemplate(fakeRequest), 1.seconds)
 
-      val pageNotFoundTitle = Messages("pageNotFound.title")(messages)
-      val pageNotFoundHeading = Messages("pageNotFound.heading")(messages)
-      val pageNotFoundMessage1 = Messages("pageNotFound.p1")(messages)
-      val pageNotFoundMessage2 = Messages("pageNotFound.p2")(messages)
+      val pageNotFoundTitle       = Messages("pageNotFound.title")(messages)
+      val pageNotFoundHeading     = Messages("pageNotFound.heading")(messages)
+      val pageNotFoundMessage1    = Messages("pageNotFound.p1")(messages)
+      val pageNotFoundMessage2    = Messages("pageNotFound.p2")(messages)
       val pageNotFoundMessageLink = Messages("pageNotFound.link")(messages)
 
       result.body must include(pageNotFoundTitle)
@@ -61,5 +64,5 @@ class ErrorHandlerSpec extends SpecBase {
     }
 
   }
-}
 
+}

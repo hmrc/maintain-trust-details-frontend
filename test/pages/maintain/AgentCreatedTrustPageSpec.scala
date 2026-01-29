@@ -28,4 +28,5 @@ class AgentCreatedTrustPageSpec extends PageBehaviours {
 
     beRemovable[Boolean](AgentCreatedTrustPage)
   }
+
 }

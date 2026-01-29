@@ -39,31 +39,80 @@ class TrustDetailsPrintHelperSpec extends SpecBase {
 
         val trustName = "Trust Name"
 
-        val userAnswers = emptyUserAnswers.copy(migratingFromNonTaxableToTaxable = true)
-          .set(NamePage, trustName).success.value
-          .set(StartDatePage, LocalDate.parse("2000-01-01")).success.value
-          .set(GovernedByUkLawPage, false).success.value
-          .set(GoverningCountryPage, "DE").success.value
-          .set(AdministeredInUkPage, false).success.value
-          .set(AdministrationCountryPage, "FR").success.value
-          .set(SetUpAfterSettlorDiedPage, false).success.value
-          .set(TypeOfTrustPage, DeedOfVariationTrustOrFamilyArrangement).success.value
-          .set(WhyDeedOfVariationCreatedPage, ReplacedWillTrust).success.value
-          .set(HoldoverReliefClaimedPage, true).success.value
-          .set(EfrbsYesNoPage, true).success.value
-          .set(EfrbsStartDatePage, LocalDate.parse("1996-02-03")).success.value
-          .set(OwnsUkLandOrPropertyPage, true).success.value
-          .set(RecordedOnEeaRegisterPage, true).success.value
-          .set(WhereTrusteesBasedPage, AllTrusteesUkBased).success.value
-          .set(SettlorsUkBasedPage, true).success.value
-          .set(CreatedUnderScotsLawPage, true).success.value
-          .set(PreviouslyResidentOffshorePage, true).success.value
-          .set(PreviouslyResidentOffshoreCountryPage, "US").success.value
-          .set(BusinessRelationshipInUkPage, true).success.value
-          .set(SettlorBenefitsFromAssetsPage, false).success.value
-          .set(ForPurposeOfSection218Page, true).success.value
-          .set(AgentCreatedTrustPage, true).success.value
-          .set(Schedule3aExemptYesNoPage, true).success.value
+        val userAnswers = emptyUserAnswers
+          .copy(migratingFromNonTaxableToTaxable = true)
+          .set(NamePage, trustName)
+          .success
+          .value
+          .set(StartDatePage, LocalDate.parse("2000-01-01"))
+          .success
+          .value
+          .set(GovernedByUkLawPage, false)
+          .success
+          .value
+          .set(GoverningCountryPage, "DE")
+          .success
+          .value
+          .set(AdministeredInUkPage, false)
+          .success
+          .value
+          .set(AdministrationCountryPage, "FR")
+          .success
+          .value
+          .set(SetUpAfterSettlorDiedPage, false)
+          .success
+          .value
+          .set(TypeOfTrustPage, DeedOfVariationTrustOrFamilyArrangement)
+          .success
+          .value
+          .set(WhyDeedOfVariationCreatedPage, ReplacedWillTrust)
+          .success
+          .value
+          .set(HoldoverReliefClaimedPage, true)
+          .success
+          .value
+          .set(EfrbsYesNoPage, true)
+          .success
+          .value
+          .set(EfrbsStartDatePage, LocalDate.parse("1996-02-03"))
+          .success
+          .value
+          .set(OwnsUkLandOrPropertyPage, true)
+          .success
+          .value
+          .set(RecordedOnEeaRegisterPage, true)
+          .success
+          .value
+          .set(WhereTrusteesBasedPage, AllTrusteesUkBased)
+          .success
+          .value
+          .set(SettlorsUkBasedPage, true)
+          .success
+          .value
+          .set(CreatedUnderScotsLawPage, true)
+          .success
+          .value
+          .set(PreviouslyResidentOffshorePage, true)
+          .success
+          .value
+          .set(PreviouslyResidentOffshoreCountryPage, "US")
+          .success
+          .value
+          .set(BusinessRelationshipInUkPage, true)
+          .success
+          .value
+          .set(SettlorBenefitsFromAssetsPage, false)
+          .success
+          .value
+          .set(ForPurposeOfSection218Page, true)
+          .success
+          .value
+          .set(AgentCreatedTrustPage, true)
+          .success
+          .value
+          .set(Schedule3aExemptYesNoPage, true)
+          .success
+          .value
 
         val result = printHelper(userAnswers)
 
@@ -71,50 +120,168 @@ class TrustDetailsPrintHelperSpec extends SpecBase {
           headingKey = None,
           rows = Seq(
             AnswerRow(messages("name.checkYourAnswersLabel"), Html(trustName), canEdit = false, changeUrl = None),
-            AnswerRow(messages("startDate.checkYourAnswersLabel"), Html("1 January 2000"), canEdit = false, changeUrl = None),
-            AnswerRow(messages("governedByUkLawYesNo.checkYourAnswersLabel"), Html("No"), Some(GovernedByUkLawController.onPageLoad().url)),
-            AnswerRow(messages("governingCountry.checkYourAnswersLabel"), Html("Germany"), Some(GoverningCountryController.onPageLoad().url)),
-            AnswerRow(messages("administeredInUkYesNo.checkYourAnswersLabel"), Html("No"), Some(AdministeredInUkController.onPageLoad().url)),
-            AnswerRow(messages("administrationCountry.checkYourAnswersLabel"), Html("France"), Some(AdministrationCountryController.onPageLoad().url)),
-            AnswerRow(messages("setUpAfterSettlorDiedYesNo.checkYourAnswersLabel"), Html("No"), Some(SetUpAfterSettlorDiedController.onPageLoad().url)),
-            AnswerRow(messages("typeOfTrust.checkYourAnswersLabel"), Html("A trust through a Deed of Variation or family agreement"), Some(TypeOfTrustController.onPageLoad().url)),
-            AnswerRow(messages("whyDeedOfVariationCreated.checkYourAnswersLabel"), Html("To replace a will trust"), Some(WhyDeedOfVariationCreatedController.onPageLoad().url)),
-            AnswerRow(messages("holdoverReliefClaimedYesNo.checkYourAnswersLabel"), Html("Yes"), Some(HoldoverReliefClaimedController.onPageLoad().url)),
-            AnswerRow(messages("efrbsYesNo.checkYourAnswersLabel"), Html("Yes"), Some(EfrbsYesNoController.onPageLoad().url)),
-            AnswerRow(messages("efrbsStartDate.checkYourAnswersLabel"), Html("3 February 1996"), Some(EfrbsStartDateController.onPageLoad().url)),
-            AnswerRow(messages("ownsUkLandOrPropertyYesNo.checkYourAnswersLabel"), Html("Yes"), Some(OwnsUkLandOrPropertyController.onPageLoad().url)),
-            AnswerRow(messages("recordedOnEeaRegisterYesNo.checkYourAnswersLabel"), Html("Yes"), Some(RecordedOnEeaRegisterController.onPageLoad().url)),
-            AnswerRow(messages("whereTrusteesBased.checkYourAnswersLabel"), Html("All the trustees are based in the UK"), Some(WhereTrusteesBasedController.onPageLoad().url)),
-            AnswerRow(messages("settlorsUkBasedYesNo.checkYourAnswersLabel"), Html("Yes"), Some(SettlorsUkBasedController.onPageLoad().url)),
-            AnswerRow(messages("createdUnderScotsLawYesNo.checkYourAnswersLabel"), Html("Yes"), Some(CreatedUnderScotsLawController.onPageLoad().url)),
-            AnswerRow(messages("previouslyResidentOffshoreYesNo.checkYourAnswersLabel"), Html("Yes"), Some(PreviouslyResidentOffshoreController.onPageLoad().url)),
-            AnswerRow(messages("previouslyResidentOffshoreCountry.checkYourAnswersLabel"), Html("United States of America"), Some(PreviouslyResidentOffshoreCountryController.onPageLoad().url)),
-            AnswerRow(messages("businessRelationshipInUkYesNo.checkYourAnswersLabel"), Html("Yes"), Some(BusinessRelationshipInUkController.onPageLoad().url)),
-            AnswerRow(messages("settlorBenefitsFromAssetsYesNo.checkYourAnswersLabel"), Html("No"), Some(SettlorBenefitsFromAssetsController.onPageLoad().url)),
-            AnswerRow(messages("forPurposeOfSection218YesNo.checkYourAnswersLabel"), Html("Yes"), Some(ForPurposeOfSection218Controller.onPageLoad().url)),
-            AnswerRow(messages("agentCreatedTrustYesNo.checkYourAnswersLabel"), Html("Yes"), Some(AgentCreatedTrustController.onPageLoad().url)),
-            AnswerRow(messages("schedule3aExemptYesNo.checkYourAnswersLabel"), Html("Yes"), Some(Schedule3aExemptYesNoController.onPageLoad().url))
+            AnswerRow(
+              messages("startDate.checkYourAnswersLabel"),
+              Html("1 January 2000"),
+              canEdit = false,
+              changeUrl = None
+            ),
+            AnswerRow(
+              messages("governedByUkLawYesNo.checkYourAnswersLabel"),
+              Html("No"),
+              Some(GovernedByUkLawController.onPageLoad().url)
+            ),
+            AnswerRow(
+              messages("governingCountry.checkYourAnswersLabel"),
+              Html("Germany"),
+              Some(GoverningCountryController.onPageLoad().url)
+            ),
+            AnswerRow(
+              messages("administeredInUkYesNo.checkYourAnswersLabel"),
+              Html("No"),
+              Some(AdministeredInUkController.onPageLoad().url)
+            ),
+            AnswerRow(
+              messages("administrationCountry.checkYourAnswersLabel"),
+              Html("France"),
+              Some(AdministrationCountryController.onPageLoad().url)
+            ),
+            AnswerRow(
+              messages("setUpAfterSettlorDiedYesNo.checkYourAnswersLabel"),
+              Html("No"),
+              Some(SetUpAfterSettlorDiedController.onPageLoad().url)
+            ),
+            AnswerRow(
+              messages("typeOfTrust.checkYourAnswersLabel"),
+              Html("A trust through a Deed of Variation or family agreement"),
+              Some(TypeOfTrustController.onPageLoad().url)
+            ),
+            AnswerRow(
+              messages("whyDeedOfVariationCreated.checkYourAnswersLabel"),
+              Html("To replace a will trust"),
+              Some(WhyDeedOfVariationCreatedController.onPageLoad().url)
+            ),
+            AnswerRow(
+              messages("holdoverReliefClaimedYesNo.checkYourAnswersLabel"),
+              Html("Yes"),
+              Some(HoldoverReliefClaimedController.onPageLoad().url)
+            ),
+            AnswerRow(
+              messages("efrbsYesNo.checkYourAnswersLabel"),
+              Html("Yes"),
+              Some(EfrbsYesNoController.onPageLoad().url)
+            ),
+            AnswerRow(
+              messages("efrbsStartDate.checkYourAnswersLabel"),
+              Html("3 February 1996"),
+              Some(EfrbsStartDateController.onPageLoad().url)
+            ),
+            AnswerRow(
+              messages("ownsUkLandOrPropertyYesNo.checkYourAnswersLabel"),
+              Html("Yes"),
+              Some(OwnsUkLandOrPropertyController.onPageLoad().url)
+            ),
+            AnswerRow(
+              messages("recordedOnEeaRegisterYesNo.checkYourAnswersLabel"),
+              Html("Yes"),
+              Some(RecordedOnEeaRegisterController.onPageLoad().url)
+            ),
+            AnswerRow(
+              messages("whereTrusteesBased.checkYourAnswersLabel"),
+              Html("All the trustees are based in the UK"),
+              Some(WhereTrusteesBasedController.onPageLoad().url)
+            ),
+            AnswerRow(
+              messages("settlorsUkBasedYesNo.checkYourAnswersLabel"),
+              Html("Yes"),
+              Some(SettlorsUkBasedController.onPageLoad().url)
+            ),
+            AnswerRow(
+              messages("createdUnderScotsLawYesNo.checkYourAnswersLabel"),
+              Html("Yes"),
+              Some(CreatedUnderScotsLawController.onPageLoad().url)
+            ),
+            AnswerRow(
+              messages("previouslyResidentOffshoreYesNo.checkYourAnswersLabel"),
+              Html("Yes"),
+              Some(PreviouslyResidentOffshoreController.onPageLoad().url)
+            ),
+            AnswerRow(
+              messages("previouslyResidentOffshoreCountry.checkYourAnswersLabel"),
+              Html("United States of America"),
+              Some(PreviouslyResidentOffshoreCountryController.onPageLoad().url)
+            ),
+            AnswerRow(
+              messages("businessRelationshipInUkYesNo.checkYourAnswersLabel"),
+              Html("Yes"),
+              Some(BusinessRelationshipInUkController.onPageLoad().url)
+            ),
+            AnswerRow(
+              messages("settlorBenefitsFromAssetsYesNo.checkYourAnswersLabel"),
+              Html("No"),
+              Some(SettlorBenefitsFromAssetsController.onPageLoad().url)
+            ),
+            AnswerRow(
+              messages("forPurposeOfSection218YesNo.checkYourAnswersLabel"),
+              Html("Yes"),
+              Some(ForPurposeOfSection218Controller.onPageLoad().url)
+            ),
+            AnswerRow(
+              messages("agentCreatedTrustYesNo.checkYourAnswersLabel"),
+              Html("Yes"),
+              Some(AgentCreatedTrustController.onPageLoad().url)
+            ),
+            AnswerRow(
+              messages("schedule3aExemptYesNo.checkYourAnswersLabel"),
+              Html("Yes"),
+              Some(Schedule3aExemptYesNoController.onPageLoad().url)
+            )
           ),
           sectionKey = None
         )
       }
 
       "not migrating" in {
-        val userAnswers = emptyUserAnswers.copy(migratingFromNonTaxableToTaxable = false)
-          .set(OwnsUkLandOrPropertyPage, true).success.value
-          .set(RecordedOnEeaRegisterPage, false).success.value
-          .set(BusinessRelationshipInUkPage, true).success.value
-          .set(Schedule3aExemptYesNoPage, false).success.value
+        val userAnswers = emptyUserAnswers
+          .copy(migratingFromNonTaxableToTaxable = false)
+          .set(OwnsUkLandOrPropertyPage, true)
+          .success
+          .value
+          .set(RecordedOnEeaRegisterPage, false)
+          .success
+          .value
+          .set(BusinessRelationshipInUkPage, true)
+          .success
+          .value
+          .set(Schedule3aExemptYesNoPage, false)
+          .success
+          .value
 
         val result = printHelper(userAnswers)
 
         result mustEqual AnswerSection(
           headingKey = None,
           rows = Seq(
-            AnswerRow(messages("ownsUkLandOrPropertyYesNo.checkYourAnswersLabel"), Html("Yes"), Some(OwnsUkLandOrPropertyController.onPageLoad().url)),
-            AnswerRow(messages("recordedOnEeaRegisterYesNo.checkYourAnswersLabel"), Html("No"), Some(RecordedOnEeaRegisterController.onPageLoad().url)),
-            AnswerRow(messages("businessRelationshipInUkYesNo.checkYourAnswersLabel"), Html("Yes"), Some(BusinessRelationshipInUkController.onPageLoad().url)),
-            AnswerRow(messages("schedule3aExemptYesNo.checkYourAnswersLabel"), Html("No"), Some(Schedule3aExemptYesNoController.onPageLoad().url))
+            AnswerRow(
+              messages("ownsUkLandOrPropertyYesNo.checkYourAnswersLabel"),
+              Html("Yes"),
+              Some(OwnsUkLandOrPropertyController.onPageLoad().url)
+            ),
+            AnswerRow(
+              messages("recordedOnEeaRegisterYesNo.checkYourAnswersLabel"),
+              Html("No"),
+              Some(RecordedOnEeaRegisterController.onPageLoad().url)
+            ),
+            AnswerRow(
+              messages("businessRelationshipInUkYesNo.checkYourAnswersLabel"),
+              Html("Yes"),
+              Some(BusinessRelationshipInUkController.onPageLoad().url)
+            ),
+            AnswerRow(
+              messages("schedule3aExemptYesNo.checkYourAnswersLabel"),
+              Html("No"),
+              Some(Schedule3aExemptYesNoController.onPageLoad().url)
+            )
           ),
           sectionKey = None
         )

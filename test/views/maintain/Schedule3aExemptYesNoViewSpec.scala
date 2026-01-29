@@ -38,11 +38,25 @@ class Schedule3aExemptYesNoViewSpec extends Schedule3aExemptYesNoViewBehaviours 
     behave like normalPage(
       view = applyView(form),
       messageKeyPrefix = messageKeyPrefix,
-      expectedGuidanceKeys = "p1", "p2", "p3",
-      "bullet1", "bullet2", "bullet3", "bullet4",
-      "bullet5", "bullet6", "bullet7", "bullet8",
-      "bullet9", "bullet10", "bullet11", "bullet12",
-      "bullet13", "bullet14", "bullet15", "bullet16",
+      expectedGuidanceKeys = "p1",
+      "p2",
+      "p3",
+      "bullet1",
+      "bullet2",
+      "bullet3",
+      "bullet4",
+      "bullet5",
+      "bullet6",
+      "bullet7",
+      "bullet8",
+      "bullet9",
+      "bullet10",
+      "bullet11",
+      "bullet12",
+      "bullet13",
+      "bullet14",
+      "bullet15",
+      "bullet16",
       "subheading"
     )
 
@@ -52,4 +66,5 @@ class Schedule3aExemptYesNoViewSpec extends Schedule3aExemptYesNoViewBehaviours 
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

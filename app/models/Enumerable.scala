@@ -30,12 +30,15 @@ object Enumerable {
 
     implicit def reads[A](implicit ev: Enumerable[A]): Reads[A] = Reads {
       case JsString(str) =>
-        ev.withName(str).map {
-          s => JsSuccess(s)
-        }.getOrElse(JsError("error.invalid"))
-      case _ =>
+        ev.withName(str)
+          .map { s =>
+            JsSuccess(s)
+          }
+          .getOrElse(JsError("error.invalid"))
+      case _             =>
         JsError("error.invalid")
     }
 
   }
+
 }

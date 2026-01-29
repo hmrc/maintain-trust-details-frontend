@@ -28,4 +28,5 @@ class TrustResidentInUkPageSpec extends PageBehaviours {
 
     beRemovable[Boolean](TrustResidentInUkPage)
   }
+
 }

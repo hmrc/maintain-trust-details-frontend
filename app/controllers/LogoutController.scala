@@ -29,39 +29,39 @@ import uk.gov.hmrc.play.http.HeaderCarrierConverter
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class LogoutController @Inject()(
-                                  appConfig: AppConfig,
-                                  val controllerComponents: MessagesControllerComponents,
-                                  identify: IdentifierAction,
-                                  getData: DataRetrievalAction,
-                                  requireData: DataRequiredAction,
-                                  auditConnector: AuditConnector
-                                )(implicit val ec: ExecutionContext) extends FrontendBaseController with SessionLogging {
+class LogoutController @Inject() (
+  appConfig: AppConfig,
+  val controllerComponents: MessagesControllerComponents,
+  identify: IdentifierAction,
+  getData: DataRetrievalAction,
+  requireData: DataRequiredAction,
+  auditConnector: AuditConnector
+)(implicit val ec: ExecutionContext)
+    extends FrontendBaseController with SessionLogging {
 
-  def logout: Action[AnyContent] = (identify andThen getData andThen requireData) {
-    request =>
+  def logout: Action[AnyContent] = (identify andThen getData andThen requireData) { request =>
+    implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
-      implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
+    infoLog("user signed out from the service, asking for feedback", Some(request.userAnswers.identifier))
 
-      infoLog("user signed out from the service, asking for feedback", Some(request.userAnswers.identifier))
+    if (appConfig.logoutAudit) {
 
-      if(appConfig.logoutAudit) {
+      val auditData = Map(
+        "sessionId"  -> Session.id,
+        "event"      -> "signout",
+        "service"    -> "maintain-trust-details-frontend",
+        "userGroup"  -> request.user.affinityGroup.toString,
+        "identifier" -> request.userAnswers.identifier
+      )
 
-        val auditData = Map(
-          "sessionId" -> Session.id,
-          "event" -> "signout",
-          "service" -> "maintain-trust-details-frontend",
-          "userGroup" -> request.user.affinityGroup.toString,
-          "identifier" -> request.userAnswers.identifier
-        )
+      auditConnector.sendExplicitAudit(
+        "trusts",
+        auditData
+      )
 
-        auditConnector.sendExplicitAudit(
-          "trusts",
-          auditData
-        )
+    }
 
-      }
-
-      Redirect(appConfig.logoutUrl).withSession(session = ("feedbackId", Session.id))
+    Redirect(appConfig.logoutUrl).withSession(session = ("feedbackId", Session.id))
   }
+
 }

@@ -41,8 +41,8 @@ import uk.gov.hmrc.play.language.LanguageUtils
 class LanguageSwitchControllerSpec extends SpecBase {
 
   implicit val cc: MessagesControllerComponents = injector.instanceOf[MessagesControllerComponents]
-  val appconfig = app.injector.instanceOf[AppConfig]
-  val langUtil = app.injector.instanceOf[LanguageUtils]
+  val appconfig                                 = app.injector.instanceOf[AppConfig]
+  val langUtil                                  = app.injector.instanceOf[LanguageUtils]
 
   "LanguageSwitchController" must {
 
@@ -59,4 +59,5 @@ class LanguageSwitchControllerSpec extends SpecBase {
     }
 
   }
+
 }

@@ -33,8 +33,12 @@ class ForPurposeOfSection218PageSpec extends PageBehaviours {
       "NO selected" in {
 
         val userAnswers = emptyUserAnswers
-          .set(ForPurposeOfSection218Page, true).success.value
-          .set(AgentCreatedTrustPage, true).success.value
+          .set(ForPurposeOfSection218Page, true)
+          .success
+          .value
+          .set(AgentCreatedTrustPage, true)
+          .success
+          .value
 
         val cleanAnswers = userAnswers.set(ForPurposeOfSection218Page, false).success.value
 
@@ -42,4 +46,5 @@ class ForPurposeOfSection218PageSpec extends PageBehaviours {
       }
     }
   }
+
 }

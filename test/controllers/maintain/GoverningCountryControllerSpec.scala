@@ -30,7 +30,7 @@ import views.html.maintain.GoverningCountryView
 
 class GoverningCountryControllerSpec extends SpecBase with MockitoSugar {
 
-  val formProvider = new CountryFormProvider()
+  val formProvider       = new CountryFormProvider()
   val form: Form[String] = formProvider.withPrefix("governingCountry")
 
   lazy val governingCountryRoute: String = routes.GoverningCountryController.onPageLoad().url
@@ -97,7 +97,6 @@ class GoverningCountryControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
 
-
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
@@ -150,4 +149,5 @@ class GoverningCountryControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
   }
+
 }

@@ -46,4 +46,5 @@ class TaxableMigrationFlagSpec extends SpecBase {
       }
     }
   }
+
 }

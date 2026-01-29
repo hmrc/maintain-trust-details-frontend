@@ -22,10 +22,12 @@ import play.api.data.format.Formatter
 import java.time.LocalDate
 import scala.util.{Failure, Success, Try}
 
-private[mappings] class LocalDateFormatter(invalidKey: String,
-                                           allRequiredKey: String,
-                                           twoRequiredKey: String,
-                                           requiredKey: String) extends Formatter[LocalDate] with Formatters {
+private[mappings] class LocalDateFormatter(
+  invalidKey: String,
+  allRequiredKey: String,
+  twoRequiredKey: String,
+  requiredKey: String
+) extends Formatter[LocalDate] with Formatters {
 
   private val fieldKeys: List[String] = List("day", "month", "year")
 
@@ -33,7 +35,7 @@ private[mappings] class LocalDateFormatter(invalidKey: String,
     Try(LocalDate.of(year, month, day)) match {
       case Success(date) =>
         Right(date)
-      case Failure(_) =>
+      case Failure(_)    =>
         Left(Seq(FormError(key, invalidKey, fieldKeys)))
     }
 
@@ -55,9 +57,8 @@ private[mappings] class LocalDateFormatter(invalidKey: String,
 
   override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], LocalDate] = {
 
-    val fields = fieldKeys.map {
-      field =>
-        field -> data.get(s"$key.$field").filter(_.nonEmpty)
+    val fields = fieldKeys.map { field =>
+      field -> data.get(s"$key.$field").filter(_.nonEmpty)
     }.toMap
 
     lazy val missingFields = fields
@@ -81,8 +82,9 @@ private[mappings] class LocalDateFormatter(invalidKey: String,
 
   override def unbind(key: String, value: LocalDate): Map[String, String] =
     Map(
-      s"$key.day" -> value.getDayOfMonth.toString,
+      s"$key.day"   -> value.getDayOfMonth.toString,
       s"$key.month" -> value.getMonthValue.toString,
-      s"$key.year" -> value.getYear.toString
+      s"$key.year"  -> value.getYear.toString
     )
+
 }

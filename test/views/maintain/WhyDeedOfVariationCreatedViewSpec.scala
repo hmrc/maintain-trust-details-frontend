@@ -44,4 +44,5 @@ class WhyDeedOfVariationCreatedViewSpec extends EnumViewBehaviours[DeedOfVariati
 
     behave like pageWithRadioOptions(form, applyView, DeedOfVariation.options)
   }
+
 }

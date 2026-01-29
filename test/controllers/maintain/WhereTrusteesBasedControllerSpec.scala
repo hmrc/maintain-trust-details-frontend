@@ -94,7 +94,6 @@ class WhereTrusteesBasedControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
 
-
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
@@ -147,4 +146,5 @@ class WhereTrusteesBasedControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
   }
+
 }

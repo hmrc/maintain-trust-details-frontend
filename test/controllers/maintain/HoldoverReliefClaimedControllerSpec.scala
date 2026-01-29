@@ -28,7 +28,7 @@ import views.html.maintain.HoldoverReliefClaimedView
 
 class HoldoverReliefClaimedControllerSpec extends SpecBase {
 
-  val formProvider = new YesNoFormProvider()
+  val formProvider        = new YesNoFormProvider()
   val form: Form[Boolean] = formProvider.withPrefix("holdoverReliefClaimedYesNo")
 
   lazy val holdoverReliefClaimedRoute: String = routes.HoldoverReliefClaimedController.onPageLoad().url
@@ -93,7 +93,6 @@ class HoldoverReliefClaimedControllerSpec extends SpecBase {
       application.stop()
     }
 
-
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
@@ -146,4 +145,5 @@ class HoldoverReliefClaimedControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

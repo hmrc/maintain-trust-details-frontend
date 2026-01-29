@@ -39,13 +39,24 @@ class BusinessRelationshipInUkViewSpec extends YesNoViewBehaviours {
     behave like normalPage(
       view = applyView(form),
       messageKeyPrefix = messageKeyPrefix,
-      expectedGuidanceKeys = "paragraph1", "bullet1", "bullet2", "bullet3", "paragraph2"
+      expectedGuidanceKeys = "paragraph1",
+      "bullet1",
+      "bullet2",
+      "bullet3",
+      "paragraph2"
     )
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, None, routes.BusinessRelationshipInUkController.onSubmit().url)
+    behave like yesNoPage(
+      form,
+      applyView,
+      messageKeyPrefix,
+      None,
+      routes.BusinessRelationshipInUkController.onSubmit().url
+    )
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

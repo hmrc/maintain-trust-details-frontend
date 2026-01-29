@@ -44,4 +44,5 @@ class AdministeredInUkViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

@@ -44,4 +44,5 @@ class CreatedUnderScotsLawViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

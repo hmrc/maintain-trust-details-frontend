@@ -39,13 +39,25 @@ class RecordedOnEeaRegisterViewSpec extends YesNoViewBehaviours {
     behave like normalPage(
       view = applyView(form),
       messageKeyPrefix = messageKeyPrefix,
-      expectedGuidanceKeys = "paragraph1", "paragraph2", "bullet1", "bullet2", "bullet3", "bullet4"
+      expectedGuidanceKeys = "paragraph1",
+      "paragraph2",
+      "bullet1",
+      "bullet2",
+      "bullet3",
+      "bullet4"
     )
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, None, routes.RecordedOnEeaRegisterController.onSubmit().url)
+    behave like yesNoPage(
+      form,
+      applyView,
+      messageKeyPrefix,
+      None,
+      routes.RecordedOnEeaRegisterController.onSubmit().url
+    )
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

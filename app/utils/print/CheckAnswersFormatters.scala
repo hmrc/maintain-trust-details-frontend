@@ -25,27 +25,22 @@ import viewmodels.CountryOptions
 import java.time.LocalDate
 import javax.inject.Inject
 
-class CheckAnswersFormatters @Inject()(languageUtils: LanguageUtils,
-                                       countryOptions: CountryOptions) {
+class CheckAnswersFormatters @Inject() (languageUtils: LanguageUtils, countryOptions: CountryOptions) {
 
-  def yesOrNo(answer: Boolean)(implicit messages: Messages): Html = {
+  def yesOrNo(answer: Boolean)(implicit messages: Messages): Html =
     if (answer) {
       escape(messages("site.yes"))
     } else {
       escape(messages("site.no"))
     }
-  }
 
-  def formatDate(date: LocalDate)(implicit messages: Messages): Html = {
+  def formatDate(date: LocalDate)(implicit messages: Messages): Html =
     escape(languageUtils.Dates.formatDate(date))
-  }
 
-  def country(code: String)(implicit messages: Messages): Html = {
+  def country(code: String)(implicit messages: Messages): Html =
     escape(countryOptions.allOptions.find(_.value.equals(code)).map(_.label).getOrElse(""))
-  }
 
-  def formatEnum[T](key: String, answer: T)(implicit messages: Messages): Html = {
+  def formatEnum[T](key: String, answer: T)(implicit messages: Messages): Html =
     escape(messages(s"$key.$answer"))
-  }
 
 }

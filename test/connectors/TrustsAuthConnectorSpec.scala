@@ -30,31 +30,34 @@ import play.api.libs.json.{JsValue, Json}
 import play.api.test.DefaultAwaitTimeout
 import uk.gov.hmrc.http.HeaderCarrier
 
-class TrustsAuthConnectorSpec extends AsyncFreeSpec with Matchers with WireMockHelper with DefaultAwaitTimeout{
+class TrustsAuthConnectorSpec extends AsyncFreeSpec with Matchers with WireMockHelper with DefaultAwaitTimeout {
 
   implicit lazy val hc: HeaderCarrier = HeaderCarrier()
 
-  private val authorisedUrl: String = s"/trusts-auth/agent-authorised"
+  private val authorisedUrl: String                        = s"/trusts-auth/agent-authorised"
   private def authorisedUrlFor(identifier: String): String = s"/trusts-auth/authorised/$identifier"
 
-  private def responseFromJson(json: JsValue): ResponseDefinitionBuilder = {
+  private def responseFromJson(json: JsValue): ResponseDefinitionBuilder =
     aResponse().withStatus(Status.OK).withBody(json.toString())
-  }
 
-  private def allowedResponse: ResponseDefinitionBuilder = responseFromJson(Json.obj("authorised" -> true))
+  private def allowedResponse: ResponseDefinitionBuilder      = responseFromJson(Json.obj("authorised" -> true))
   private def allowedAgentResponse: ResponseDefinitionBuilder = responseFromJson(Json.obj("arn" -> "SomeArn"))
 
-  private def redirectResponse(): ResponseDefinitionBuilder = responseFromJson(Json.obj("redirectUrl" -> "redirect-url"))
+  private def redirectResponse(): ResponseDefinitionBuilder = responseFromJson(
+    Json.obj("redirectUrl" -> "redirect-url")
+  )
 
-  private def wiremock(url: String, response: ResponseDefinitionBuilder): StubMapping = {
+  private def wiremock(url: String, response: ResponseDefinitionBuilder): StubMapping =
     server.stubFor(get(urlEqualTo(url)).willReturn(response))
-  }
 
   lazy val app: Application = new GuiceApplicationBuilder()
-    .configure(Seq(
-      "microservice.services.trusts-auth.port" -> server.port(),
-      "auditing.enabled" -> false
-    ): _*).build()
+    .configure(
+      Seq(
+        "microservice.services.trusts-auth.port" -> server.port(),
+        "auditing.enabled"                       -> false
+      ): _*
+    )
+    .build()
 
   private lazy val connector = app.injector.instanceOf[TrustsAuthConnector]
 
@@ -129,4 +132,5 @@ class TrustsAuthConnectorSpec extends AsyncFreeSpec with Matchers with WireMockH
       }
     }
   }
+
 }

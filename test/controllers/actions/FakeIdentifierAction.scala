@@ -24,20 +24,21 @@ import models.requests.IdentifierRequest
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class FakeIdentifierAction @Inject()(bodyParsers: BodyParsers.Default, affinityGroup: AffinityGroup) extends IdentifierAction {
+class FakeIdentifierAction @Inject() (bodyParsers: BodyParsers.Default, affinityGroup: AffinityGroup)
+    extends IdentifierAction {
 
-  override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
+  override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] =
     affinityGroup match {
       case AffinityGroup.Agent =>
         block(IdentifierRequest(request, AgentUser("id", Enrolments(Set()), "arn")))
-      case _ =>
+      case _                   =>
         block(IdentifierRequest(request, OrganisationUser("id", Enrolments(Set()))))
     }
-  }
 
   override def parser: BodyParser[AnyContent] =
     bodyParsers
 
   override protected def executionContext: ExecutionContext =
     scala.concurrent.ExecutionContext.Implicits.global
+
 }

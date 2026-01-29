@@ -29,22 +29,23 @@ case object WhereTrusteesBasedPage extends QuestionPage[TrusteesBased] {
 
   override def toString: String = "whereTrusteesBased"
 
-  override def cleanup(value: Option[TrusteesBased], userAnswers: UserAnswers): Try[UserAnswers] = {
+  override def cleanup(value: Option[TrusteesBased], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
-      case Some(AllTrusteesUkBased) => userAnswers
-        .remove(SettlorsUkBasedPage)
-        .flatMap(_.remove(BusinessRelationshipInUkPage))
-        .flatMap(_.remove(SettlorBenefitsFromAssetsPage))
-        .flatMap(_.remove(ForPurposeOfSection218Page))
-        .flatMap(_.remove(AgentCreatedTrustPage))
-      case Some(NoTrusteesUkBased) => userAnswers
-        .remove(SettlorsUkBasedPage)
-        .flatMap(_.remove(CreatedUnderScotsLawPage))
-        .flatMap(_.remove(PreviouslyResidentOffshorePage))
-        .flatMap(_.remove(PreviouslyResidentOffshoreCountryPage))
-      case _ =>
+      case Some(AllTrusteesUkBased) =>
+        userAnswers
+          .remove(SettlorsUkBasedPage)
+          .flatMap(_.remove(BusinessRelationshipInUkPage))
+          .flatMap(_.remove(SettlorBenefitsFromAssetsPage))
+          .flatMap(_.remove(ForPurposeOfSection218Page))
+          .flatMap(_.remove(AgentCreatedTrustPage))
+      case Some(NoTrusteesUkBased)  =>
+        userAnswers
+          .remove(SettlorsUkBasedPage)
+          .flatMap(_.remove(CreatedUnderScotsLawPage))
+          .flatMap(_.remove(PreviouslyResidentOffshorePage))
+          .flatMap(_.remove(PreviouslyResidentOffshoreCountryPage))
+      case _                        =>
         super.cleanup(value, userAnswers)
     }
-  }
 
 }

@@ -28,4 +28,5 @@ class RecordedOnEeaRegisterPageSpec extends PageBehaviours {
 
     beRemovable[Boolean](RecordedOnEeaRegisterPage)
   }
+
 }

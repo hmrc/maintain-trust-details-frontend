@@ -27,14 +27,17 @@ import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class AppConfig @Inject()(config: Configuration,
-                          servicesConfig: ServicesConfig,
-                          contactFrontendConfig: ContactFrontendConfig) {
+class AppConfig @Inject() (
+  config: Configuration,
+  servicesConfig: ServicesConfig,
+  contactFrontendConfig: ContactFrontendConfig
+) {
 
-  val welshLanguageSupportEnabled: Boolean = config.getOptional[Boolean]("features.welsh-language-support").getOrElse(false)
+  val welshLanguageSupportEnabled: Boolean =
+    config.getOptional[Boolean]("features.welsh-language-support").getOrElse(false)
 
-  val en: String = "en"
-  val cy: String = "cy"
+  val en: String            = "en"
+  val cy: String            = "cy"
   val defaultLanguage: Lang = Lang(en)
 
   def languageMap: Map[String, Lang] = Map(
@@ -49,28 +52,29 @@ class AppConfig @Inject()(config: Configuration,
 
   lazy val trustsStoreUrl: String = servicesConfig.baseUrl("trusts-store")
 
-  lazy val loginUrl: String = config.get[String]("urls.login")
-  lazy val loginContinueUrl: String = config.get[String]("urls.loginContinue")
-  lazy val logoutUrl: String = config.get[String]("urls.logout")
+  lazy val loginUrl: String                  = config.get[String]("urls.login")
+  lazy val loginContinueUrl: String          = config.get[String]("urls.loginContinue")
+  lazy val logoutUrl: String                 = config.get[String]("urls.logout")
   lazy val maintainATrustOverviewUrl: String = config.get[String]("urls.maintainATrustOverview")
 
   lazy val trustsUrl: String = servicesConfig.baseUrl("trusts")
 
-  lazy val schedule3aExemptEnabled: Boolean = config.get[Boolean]("microservice.services.features.schedule3aExempt.enabled")
+  lazy val schedule3aExemptEnabled: Boolean =
+    config.get[Boolean]("microservice.services.features.schedule3aExempt.enabled")
 
   lazy val logoutAudit: Boolean = config.get[Boolean]("features.auditing.logout")
 
   lazy val trustsAuthUrl: String = servicesConfig.baseUrl("trusts-auth")
 
-  val betaFeedbackUrl = s"${contactFrontendConfig.baseUrl.get}/contact/beta-feedback?service=${contactFrontendConfig.serviceId.get}"
+  val betaFeedbackUrl =
+    s"${contactFrontendConfig.baseUrl.get}/contact/beta-feedback?service=${contactFrontendConfig.serviceId.get}"
 
   lazy val countdownLength: Int = config.get[Int]("timeout.countdown")
-  lazy val timeoutLength: Int = config.get[Int]("timeout.length")
+  lazy val timeoutLength: Int   = config.get[Int]("timeout.length")
 
   lazy val mongoReplaceIndexes: Boolean = config.get[Boolean]("features.mongo.dropIndexes")
-  lazy val mongoSessionTTL: Long = config.get[Int]("mongodb.session.ttlSeconds")
-  lazy val mongoPlaybackTTL: Long = config.get[Int]("mongodb.playback.ttlSeconds")
-
+  lazy val mongoSessionTTL: Long        = config.get[Int]("mongodb.session.ttlSeconds")
+  lazy val mongoPlaybackTTL: Long       = config.get[Int]("mongodb.playback.ttlSeconds")
 
   private def getDate(entry: String): LocalDate = {
 
@@ -86,13 +90,13 @@ class AppConfig @Inject()(config: Configuration,
   lazy val minDate: LocalDate = getDate("minimum")
   lazy val maxDate: LocalDate = getDate("maximum")
 
-  lazy val locationCanonicalList: String = config.get[String]("location.canonical.list.all")
+  lazy val locationCanonicalList: String   = config.get[String]("location.canonical.list.all")
   lazy val locationCanonicalListCY: String = config.get[String]("location.canonical.list.allCY")
 
   def helplineUrl(implicit messages: Messages): String = {
     val path = messages.lang.code match {
       case `cy` => "urls.welshHelpline"
-      case _ => "urls.trustsHelpline"
+      case _    => "urls.trustsHelpline"
     }
 
     config.get[String](path)

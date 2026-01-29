@@ -32,8 +32,14 @@ class SectionFormatterSpec extends SpecBase {
       val answerSection: AnswerSection = AnswerSection(
         headingKey = None,
         rows = Seq(
-          AnswerRow(messages("startDate.checkYourAnswersLabel"), Html("1 January 2000"), canEdit = false, changeUrl = Some("/change-url")),
-          AnswerRow(messages("governedByUkLawYesNo.checkYourAnswersLabel"), Html("No"), Some("/change-url"))),
+          AnswerRow(
+            messages("startDate.checkYourAnswersLabel"),
+            Html("1 January 2000"),
+            canEdit = false,
+            changeUrl = Some("/change-url")
+          ),
+          AnswerRow(messages("governedByUkLawYesNo.checkYourAnswersLabel"), Html("No"), Some("/change-url"))
+        ),
         sectionKey = None
       )
 
@@ -41,9 +47,7 @@ class SectionFormatterSpec extends SpecBase {
 
       result mustEqual Seq(
         SummaryListRow(
-          key = Key(classes = "govuk-!-width-two-thirds",
-            content = Text("When was the trust created?")
-          ),
+          key = Key(classes = "govuk-!-width-two-thirds", content = Text("When was the trust created?")),
           value = Value(classes = "govuk-!-width-one-half", content = HtmlContent("1 January 2000")),
           actions = None
         ),
@@ -53,15 +57,21 @@ class SectionFormatterSpec extends SpecBase {
             content = Text("Is the trust governed by UK law?")
           ),
           value = Value(classes = "govuk-!-width-one-half", content = HtmlContent("No")),
-          actions = Option(Actions(items = Seq(ActionItem(href = "/change-url",
-            classes = s"change-link-1",
-            visuallyHiddenText = Some("Is the trust governed by UK law?"),
-            content = Text(messages("site.edit"))
-          ))))
+          actions = Option(
+            Actions(items =
+              Seq(
+                ActionItem(
+                  href = "/change-url",
+                  classes = s"change-link-1",
+                  visuallyHiddenText = Some("Is the trust governed by UK law?"),
+                  content = Text(messages("site.edit"))
+                )
+              )
+            )
+          )
         )
       )
     }
   }
+
 }
-
-

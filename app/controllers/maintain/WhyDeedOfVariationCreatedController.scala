@@ -31,43 +31,39 @@ import views.html.maintain.WhyDeedOfVariationCreatedView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class WhyDeedOfVariationCreatedController @Inject()(
-                                                     override val messagesApi: MessagesApi,
-                                                     standardActionSets: StandardActionSets,
-                                                     repository: PlaybackRepository,
-                                                     navigator: Navigator,
-                                                     formProvider: EnumFormProvider,
-                                                     val controllerComponents: MessagesControllerComponents,
-                                                     view: WhyDeedOfVariationCreatedView
-                                                   )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class WhyDeedOfVariationCreatedController @Inject() (
+  override val messagesApi: MessagesApi,
+  standardActionSets: StandardActionSets,
+  repository: PlaybackRepository,
+  navigator: Navigator,
+  formProvider: EnumFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: WhyDeedOfVariationCreatedView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport {
 
   private val form: Form[DeedOfVariation] = formProvider("whyDeedOfVariationCreated")
 
-  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForIdentifier {
-    implicit request =>
-      val preparedForm = request.userAnswers.get(WhyDeedOfVariationCreatedPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
+  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForIdentifier { implicit request =>
+    val preparedForm = request.userAnswers.get(WhyDeedOfVariationCreatedPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      Ok(view(preparedForm))
+    Ok(view(preparedForm))
   }
 
-  def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForIdentifier.async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors))),
-
-        value => {
+  def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForIdentifier.async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors))),
+        value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(WhyDeedOfVariationCreatedPage, value))
             _              <- repository.set(updatedAnswers)
-          } yield {
-            Redirect(navigator.nextPage(WhyDeedOfVariationCreatedPage, updatedAnswers))
-          }
-        }
+          } yield Redirect(navigator.nextPage(WhyDeedOfVariationCreatedPage, updatedAnswers))
       )
   }
+
 }

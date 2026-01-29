@@ -27,9 +27,9 @@ import java.time.{LocalDate, LocalDateTime}
 class MongoDateTimeFormatsSpec extends AnyFreeSpec with Matchers with OptionValues with MongoDateTimeFormats {
 
   "a LocalDateTime" - {
-    val date = LocalDate.of(2018, 2, 1).atStartOfDay
+    val date       = LocalDate.of(2018, 2, 1).atStartOfDay
     val dateMillis = 1517443200000L
-    val json = Json.obj(
+    val json       = Json.obj(
       s"$$date" -> dateMillis
     )
     "must serialise to json" in {
@@ -49,24 +49,24 @@ class MongoDateTimeFormatsSpec extends AnyFreeSpec with Matchers with OptionValu
       val jsonNumberLong = Json.obj(
         "$date" -> Json.obj("$numberLong" -> JsString(dateMillis.toString))
       )
-      val result = jsonNumberLong.as[LocalDateTime]
+      val result         = jsonNumberLong.as[LocalDateTime]
       result mustEqual date
     }
 
     "must deserialise from json when $date is an ISO string with Z" in {
       val jsonIsoZ = Json.obj("$date" -> JsString("2018-02-01T00:00:00Z"))
-      val result = jsonIsoZ.as[LocalDateTime]
+      val result   = jsonIsoZ.as[LocalDateTime]
       result mustEqual date
     }
 
     "must deserialise from json when $date is an ISO string without Z" in {
       val jsonIsoNoZ = Json.obj("$date" -> JsString("2018-02-01T00:00:00"))
-      val result = jsonIsoNoZ.as[LocalDateTime]
+      val result     = jsonIsoNoZ.as[LocalDateTime]
       result mustEqual date
     }
 
     "must fail to deserialise when $date is the wrong type" in {
-      val bad = Json.obj("$date" -> JsBoolean(true))
+      val bad    = Json.obj("$date" -> JsBoolean(true))
       val result = bad.validate[LocalDateTime]
       result.isError mustBe true
       val JsError(errs) = result
@@ -74,7 +74,7 @@ class MongoDateTimeFormatsSpec extends AnyFreeSpec with Matchers with OptionValu
     }
 
     "must fail to deserialise when $date object does not contain $numberLong" in {
-      val bad = Json.obj("$date" -> Json.obj("notNumberLong" -> JsString("x")))
+      val bad    = Json.obj("$date" -> Json.obj("notNumberLong" -> JsString("x")))
       val result = bad.validate[LocalDateTime]
       result.isError mustBe true
       val JsError(errs) = result
@@ -82,11 +82,12 @@ class MongoDateTimeFormatsSpec extends AnyFreeSpec with Matchers with OptionValu
     }
 
     "must fail to deserialise when $date is missing" in {
-      val bad = Json.obj("notDate" -> JsNumber(dateMillis))
+      val bad    = Json.obj("notDate" -> JsNumber(dateMillis))
       val result = bad.validate[LocalDateTime]
       result.isError mustBe true
       val JsError(errs) = result
       errs.head._2.head.message mustBe "Unexpected LocalDateTime Format"
     }
   }
+
 }

@@ -50,13 +50,14 @@ object TypeOfTrust {
   }
 
   implicit val reads: Reads[TypeOfTrust] = Reads {
-    case JsString(WillTrustOrIntestacyTrust.asString) => JsSuccess(WillTrustOrIntestacyTrust)
-    case JsString(DeedOfVariationTrustOrFamilyArrangement.asString) => JsSuccess(DeedOfVariationTrustOrFamilyArrangement)
-    case JsString(InterVivosSettlement.asString) => JsSuccess(InterVivosSettlement)
-    case JsString(EmploymentRelated.asString) => JsSuccess(EmploymentRelated)
-    case JsString(HeritageMaintenanceFund.asString) => JsSuccess(HeritageMaintenanceFund)
-    case JsString(FlatManagementCompanyOrSinkingFund.asString) => JsSuccess(FlatManagementCompanyOrSinkingFund)
-    case _ => JsError("Invalid TypeOfTrust")
+    case JsString(WillTrustOrIntestacyTrust.asString)               => JsSuccess(WillTrustOrIntestacyTrust)
+    case JsString(DeedOfVariationTrustOrFamilyArrangement.asString) =>
+      JsSuccess(DeedOfVariationTrustOrFamilyArrangement)
+    case JsString(InterVivosSettlement.asString)                    => JsSuccess(InterVivosSettlement)
+    case JsString(EmploymentRelated.asString)                       => JsSuccess(EmploymentRelated)
+    case JsString(HeritageMaintenanceFund.asString)                 => JsSuccess(HeritageMaintenanceFund)
+    case JsString(FlatManagementCompanyOrSinkingFund.asString)      => JsSuccess(FlatManagementCompanyOrSinkingFund)
+    case _                                                          => JsError("Invalid TypeOfTrust")
   }
 
   implicit val writes: Writes[TypeOfTrust] = Writes(x => JsString(x.asString))
@@ -76,4 +77,5 @@ object TypeOfTrust {
 
   implicit val enumerable: Enumerable[TypeOfTrust] =
     Enumerable(values.map(v => v.toString -> v): _*)
+
 }

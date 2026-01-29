@@ -56,7 +56,8 @@ class WhyDeedOfVariationCreatedControllerSpec extends SpecBase with MockitoSugar
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(WhyDeedOfVariationCreatedPage, DeedOfVariation.ReplacedWillTrust).success.value
+      val userAnswers =
+        emptyUserAnswers.set(WhyDeedOfVariationCreatedPage, DeedOfVariation.ReplacedWillTrust).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -92,7 +93,6 @@ class WhyDeedOfVariationCreatedControllerSpec extends SpecBase with MockitoSugar
 
       application.stop()
     }
-
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
@@ -148,4 +148,5 @@ class WhyDeedOfVariationCreatedControllerSpec extends SpecBase with MockitoSugar
       application.stop()
     }
   }
+
 }

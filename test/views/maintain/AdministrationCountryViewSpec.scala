@@ -46,4 +46,5 @@ class AdministrationCountryViewSpec extends SelectCountryViewBehaviours {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

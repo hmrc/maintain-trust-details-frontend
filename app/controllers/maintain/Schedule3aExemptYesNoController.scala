@@ -33,41 +33,39 @@ import views.html.maintain.Schedule3aExemptYesNoView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class Schedule3aExemptYesNoController @Inject()(override val messagesApi: MessagesApi,
-                                                yesNoFormProvider: YesNoFormProvider,
-                                                repository: PlaybackRepository,
-                                                navigator: Navigator,
-                                                actions: StandardActionSets,
-                                                val controllerComponents: MessagesControllerComponents,
-                                                view: Schedule3aExemptYesNoView
-                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class Schedule3aExemptYesNoController @Inject() (
+  override val messagesApi: MessagesApi,
+  yesNoFormProvider: YesNoFormProvider,
+  repository: PlaybackRepository,
+  navigator: Navigator,
+  actions: StandardActionSets,
+  val controllerComponents: MessagesControllerComponents,
+  view: Schedule3aExemptYesNoView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport {
 
   private val form: Form[Boolean] = yesNoFormProvider.withPrefix("schedule3aExemptYesNo")
 
-  def onPageLoad(): Action[AnyContent] = actions.identifiedUserWithData {
-    implicit request =>
+  def onPageLoad(): Action[AnyContent] = actions.identifiedUserWithData { implicit request =>
+    val preparedForm = request.userAnswers.get(Schedule3aExemptYesNoPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(Schedule3aExemptYesNoPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm))
+    Ok(view(preparedForm))
   }
 
-  def onSubmit(): Action[AnyContent] = actions.identifiedUserWithData.async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors))),
-
-        value => {
+  def onSubmit(): Action[AnyContent] = actions.identifiedUserWithData.async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors))),
+        value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(Schedule3aExemptYesNoPage, value))
-            _ <- repository.set(updatedAnswers)
+            _              <- repository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(Schedule3aExemptYesNoPage, updatedAnswers))
-        }
       )
   }
+
 }

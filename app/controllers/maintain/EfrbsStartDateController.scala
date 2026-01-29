@@ -31,42 +31,39 @@ import java.time.LocalDate
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class EfrbsStartDateController @Inject()(
-                                          override val messagesApi: MessagesApi,
-                                          repository: PlaybackRepository,
-                                          dateFormProvider: DateFormProvider,
-                                          navigator: Navigator,
-                                          actions: StandardActionSets,
-                                          val controllerComponents: MessagesControllerComponents,
-                                          view: EfrbsStartDateView
-                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class EfrbsStartDateController @Inject() (
+  override val messagesApi: MessagesApi,
+  repository: PlaybackRepository,
+  dateFormProvider: DateFormProvider,
+  navigator: Navigator,
+  actions: StandardActionSets,
+  val controllerComponents: MessagesControllerComponents,
+  view: EfrbsStartDateView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport {
 
   private val form: Form[LocalDate] = dateFormProvider.withPrefix("efrbsStartDate")
 
-  def onPageLoad(): Action[AnyContent] = actions.identifiedUserWithData {
-    implicit request =>
+  def onPageLoad(): Action[AnyContent] = actions.identifiedUserWithData { implicit request =>
+    val preparedForm = request.userAnswers.get(EfrbsStartDatePage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(EfrbsStartDatePage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm))
+    Ok(view(preparedForm))
   }
 
-  def onSubmit(): Action[AnyContent] = actions.identifiedUserWithData.async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors))),
-
-        value => {
+  def onSubmit(): Action[AnyContent] = actions.identifiedUserWithData.async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors))),
+        value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(EfrbsStartDatePage, value))
             _              <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(EfrbsStartDatePage,updatedAnswers))
-        }
+          } yield Redirect(navigator.nextPage(EfrbsStartDatePage, updatedAnswers))
       )
   }
+
 }

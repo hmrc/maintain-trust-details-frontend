@@ -27,23 +27,19 @@ import java.time.{Instant, LocalDate, ZoneOffset}
 
 trait ModelGenerators {
 
-  implicit lazy val arbitraryTaxableMigrationFlag: Arbitrary[TaxableMigrationFlag] = {
+  implicit lazy val arbitraryTaxableMigrationFlag: Arbitrary[TaxableMigrationFlag] =
     Arbitrary {
       for {
         value <- arbitrary[Option[Boolean]]
-      } yield {
-        TaxableMigrationFlag(value)
-      }
+      } yield TaxableMigrationFlag(value)
     }
-  }
 
-  implicit lazy val arbitraryTypeOfTrust: Arbitrary[TypeOfTrust] = {
+  implicit lazy val arbitraryTypeOfTrust: Arbitrary[TypeOfTrust] =
     Arbitrary {
       Gen.oneOf(TypeOfTrust.values)
     }
-  }
 
-  implicit lazy val arbitraryDeedOfVariation: Arbitrary[DeedOfVariation] = {
+  implicit lazy val arbitraryDeedOfVariation: Arbitrary[DeedOfVariation] =
     Arbitrary {
       Gen.oneOf(
         PreviouslyAbsoluteInterestUnderWill,
@@ -51,29 +47,25 @@ trait ModelGenerators {
         AdditionToWillTrust
       )
     }
-  }
 
-  implicit lazy val arbitraryLocalDate: Arbitrary[LocalDate] = {
+  implicit lazy val arbitraryLocalDate: Arbitrary[LocalDate] =
     Arbitrary {
       for {
-        year <- Gen.choose(min = 1500, max = 2099)
+        year  <- Gen.choose(min = 1500, max = 2099)
         month <- Gen.choose(1, 12)
-        day <- Gen.choose(
-          min = 1,
-          max = month match {
-            case 2 if year % 4 == 0 => 29
-            case 2 => 28
-            case 4 | 6 | 9 | 11 => 30
-            case _ => 31
-          }
-        )
-      } yield {
-        LocalDate.of(year, month, day)
-      }
+        day   <- Gen.choose(
+                   min = 1,
+                   max = month match {
+                     case 2 if year % 4 == 0 => 29
+                     case 2              => 28
+                     case 4 | 6 | 9 | 11 => 30
+                     case _              => 31
+                   }
+                 )
+      } yield LocalDate.of(year, month, day)
     }
-  }
 
-  implicit lazy val arbitraryTrusteesBased: Arbitrary[TrusteesBased] = {
+  implicit lazy val arbitraryTrusteesBased: Arbitrary[TrusteesBased] =
     Arbitrary {
       Gen.oneOf(
         AllTrusteesUkBased,
@@ -81,16 +73,14 @@ trait ModelGenerators {
         NoTrusteesUkBased
       )
     }
-  }
 
   def datesBetween(min: LocalDate, max: LocalDate): Gen[LocalDate] = {
 
     def toMillis(date: LocalDate): Long =
       date.atStartOfDay.atZone(ZoneOffset.UTC).toInstant.toEpochMilli
 
-    Gen.choose(toMillis(min), toMillis(max)).map {
-      millis =>
-        Instant.ofEpochMilli(millis).atOffset(ZoneOffset.UTC).toLocalDate
+    Gen.choose(toMillis(min), toMillis(max)).map { millis =>
+      Instant.ofEpochMilli(millis).atOffset(ZoneOffset.UTC).toLocalDate
     }
   }
 

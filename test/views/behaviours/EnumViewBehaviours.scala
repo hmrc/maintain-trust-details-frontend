@@ -22,22 +22,23 @@ import viewmodels.RadioOption
 
 trait EnumViewBehaviours[A] extends ViewBehaviours {
 
-  def pageWithRadioOptions(form: Form[A],
-                           applyView: Form[A] => HtmlFormat.Appendable,
-                           options: List[RadioOption]): Unit = {
+  def pageWithRadioOptions(
+    form: Form[A],
+    applyView: Form[A] => HtmlFormat.Appendable,
+    options: List[RadioOption]
+  ): Unit = {
 
     "render radio buttons" in {
 
       val doc = asDocument(applyView(form))
 
-      for (option <- options) {
+      for (option <- options)
         assertContainsRadioButton(doc, option.id, "value", option.value, isChecked = false)
-      }
     }
 
     "render selected radio button" when {
 
-      for (option <- options) {
+      for (option <- options)
 
         s"value is '${option.value}'" must {
 
@@ -47,12 +48,11 @@ trait EnumViewBehaviours[A] extends ViewBehaviours {
 
             assertContainsRadioButton(doc, option.id, "value", option.value, isChecked = true)
 
-            for (unselectedOption <- options.filterNot(_ == option)) {
+            for (unselectedOption <- options.filterNot(_ == option))
               assertContainsRadioButton(doc, unselectedOption.id, "value", unselectedOption.value, isChecked = false)
-            }
           }
         }
-      }
     }
   }
+
 }

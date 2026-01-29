@@ -30,42 +30,39 @@ import views.html.maintain.HoldoverReliefClaimedView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class HoldoverReliefClaimedController @Inject()(
-                                                 override val messagesApi: MessagesApi,
-                                                 repository: PlaybackRepository,
-                                                 yesNoFormProvider: YesNoFormProvider,
-                                                 navigator: Navigator,
-                                                 actions: StandardActionSets,
-                                                 val controllerComponents: MessagesControllerComponents,
-                                                 view: HoldoverReliefClaimedView
-                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class HoldoverReliefClaimedController @Inject() (
+  override val messagesApi: MessagesApi,
+  repository: PlaybackRepository,
+  yesNoFormProvider: YesNoFormProvider,
+  navigator: Navigator,
+  actions: StandardActionSets,
+  val controllerComponents: MessagesControllerComponents,
+  view: HoldoverReliefClaimedView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport {
 
   private val form: Form[Boolean] = yesNoFormProvider.withPrefix("holdoverReliefClaimedYesNo")
 
-  def onPageLoad(): Action[AnyContent] = actions.identifiedUserWithData {
-    implicit request =>
+  def onPageLoad(): Action[AnyContent] = actions.identifiedUserWithData { implicit request =>
+    val preparedForm = request.userAnswers.get(HoldoverReliefClaimedPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(HoldoverReliefClaimedPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm))
+    Ok(view(preparedForm))
   }
 
-  def onSubmit(): Action[AnyContent] = actions.identifiedUserWithData.async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors))),
-
-        value => {
+  def onSubmit(): Action[AnyContent] = actions.identifiedUserWithData.async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors))),
+        value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(HoldoverReliefClaimedPage, value))
             _              <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(HoldoverReliefClaimedPage,updatedAnswers))
-        }
+          } yield Redirect(navigator.nextPage(HoldoverReliefClaimedPage, updatedAnswers))
       )
   }
+
 }

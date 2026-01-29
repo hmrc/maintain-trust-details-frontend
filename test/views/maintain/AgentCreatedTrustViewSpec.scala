@@ -44,4 +44,5 @@ class AgentCreatedTrustViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

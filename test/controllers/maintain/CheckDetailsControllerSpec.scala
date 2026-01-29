@@ -42,13 +42,14 @@ import views.html.maintain.CheckDetailsView
 import java.time.LocalDate
 import scala.concurrent.Future
 
-class CheckDetailsControllerSpec extends SpecBase with BeforeAndAfterEach with ScalaCheckPropertyChecks with ModelGenerators {
+class CheckDetailsControllerSpec
+    extends SpecBase with BeforeAndAfterEach with ScalaCheckPropertyChecks with ModelGenerators {
 
-  private lazy val checkDetailsRoute = controllers.maintain.routes.CheckDetailsController.onPageLoad().url
+  private lazy val checkDetailsRoute  = controllers.maintain.routes.CheckDetailsController.onPageLoad().url
   private lazy val submitDetailsRoute = controllers.maintain.routes.CheckDetailsController.onSubmit().url
-  private lazy val onwardRoute = frontendAppConfig.maintainATrustOverviewUrl
+  private lazy val onwardRoute        = frontendAppConfig.maintainATrustOverviewUrl
 
-  private val mockTrustsConnector: TrustsConnector = mock[TrustsConnector]
+  private val mockTrustsConnector: TrustsConnector           = mock[TrustsConnector]
   private val mockTrustsStoreConnector: TrustsStoreConnector = mock[TrustsStoreConnector]
 
   override def beforeEach(): Unit = {
@@ -154,7 +155,8 @@ class CheckDetailsControllerSpec extends SpecBase with BeforeAndAfterEach with S
               bind[TrustsConnector].toInstance(mockTrustsConnector),
               bind[TrustDetailsMapper].toInstance(mockMapper),
               bind[TrustsStoreConnector].toInstance(mockTrustsStoreConnector)
-            ).build()
+            )
+            .build()
 
           val trustDetails = nonMigratingTrustDetails
           when(mockMapper(any())).thenReturn(JsSuccess(trustDetails))
@@ -167,9 +169,17 @@ class CheckDetailsControllerSpec extends SpecBase with BeforeAndAfterEach with S
 
           redirectLocation(result).value mustEqual onwardRoute
 
-          verify(mockTrustsConnector, never).removeOptionalTrustDetailTransforms(ArgumentMatchers.eq(userAnswers.identifier))(any(), any())
-          verify(mockTrustsConnector).setNonMigratingTrustDetails(ArgumentMatchers.eq(userAnswers.identifier), ArgumentMatchers.eq(trustDetails))(any(), any())
-          verify(mockTrustsStoreConnector).updateTaskStatus(ArgumentMatchers.eq(userAnswers.identifier), ArgumentMatchers.eq(Completed))(any(), any())
+          verify(mockTrustsConnector, never).removeOptionalTrustDetailTransforms(
+            ArgumentMatchers.eq(userAnswers.identifier)
+          )(any(), any())
+          verify(mockTrustsConnector).setNonMigratingTrustDetails(
+            ArgumentMatchers.eq(userAnswers.identifier),
+            ArgumentMatchers.eq(trustDetails)
+          )(any(), any())
+          verify(mockTrustsStoreConnector).updateTaskStatus(
+            ArgumentMatchers.eq(userAnswers.identifier),
+            ArgumentMatchers.eq(Completed)
+          )(any(), any())
 
           application.stop()
         }
@@ -185,7 +195,8 @@ class CheckDetailsControllerSpec extends SpecBase with BeforeAndAfterEach with S
               bind[TrustsConnector].toInstance(mockTrustsConnector),
               bind[TrustDetailsMapper].toInstance(mockMapper),
               bind[TrustsStoreConnector].toInstance(mockTrustsStoreConnector)
-            ).build()
+            )
+            .build()
 
           val trustDetails = migratingTrustDetails
           when(mockMapper(any())).thenReturn(JsSuccess(trustDetails))
@@ -198,56 +209,66 @@ class CheckDetailsControllerSpec extends SpecBase with BeforeAndAfterEach with S
 
           redirectLocation(result).value mustEqual onwardRoute
 
-          verify(mockTrustsConnector).removeOptionalTrustDetailTransforms(ArgumentMatchers.eq(userAnswers.identifier))(any(), any())
-          verify(mockTrustsConnector).setMigratingTrustDetails(ArgumentMatchers.eq(userAnswers.identifier), ArgumentMatchers.eq(trustDetails))(any(), any())
-          verify(mockTrustsStoreConnector).updateTaskStatus(ArgumentMatchers.eq(userAnswers.identifier), ArgumentMatchers.eq(Completed))(any(), any())
+          verify(mockTrustsConnector)
+            .removeOptionalTrustDetailTransforms(ArgumentMatchers.eq(userAnswers.identifier))(any(), any())
+          verify(mockTrustsConnector).setMigratingTrustDetails(
+            ArgumentMatchers.eq(userAnswers.identifier),
+            ArgumentMatchers.eq(trustDetails)
+          )(any(), any())
+          verify(mockTrustsStoreConnector).updateTaskStatus(
+            ArgumentMatchers.eq(userAnswers.identifier),
+            ArgumentMatchers.eq(Completed)
+          )(any(), any())
 
           application.stop()
         }
       }
 
       "remove trust type dependent transform fields" when {
-        "previous trust type is EmploymentRelated and new one is different" in {
+        "previous trust type is EmploymentRelated and new one is different" in
+          forAll(arbitrary[TypeOfTrust].suchThat(_ != EmploymentRelated)) { newAnswer =>
+            beforeEach()
 
-          forAll(arbitrary[TypeOfTrust].suchThat(_ != EmploymentRelated)) {
-            newAnswer =>
-              beforeEach()
+            val userAnswers = emptyUserAnswers
 
-              val userAnswers = emptyUserAnswers
+            val mockMapper = mock[TrustDetailsMapper]
 
-              val mockMapper = mock[TrustDetailsMapper]
+            val application = applicationBuilder(userAnswers = Some(userAnswers))
+              .overrides(
+                bind[TrustsConnector].toInstance(mockTrustsConnector),
+                bind[TrustDetailsMapper].toInstance(mockMapper),
+                bind[TrustsStoreConnector].toInstance(mockTrustsStoreConnector)
+              )
+              .build()
 
-              val application = applicationBuilder(userAnswers = Some(userAnswers))
-                .overrides(
-                  bind[TrustsConnector].toInstance(mockTrustsConnector),
-                  bind[TrustDetailsMapper].toInstance(mockMapper),
-                  bind[TrustsStoreConnector].toInstance(mockTrustsStoreConnector)
-                ).build()
+            val newTrustDetails = migratingTrustDetails.copy(typeOfTrust = newAnswer)
+            when(mockMapper(any())).thenReturn(JsSuccess(newTrustDetails))
 
-              val newTrustDetails = migratingTrustDetails.copy(typeOfTrust = newAnswer)
-              when(mockMapper(any())).thenReturn(JsSuccess(newTrustDetails))
+            val request = FakeRequest(POST, submitDetailsRoute)
 
-              val request = FakeRequest(POST, submitDetailsRoute)
+            val result = route(application, request).value
 
-              val result = route(application, request).value
+            status(result) mustEqual SEE_OTHER
 
-              status(result) mustEqual SEE_OTHER
+            redirectLocation(result).value mustEqual onwardRoute
 
-              redirectLocation(result).value mustEqual onwardRoute
+            verify(mockTrustsConnector).removeTrustTypeDependentTransformFields(any())(any(), any())
+            verify(mockTrustsConnector).setMigratingTrustDetails(
+              ArgumentMatchers.eq(userAnswers.identifier),
+              ArgumentMatchers.eq(newTrustDetails)
+            )(any(), any())
+            verify(mockTrustsStoreConnector).updateTaskStatus(
+              ArgumentMatchers.eq(userAnswers.identifier),
+              ArgumentMatchers.eq(Completed)
+            )(any(), any())
 
-              verify(mockTrustsConnector).removeTrustTypeDependentTransformFields(any())(any(), any())
-              verify(mockTrustsConnector).setMigratingTrustDetails(ArgumentMatchers.eq(userAnswers.identifier), ArgumentMatchers.eq(newTrustDetails))(any(), any())
-              verify(mockTrustsStoreConnector).updateTaskStatus(ArgumentMatchers.eq(userAnswers.identifier), ArgumentMatchers.eq(Completed))(any(), any())
-
-              application.stop()
+            application.stop()
           }
-        }
       }
 
       "not remove trust type dependent transform fields" when {
 
-        "previous trust type is not EmploymentRelated and new one is anything" in {
-
+        "previous trust type is not EmploymentRelated and new one is anything" in
           forAll(arbitrary[TypeOfTrust].suchThat(_ != EmploymentRelated), arbitrary[TypeOfTrust]) {
             (oldAnswer, newAnswer) =>
               beforeEach()
@@ -261,7 +282,8 @@ class CheckDetailsControllerSpec extends SpecBase with BeforeAndAfterEach with S
                   bind[TrustsConnector].toInstance(mockTrustsConnector),
                   bind[TrustDetailsMapper].toInstance(mockMapper),
                   bind[TrustsStoreConnector].toInstance(mockTrustsStoreConnector)
-                ).build()
+                )
+                .build()
 
               when(mockTrustsConnector.getTrustDetails(any())(any(), any()))
                 .thenReturn(Future.successful(oldTrustDetails(oldAnswer)))
@@ -278,12 +300,17 @@ class CheckDetailsControllerSpec extends SpecBase with BeforeAndAfterEach with S
               redirectLocation(result).value mustEqual onwardRoute
 
               verify(mockTrustsConnector, never).removeTrustTypeDependentTransformFields(any())(any(), any())
-              verify(mockTrustsConnector).setMigratingTrustDetails(ArgumentMatchers.eq(userAnswers.identifier), ArgumentMatchers.eq(newTrustDetails))(any(), any())
-              verify(mockTrustsStoreConnector).updateTaskStatus(ArgumentMatchers.eq(userAnswers.identifier), ArgumentMatchers.eq(Completed))(any(), any())
+              verify(mockTrustsConnector).setMigratingTrustDetails(
+                ArgumentMatchers.eq(userAnswers.identifier),
+                ArgumentMatchers.eq(newTrustDetails)
+              )(any(), any())
+              verify(mockTrustsStoreConnector).updateTaskStatus(
+                ArgumentMatchers.eq(userAnswers.identifier),
+                ArgumentMatchers.eq(Completed)
+              )(any(), any())
 
               application.stop()
           }
-        }
 
         "previous trust type is EmploymentRelated and new one hasn't changed" in {
 
@@ -296,7 +323,8 @@ class CheckDetailsControllerSpec extends SpecBase with BeforeAndAfterEach with S
               bind[TrustsConnector].toInstance(mockTrustsConnector),
               bind[TrustDetailsMapper].toInstance(mockMapper),
               bind[TrustsStoreConnector].toInstance(mockTrustsStoreConnector)
-            ).build()
+            )
+            .build()
 
           val newTrustDetails = migratingTrustDetails.copy(typeOfTrust = EmploymentRelated)
           when(mockMapper(any())).thenReturn(JsSuccess(newTrustDetails))
@@ -310,8 +338,14 @@ class CheckDetailsControllerSpec extends SpecBase with BeforeAndAfterEach with S
           redirectLocation(result).value mustEqual onwardRoute
 
           verify(mockTrustsConnector, never).removeTrustTypeDependentTransformFields(any())(any(), any())
-          verify(mockTrustsConnector).setMigratingTrustDetails(ArgumentMatchers.eq(userAnswers.identifier), ArgumentMatchers.eq(newTrustDetails))(any(), any())
-          verify(mockTrustsStoreConnector).updateTaskStatus(ArgumentMatchers.eq(userAnswers.identifier), ArgumentMatchers.eq(Completed))(any(), any())
+          verify(mockTrustsConnector).setMigratingTrustDetails(
+            ArgumentMatchers.eq(userAnswers.identifier),
+            ArgumentMatchers.eq(newTrustDetails)
+          )(any(), any())
+          verify(mockTrustsStoreConnector).updateTaskStatus(
+            ArgumentMatchers.eq(userAnswers.identifier),
+            ArgumentMatchers.eq(Completed)
+          )(any(), any())
 
           application.stop()
         }
@@ -327,7 +361,8 @@ class CheckDetailsControllerSpec extends SpecBase with BeforeAndAfterEach with S
             .overrides(
               bind[TrustsConnector].toInstance(mockTrustsConnector),
               bind[TrustDetailsMapper].toInstance(mockMapper)
-            ).build()
+            )
+            .build()
 
           when(mockMapper(any())).thenReturn(JsError())
 
@@ -350,11 +385,13 @@ class CheckDetailsControllerSpec extends SpecBase with BeforeAndAfterEach with S
               .overrides(
                 bind[TrustsConnector].toInstance(mockTrustsConnector),
                 bind[TrustDetailsMapper].toInstance(mockMapper)
-              ).build()
+              )
+              .build()
 
             when(mockMapper(any())).thenReturn(JsSuccess(nonMigratingTrustDetails))
 
-            when(mockTrustsConnector.setNonMigratingTrustDetails(any(), any())(any(), any())).thenReturn(Future.failed(new Throwable("")))
+            when(mockTrustsConnector.setNonMigratingTrustDetails(any(), any())(any(), any()))
+              .thenReturn(Future.failed(new Throwable("")))
 
             val request = FakeRequest(POST, submitDetailsRoute)
 
@@ -373,11 +410,13 @@ class CheckDetailsControllerSpec extends SpecBase with BeforeAndAfterEach with S
               .overrides(
                 bind[TrustsConnector].toInstance(mockTrustsConnector),
                 bind[TrustDetailsMapper].toInstance(mockMapper)
-              ).build()
+              )
+              .build()
 
             when(mockMapper(any())).thenReturn(JsSuccess(migratingTrustDetails))
 
-            when(mockTrustsConnector.setMigratingTrustDetails(any(), any())(any(), any())).thenReturn(Future.failed(new Throwable("")))
+            when(mockTrustsConnector.setMigratingTrustDetails(any(), any())(any(), any()))
+              .thenReturn(Future.failed(new Throwable("")))
 
             val request = FakeRequest(POST, submitDetailsRoute)
 
@@ -397,12 +436,14 @@ class CheckDetailsControllerSpec extends SpecBase with BeforeAndAfterEach with S
             .overrides(
               bind[TrustsConnector].toInstance(mockTrustsConnector),
               bind[TrustDetailsMapper].toInstance(mockMapper)
-            ).build()
+            )
+            .build()
 
           val newTrustDetails = migratingTrustDetails.copy(typeOfTrust = HeritageMaintenanceFund)
           when(mockMapper(any())).thenReturn(JsSuccess(newTrustDetails))
 
-          when(mockTrustsConnector.removeTrustTypeDependentTransformFields(any())(any(), any())).thenReturn(Future.failed(new Throwable("")))
+          when(mockTrustsConnector.removeTrustTypeDependentTransformFields(any())(any(), any()))
+            .thenReturn(Future.failed(new Throwable("")))
 
           val request = FakeRequest(POST, submitDetailsRoute)
 
@@ -416,4 +457,5 @@ class CheckDetailsControllerSpec extends SpecBase with BeforeAndAfterEach with S
     }
 
   }
+
 }

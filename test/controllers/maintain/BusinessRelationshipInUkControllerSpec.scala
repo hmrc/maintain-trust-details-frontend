@@ -28,7 +28,7 @@ import views.html.maintain.BusinessRelationshipInUkView
 
 class BusinessRelationshipInUkControllerSpec extends SpecBase {
 
-  val formProvider = new YesNoFormProvider()
+  val formProvider        = new YesNoFormProvider()
   val form: Form[Boolean] = formProvider.withPrefix("businessRelationshipInUkYesNo")
 
   lazy val businessRelationshipYesNoControllerRoute: String = routes.BusinessRelationshipInUkController.onPageLoad().url
@@ -92,7 +92,6 @@ class BusinessRelationshipInUkControllerSpec extends SpecBase {
       application.stop()
     }
 
-
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
@@ -147,4 +146,5 @@ class BusinessRelationshipInUkControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

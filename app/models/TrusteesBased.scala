@@ -28,16 +28,18 @@ object TrusteesBased {
   case object InternationalAndUkBasedTrustees extends WithName("some-uk-based") with TrusteesBased
 
   implicit val reads: Reads[TrusteesBased] = Reads {
-    case JsString(AllTrusteesUkBased.toString) => JsSuccess(AllTrusteesUkBased)
-    case JsString(NoTrusteesUkBased.toString) => JsSuccess(NoTrusteesUkBased)
+    case JsString(AllTrusteesUkBased.toString)              => JsSuccess(AllTrusteesUkBased)
+    case JsString(NoTrusteesUkBased.toString)               => JsSuccess(NoTrusteesUkBased)
     case JsString(InternationalAndUkBasedTrustees.toString) => JsSuccess(InternationalAndUkBasedTrustees)
-    case _ => JsError("Invalid TrusteesBased")
+    case _                                                  => JsError("Invalid TrusteesBased")
   }
 
   implicit val writes: Writes[TrusteesBased] = Writes(x => JsString(x.toString))
 
   val values: List[TrusteesBased] = List(
-    AllTrusteesUkBased, NoTrusteesUkBased, InternationalAndUkBasedTrustees
+    AllTrusteesUkBased,
+    NoTrusteesUkBased,
+    InternationalAndUkBasedTrustees
   )
 
   val options: List[RadioOption] = values

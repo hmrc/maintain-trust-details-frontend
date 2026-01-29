@@ -30,42 +30,39 @@ import views.html.maintain.EfrbsYesNoView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class EfrbsYesNoController @Inject()(
-                                      override val messagesApi: MessagesApi,
-                                      repository: PlaybackRepository,
-                                      yesNoFormProvider: YesNoFormProvider,
-                                      navigator: Navigator,
-                                      actions: StandardActionSets,
-                                      val controllerComponents: MessagesControllerComponents,
-                                      view: EfrbsYesNoView
-                                    )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class EfrbsYesNoController @Inject() (
+  override val messagesApi: MessagesApi,
+  repository: PlaybackRepository,
+  yesNoFormProvider: YesNoFormProvider,
+  navigator: Navigator,
+  actions: StandardActionSets,
+  val controllerComponents: MessagesControllerComponents,
+  view: EfrbsYesNoView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport {
 
   private val form: Form[Boolean] = yesNoFormProvider.withPrefix("efrbsYesNo")
 
-  def onPageLoad(): Action[AnyContent] = actions.identifiedUserWithData {
-    implicit request =>
+  def onPageLoad(): Action[AnyContent] = actions.identifiedUserWithData { implicit request =>
+    val preparedForm = request.userAnswers.get(EfrbsYesNoPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(EfrbsYesNoPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm))
+    Ok(view(preparedForm))
   }
 
-  def onSubmit(): Action[AnyContent] = actions.identifiedUserWithData.async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors))),
-
-        value => {
+  def onSubmit(): Action[AnyContent] = actions.identifiedUserWithData.async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors))),
+        value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(EfrbsYesNoPage, value))
             _              <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(EfrbsYesNoPage,updatedAnswers))
-        }
+          } yield Redirect(navigator.nextPage(EfrbsYesNoPage, updatedAnswers))
       )
   }
+
 }

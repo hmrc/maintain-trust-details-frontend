@@ -36,11 +36,15 @@ class BeforeYouContinueViewSpec extends ViewBehaviours {
       messageKeyPrefix = messageKeyPrefix,
       messageKeyParam = "",
       captionParam = "",
-      expectedGuidanceKeys = "subheading", "bullet1", "bullet2", "bullet3"
+      expectedGuidanceKeys = "subheading",
+      "bullet1",
+      "bullet2",
+      "bullet3"
     )
 
     behave like pageWithBackLink(applyView())
 
     behave like pageWithASubmitButton(applyView())
   }
+
 }

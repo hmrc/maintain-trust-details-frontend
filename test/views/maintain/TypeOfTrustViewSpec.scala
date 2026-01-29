@@ -44,4 +44,5 @@ class TypeOfTrustViewSpec extends EnumViewBehaviours[TypeOfTrust] {
 
     behave like pageWithRadioOptions(form, applyView, TypeOfTrust.options)
   }
+
 }

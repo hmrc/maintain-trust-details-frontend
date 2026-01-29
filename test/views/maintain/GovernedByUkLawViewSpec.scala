@@ -39,7 +39,12 @@ class GovernedByUkLawViewSpec extends YesNoViewBehaviours {
     behave like normalPage(
       view = applyView(form),
       messageKeyPrefix = messageKeyPrefix,
-      expectedGuidanceKeys = "paragraph1", "bullet1", "bullet2", "bullet3", "paragraph2", "paragraph3"
+      expectedGuidanceKeys = "paragraph1",
+      "bullet1",
+      "bullet2",
+      "bullet3",
+      "paragraph2",
+      "paragraph3"
     )
 
     behave like pageWithBackLink(applyView(form))
@@ -48,4 +53,5 @@ class GovernedByUkLawViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

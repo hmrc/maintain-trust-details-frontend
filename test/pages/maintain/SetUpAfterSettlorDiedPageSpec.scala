@@ -36,20 +36,31 @@ class SetUpAfterSettlorDiedPageSpec extends PageBehaviours {
       "YES selected" in {
 
         val userAnswers = emptyUserAnswers
-          .set(TypeOfTrustPage, DeedOfVariationTrustOrFamilyArrangement).success.value
-          .set(WhyDeedOfVariationCreatedPage, ReplacedWillTrust).success.value
-          .set(HoldoverReliefClaimedPage, true).success.value
-          .set(EfrbsYesNoPage, true).success.value
-          .set(EfrbsStartDatePage, LocalDate.parse("1996-02-03")).success.value
+          .set(TypeOfTrustPage, DeedOfVariationTrustOrFamilyArrangement)
+          .success
+          .value
+          .set(WhyDeedOfVariationCreatedPage, ReplacedWillTrust)
+          .success
+          .value
+          .set(HoldoverReliefClaimedPage, true)
+          .success
+          .value
+          .set(EfrbsYesNoPage, true)
+          .success
+          .value
+          .set(EfrbsStartDatePage, LocalDate.parse("1996-02-03"))
+          .success
+          .value
 
         val cleanAnswers = userAnswers.set(SetUpAfterSettlorDiedPage, true).success.value
 
-        cleanAnswers.get(TypeOfTrustPage) mustBe None
+        cleanAnswers.get(TypeOfTrustPage)               mustBe None
         cleanAnswers.get(WhyDeedOfVariationCreatedPage) mustBe None
-        cleanAnswers.get(HoldoverReliefClaimedPage) mustBe None
-        cleanAnswers.get(EfrbsYesNoPage) mustBe None
-        cleanAnswers.get(EfrbsStartDatePage) mustBe None
+        cleanAnswers.get(HoldoverReliefClaimedPage)     mustBe None
+        cleanAnswers.get(EfrbsYesNoPage)                mustBe None
+        cleanAnswers.get(EfrbsStartDatePage)            mustBe None
       }
     }
   }
+
 }

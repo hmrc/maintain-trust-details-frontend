@@ -45,4 +45,5 @@ class BeforeYouContinueControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

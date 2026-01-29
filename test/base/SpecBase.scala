@@ -31,8 +31,8 @@ import uk.gov.hmrc.auth.core.AffinityGroup
 trait SpecBaseHelpers extends GuiceOneAppPerSuite with TryValues with Mocked with BeforeAndAfter with FakeApp {
   this: TestSuite =>
 
-  val internalId: String = "internalId"
-  val identifier: String = "identifier"
+  val internalId: String    = "internalId"
+  val identifier: String    = "identifier"
   val userSessionId: String = "sessionId"
 
   val fakeNavigator = new FakeNavigator()
@@ -48,8 +48,10 @@ trait SpecBaseHelpers extends GuiceOneAppPerSuite with TryValues with Mocked wit
 
   val bodyParsers: BodyParsers.Default = injector.instanceOf[BodyParsers.Default]
 
-  protected def applicationBuilder(userAnswers: Option[UserAnswers] = None,
-                                   affinityGroup: AffinityGroup = AffinityGroup.Organisation): GuiceApplicationBuilder =
+  protected def applicationBuilder(
+    userAnswers: Option[UserAnswers] = None,
+    affinityGroup: AffinityGroup = AffinityGroup.Organisation
+  ): GuiceApplicationBuilder =
     new GuiceApplicationBuilder()
       .overrides(
         bind[IdentifierAction].toInstance(new FakeIdentifierAction(bodyParsers, affinityGroup)),
@@ -59,6 +61,7 @@ trait SpecBaseHelpers extends GuiceOneAppPerSuite with TryValues with Mocked wit
         bind[PlaybackRepository].toInstance(playbackRepository),
         bind[ActiveSessionRepository].toInstance(mockSessionRepository)
       )
+
 }
 
 trait SpecBase extends PlaySpec with SpecBaseHelpers

@@ -51,4 +51,5 @@ class LogoutControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

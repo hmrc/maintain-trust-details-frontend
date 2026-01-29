@@ -36,81 +36,82 @@ import javax.inject.Inject
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class CheckDetailsController @Inject()(
-                                        override val messagesApi: MessagesApi,
-                                        standardActionSets: StandardActionSets,
-                                        val controllerComponents: MessagesControllerComponents,
-                                        view: CheckDetailsView,
-                                        connector: TrustsConnector,
-                                        val appConfig: AppConfig,
-                                        printHelper: TrustDetailsPrintHelper,
-                                        mapper: TrustDetailsMapper,
-                                        errorHandler: ErrorHandler,
-                                        trustsStoreConnector: TrustsStoreConnector
-                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with SessionLogging {
+class CheckDetailsController @Inject() (
+  override val messagesApi: MessagesApi,
+  standardActionSets: StandardActionSets,
+  val controllerComponents: MessagesControllerComponents,
+  view: CheckDetailsView,
+  connector: TrustsConnector,
+  val appConfig: AppConfig,
+  printHelper: TrustDetailsPrintHelper,
+  mapper: TrustDetailsMapper,
+  errorHandler: ErrorHandler,
+  trustsStoreConnector: TrustsStoreConnector
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport with SessionLogging {
 
-  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForIdentifier {
-    implicit request =>
-
-      val section: AnswerSection = printHelper(request.userAnswers)
-      Ok(view(section))
+  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForIdentifier { implicit request =>
+    val section: AnswerSection = printHelper(request.userAnswers)
+    Ok(view(section))
   }
 
-  def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForIdentifier.async {
-    implicit request =>
-      val userAnswers = request.userAnswers
-      val identifier = userAnswers.identifier
+  def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForIdentifier.async { implicit request =>
+    val userAnswers = request.userAnswers
+    val identifier  = userAnswers.identifier
 
-      mapper(userAnswers) match {
-        case JsSuccess(newTrustDetails, _) =>
-          (for {
-            oldTrustDetails <- connector.getTrustDetails(identifier)
-            _ <- removeOptionalTransformsIfMigrating(userAnswers.migratingFromNonTaxableToTaxable, identifier)
-            _ <- setNewDetails(newTrustDetails, identifier)
-            _ <- removeAnyTrustTypeDependentTransformFields(newTrustDetails, oldTrustDetails, identifier)
-            _ <- trustsStoreConnector.updateTaskStatus(request.userAnswers.identifier, Completed)
-          } yield {
-            Redirect(appConfig.maintainATrustOverviewUrl)
-          }).recoverWith {
-            case e =>
-              errorLog(s"Error setting transforms: ${e.getMessage}", Some(identifier))
-              errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
-          }
-        case JsError(errors) =>
-          errorLog(s"Failed to map user answers: $errors", Some(identifier))
+    mapper(userAnswers) match {
+      case JsSuccess(newTrustDetails, _) =>
+        (for {
+          oldTrustDetails <- connector.getTrustDetails(identifier)
+          _               <- removeOptionalTransformsIfMigrating(userAnswers.migratingFromNonTaxableToTaxable, identifier)
+          _               <- setNewDetails(newTrustDetails, identifier)
+          _               <- removeAnyTrustTypeDependentTransformFields(newTrustDetails, oldTrustDetails, identifier)
+          _               <- trustsStoreConnector.updateTaskStatus(request.userAnswers.identifier, Completed)
+        } yield Redirect(appConfig.maintainATrustOverviewUrl)).recoverWith { case e =>
+          errorLog(s"Error setting transforms: ${e.getMessage}", Some(identifier))
           errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
-      }
+        }
+      case JsError(errors)               =>
+        errorLog(s"Failed to map user answers: $errors", Some(identifier))
+        errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
+    }
   }
 
-  private def removeOptionalTransformsIfMigrating(migratingFromNonTaxableToTaxable: Boolean, identifier: String)
-                                                 (implicit hc: HeaderCarrier): Future[Unit] = {
+  private def removeOptionalTransformsIfMigrating(migratingFromNonTaxableToTaxable: Boolean, identifier: String)(
+    implicit hc: HeaderCarrier
+  ): Future[Unit] =
     if (migratingFromNonTaxableToTaxable) {
       connector.removeOptionalTrustDetailTransforms(identifier).map(_ => ())
     } else {
       Future.successful(())
     }
-  }
 
-  private def setNewDetails(newTrustDetails: TrustDetails, identifier: String)
-                           (implicit hc: HeaderCarrier): Future[HttpResponse] = {
+  private def setNewDetails(newTrustDetails: TrustDetails, identifier: String)(implicit
+    hc: HeaderCarrier
+  ): Future[HttpResponse] =
     newTrustDetails match {
       case x: NonMigratingTrustDetails => connector.setNonMigratingTrustDetails(identifier, x)
-      case x: MigratingTrustDetails => connector.setMigratingTrustDetails(identifier, x)
+      case x: MigratingTrustDetails    => connector.setMigratingTrustDetails(identifier, x)
     }
-  }
 
-  private def removeAnyTrustTypeDependentTransformFields(newTrustDetails: TrustDetails, oldTrustDetails: TrustDetailsType, identifier: String)
-                                                        (implicit hc: HeaderCarrier): Future[Unit] = {
+  private def removeAnyTrustTypeDependentTransformFields(
+    newTrustDetails: TrustDetails,
+    oldTrustDetails: TrustDetailsType,
+    identifier: String
+  )(implicit hc: HeaderCarrier): Future[Unit] = {
 
-    def needToRemoveTrustTypeDependentTransformFields(previousAnswer: Option[TypeOfTrust], newAnswer: TypeOfTrust): Boolean = {
+    def needToRemoveTrustTypeDependentTransformFields(
+      previousAnswer: Option[TypeOfTrust],
+      newAnswer: TypeOfTrust
+    ): Boolean =
       previousAnswer match {
         case Some(x) => x == EmploymentRelated && x != newAnswer
-        case _ => false
+        case _       => false
       }
-    }
 
     newTrustDetails match {
-      case x: MigratingTrustDetails if needToRemoveTrustTypeDependentTransformFields(oldTrustDetails.typeOfTrust, x.typeOfTrust) =>
+      case x: MigratingTrustDetails
+          if needToRemoveTrustTypeDependentTransformFields(oldTrustDetails.typeOfTrust, x.typeOfTrust) =>
         connector.removeTrustTypeDependentTransformFields(identifier).map(_ => ())
       case _ =>
         Future.successful(())

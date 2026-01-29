@@ -30,44 +30,39 @@ import views.html.maintain.ForPurposeOfSection218View
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class ForPurposeOfSection218Controller @Inject()(
-                                                  override val messagesApi: MessagesApi,
-                                                  yesNoFormProvider: YesNoFormProvider,
-                                                  repository: PlaybackRepository,
-                                                  navigator: Navigator,
-                                                  actions: StandardActionSets,
-                                                  val controllerComponents: MessagesControllerComponents,
-                                                  view: ForPurposeOfSection218View
-                                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class ForPurposeOfSection218Controller @Inject() (
+  override val messagesApi: MessagesApi,
+  yesNoFormProvider: YesNoFormProvider,
+  repository: PlaybackRepository,
+  navigator: Navigator,
+  actions: StandardActionSets,
+  val controllerComponents: MessagesControllerComponents,
+  view: ForPurposeOfSection218View
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport {
 
   private val form: Form[Boolean] = yesNoFormProvider.withPrefix("forPurposeOfSection218YesNo")
 
-  def onPageLoad(): Action[AnyContent] = actions.identifiedUserWithData {
-    implicit request =>
+  def onPageLoad(): Action[AnyContent] = actions.identifiedUserWithData { implicit request =>
+    val preparedForm = request.userAnswers.get(ForPurposeOfSection218Page) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(ForPurposeOfSection218Page) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm))
+    Ok(view(preparedForm))
   }
 
-  def onSubmit(): Action[AnyContent] = actions.identifiedUserWithData.async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors))),
-
-        value => {
+  def onSubmit(): Action[AnyContent] = actions.identifiedUserWithData.async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors))),
+        value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(ForPurposeOfSection218Page, value))
-            _ <- repository.set(updatedAnswers)
-          } yield {
-            Redirect(navigator.nextPage(ForPurposeOfSection218Page, updatedAnswers))
-          }
-        }
+            _              <- repository.set(updatedAnswers)
+          } yield Redirect(navigator.nextPage(ForPurposeOfSection218Page, updatedAnswers))
       )
   }
+
 }

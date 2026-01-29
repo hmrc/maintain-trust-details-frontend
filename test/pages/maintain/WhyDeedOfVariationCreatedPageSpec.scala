@@ -29,4 +29,5 @@ class WhyDeedOfVariationCreatedPageSpec extends PageBehaviours {
 
     beRemovable[DeedOfVariation](WhyDeedOfVariationCreatedPage)
   }
+
 }
