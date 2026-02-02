@@ -61,29 +61,29 @@ class TrustsConnectorSpec
   override val identifier = "1000000008"
   val index               = 0
 
-  private def setUkPropertyUrl(identifier: String)                           = s"/trusts/trust-details/$identifier/uk-property"
-  private def setTrustRecordedUrl(identifier: String)                        = s"/trusts/trust-details/$identifier/recorded"
-  private def setUkRelationUrl(identifier: String)                           = s"/trusts/trust-details/$identifier/uk-relation"
-  private def setUkResidentUrl(identifier: String)                           = s"/trusts/trust-details/$identifier/uk-resident"
+  private def setUkPropertyUrl(identifier: String)    = s"/trusts/trust-details/$identifier/uk-property"
+  private def setTrustRecordedUrl(identifier: String) = s"/trusts/trust-details/$identifier/recorded"
+  private def setUkRelationUrl(identifier: String)    = s"/trusts/trust-details/$identifier/uk-relation"
+  private def setUkResidentUrl(identifier: String)    = s"/trusts/trust-details/$identifier/uk-resident"
 
-  private def getTrustMigrationFlagUrl(identifier: String)                   =
+  private def getTrustMigrationFlagUrl(identifier: String) =
     s"/trusts/$identifier/taxable-migration/migrating-to-taxable"
 
-  private def setMigratingTrustDetailsUrl(identifier: String)                =
+  private def setMigratingTrustDetailsUrl(identifier: String) =
     s"/trusts/trust-details/$identifier/migrating-trust-details"
 
-  private def setNonMigratingTrustDetailsUrl(identifier: String)             =
+  private def setNonMigratingTrustDetailsUrl(identifier: String) =
     s"/trusts/trust-details/$identifier/non-migrating-trust-details"
 
-  private def wasTrustRegisteredWithDeceasedSettlorUrl(identifier: String)   =
+  private def wasTrustRegisteredWithDeceasedSettlorUrl(identifier: String) =
     s"/trusts/trust-details/$identifier/has-deceased-settlor"
 
-  private def getTrustNameUrl(identifier: String)                            = s"/trusts/trust-details/$identifier/trust-name"
+  private def getTrustNameUrl(identifier: String) = s"/trusts/trust-details/$identifier/trust-name"
 
   private def removeTrustTypeDependentTransformFieldsUrl(identifier: String) =
     s"/trusts/$identifier/trust-type-dependent-transform-fields"
 
-  private def removeOptionalTrustDetailTransformsUrl(identifier: String)     =
+  private def removeOptionalTrustDetailTransformsUrl(identifier: String) =
     s"/trusts/trust-details/$identifier/optional-trust-detail-transforms"
 
   "trust connector" must {

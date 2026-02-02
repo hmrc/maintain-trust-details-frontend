@@ -38,7 +38,7 @@ class AuthenticationServiceSpec extends SpecBase with ScalaFutures with EitherVa
 
   private val utr = "0987654321"
 
-  private val agentEnrolment  =
+  private val agentEnrolment =
     Enrolment("HMRC-AS-AGENT", List(EnrolmentIdentifier("AgentReferenceNumber", "SomeVal")), "Activated", None)
 
   private val trustsEnrolment = Enrolment("HMRC-TERS-ORG", List(EnrolmentIdentifier("SAUTR", utr)), "Activated", None)
@@ -50,7 +50,7 @@ class AuthenticationServiceSpec extends SpecBase with ScalaFutures with EitherVa
     )
   )
 
-  implicit private val hc: HeaderCarrier                    = HeaderCarrier()
+  implicit private val hc: HeaderCarrier = HeaderCarrier()
 
   implicit private val dataRequest: DataRequest[AnyContent] =
     DataRequest[AnyContent](fakeRequest, emptyUserAnswers, AgentUser("internalId", enrolments, "SomeVal"))
