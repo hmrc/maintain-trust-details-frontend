@@ -27,4 +27,5 @@ class EnumFormProvider @Inject() extends Mappings {
     Form(
       "value" -> enumerable[T](s"$prefix.error.required")
     )
+
 }

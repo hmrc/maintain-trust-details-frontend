@@ -39,9 +39,9 @@ object DeedOfVariation {
 
   implicit val reads: Reads[DeedOfVariation] = Reads {
     case JsString(PreviouslyAbsoluteInterestUnderWill.asString) => JsSuccess(PreviouslyAbsoluteInterestUnderWill)
-    case JsString(ReplacedWillTrust.asString) => JsSuccess(ReplacedWillTrust)
-    case JsString(AdditionToWillTrust.asString) => JsSuccess(AdditionToWillTrust)
-    case _ => JsError("Invalid DeedOfVariation")
+    case JsString(ReplacedWillTrust.asString)                   => JsSuccess(ReplacedWillTrust)
+    case JsString(AdditionToWillTrust.asString)                 => JsSuccess(AdditionToWillTrust)
+    case _                                                      => JsError("Invalid DeedOfVariation")
   }
 
   implicit val writes: Writes[DeedOfVariation] = Writes(x => JsString(x.asString))
@@ -58,4 +58,5 @@ object DeedOfVariation {
 
   implicit val enumerable: Enumerable[DeedOfVariation] =
     Enumerable(values.map(v => v.toString -> v): _*)
+
 }

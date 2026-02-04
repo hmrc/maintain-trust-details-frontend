@@ -19,12 +19,11 @@ package config
 import base.SpecBase
 import play.api.i18n.Lang
 
-class AppConfigSpec extends SpecBase{
+class AppConfigSpec extends SpecBase {
 
   private val appConfig = app.injector.instanceOf[AppConfig]
 
   "FrontendAppConfig" must {
-
 
     "have the correct betaFeedbackUrl" in {
       appConfig.betaFeedbackUrl mustBe "http://localhost:9250/contact/beta-feedback?service=trusts"
@@ -71,6 +70,6 @@ class AppConfigSpec extends SpecBase{
       appConfig.helplineUrl mustBe "https://www.gov.uk/government/organisations/hm-revenue-customs/contact/trusts"
     }
 
-
   }
+
 }

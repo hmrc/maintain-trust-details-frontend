@@ -29,7 +29,7 @@ import views.html.maintain.SetUpAfterSettlorDiedView
 
 class SetUpAfterSettlorDiedControllerSpec extends SpecBase with MockitoSugar {
 
-  val formProvider = new YesNoFormProvider()
+  val formProvider        = new YesNoFormProvider()
   val form: Form[Boolean] = formProvider.withPrefix("setUpAfterSettlorDiedYesNo")
 
   lazy val setUpAfterSettlorDiedRoute: String = routes.SetUpAfterSettlorDiedController.onPageLoad().url
@@ -74,7 +74,6 @@ class SetUpAfterSettlorDiedControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
 
-
     "redirect to the next page setting when a valid answer is entered" in {
 
       val application =
@@ -93,7 +92,6 @@ class SetUpAfterSettlorDiedControllerSpec extends SpecBase with MockitoSugar {
 
       application.stop()
     }
-
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
@@ -149,4 +147,5 @@ class SetUpAfterSettlorDiedControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
   }
+
 }

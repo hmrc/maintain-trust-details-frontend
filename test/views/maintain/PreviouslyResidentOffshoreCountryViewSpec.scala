@@ -46,4 +46,5 @@ class PreviouslyResidentOffshoreCountryViewSpec extends SelectCountryViewBehavio
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

@@ -44,4 +44,5 @@ class WhereTrusteesBasedViewSpec extends EnumViewBehaviours[TrusteesBased] {
 
     behave like pageWithRadioOptions(form, applyView, TrusteesBased.options)
   }
+
 }

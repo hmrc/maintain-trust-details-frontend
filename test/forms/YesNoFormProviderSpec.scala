@@ -22,8 +22,8 @@ import forms.behaviours.BooleanFieldBehaviours
 class YesNoFormProviderSpec extends BooleanFieldBehaviours {
 
   val messagePrefix = "yesNo"
-  val requiredKey = s"$messagePrefix.error.required"
-  val invalidKey = "error.boolean"
+  val requiredKey   = s"$messagePrefix.error.required"
+  val invalidKey    = "error.boolean"
 
   val form: Form[Boolean] = new YesNoFormProvider().withPrefix(messagePrefix)
 

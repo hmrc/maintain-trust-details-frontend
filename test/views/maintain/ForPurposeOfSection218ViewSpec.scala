@@ -40,8 +40,15 @@ class ForPurposeOfSection218ViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, None, routes.ForPurposeOfSection218Controller.onSubmit().url)
+    behave like yesNoPage(
+      form,
+      applyView,
+      messageKeyPrefix,
+      None,
+      routes.ForPurposeOfSection218Controller.onSubmit().url
+    )
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

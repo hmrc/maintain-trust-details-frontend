@@ -23,17 +23,14 @@ import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisationException, AuthorisedF
 import config.AppConfig
 import controllers.routes
 
-class TrustsAuthorisedFunctions @Inject()(override val authConnector: AuthConnector,
-                                          val config: AppConfig) extends AuthorisedFunctions {
+class TrustsAuthorisedFunctions @Inject() (override val authConnector: AuthConnector, val config: AppConfig)
+    extends AuthorisedFunctions {
 
   def recoverFromAuthorisation: PartialFunction[Throwable, Result] = {
-    case _: NoActiveSession =>
-      Redirect(config.loginUrl,
-        Map("continue" -> Seq(config.loginContinueUrl),
-          "origin" -> Seq(config.appName)
-        )
-      )
+    case _: NoActiveSession        =>
+      Redirect(config.loginUrl, Map("continue" -> Seq(config.loginContinueUrl), "origin" -> Seq(config.appName)))
     case _: AuthorisationException =>
       Redirect(routes.UnauthorisedController.onPageLoad)
   }
+
 }

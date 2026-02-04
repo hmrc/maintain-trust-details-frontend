@@ -21,17 +21,20 @@ import models.requests.{DataRequest, IdentifierRequest, OptionalDataRequest}
 
 import javax.inject.Inject
 
-class StandardActionSets @Inject()(identify: IdentifierAction,
-                                   val saveSession: SaveActiveSessionProvider,
-                                   val getData: DataRetrievalAction,
-                                   requireData: DataRequiredAction,
-                                   playbackIdentifier: PlaybackIdentifierAction) {
+class StandardActionSets @Inject() (
+  identify: IdentifierAction,
+  val saveSession: SaveActiveSessionProvider,
+  val getData: DataRetrievalAction,
+  requireData: DataRequiredAction,
+  playbackIdentifier: PlaybackIdentifierAction
+) {
 
   def auth: ActionBuilder[IdentifierRequest, AnyContent] = identify
 
   def authWithSession: ActionBuilder[OptionalDataRequest, AnyContent] = auth andThen getData
 
-  def authWithSavedSession(identifier: String): ActionBuilder[OptionalDataRequest, AnyContent] = auth andThen saveSession(identifier) andThen getData
+  def authWithSavedSession(identifier: String): ActionBuilder[OptionalDataRequest, AnyContent] =
+    auth andThen saveSession(identifier) andThen getData
 
   def identifiedUserWithData: ActionBuilder[DataRequest, AnyContent] = authWithSession andThen requireData
 

@@ -21,49 +21,49 @@ import models.TypeOfTrust._
 import play.api.libs.json.{JsNull, JsString, Json}
 import viewmodels.RadioOption
 
-class TypeOfTrustSpec extends SpecBase{
+class TypeOfTrustSpec extends SpecBase {
 
   "TypeOfTrust" must {
 
     "serialise and deserailise" when {
 
       "Will Trust or Intestacy Trust" in {
-        val json = JsString("Will Trust or Intestacy Trust")
+        val json        = JsString("Will Trust or Intestacy Trust")
         val typeOfTrust = json.as[TypeOfTrust]
         typeOfTrust mustEqual WillTrustOrIntestacyTrust
         Json.toJson(typeOfTrust) mustEqual json
       }
 
       "Deed of Variation Trust or Family Arrangement" in {
-        val json = JsString("Deed of Variation Trust or Family Arrangement")
+        val json        = JsString("Deed of Variation Trust or Family Arrangement")
         val typeOfTrust = json.as[TypeOfTrust]
         typeOfTrust mustEqual DeedOfVariationTrustOrFamilyArrangement
         Json.toJson(typeOfTrust) mustEqual json
       }
 
       "Inter vivos Settlement" in {
-        val json = JsString("Inter vivos Settlement")
+        val json        = JsString("Inter vivos Settlement")
         val typeOfTrust = json.as[TypeOfTrust]
         typeOfTrust mustEqual InterVivosSettlement
         Json.toJson(typeOfTrust) mustEqual json
       }
 
       "Employment Related" in {
-        val json = JsString("Employment Related")
+        val json        = JsString("Employment Related")
         val typeOfTrust = json.as[TypeOfTrust]
         typeOfTrust mustEqual EmploymentRelated
         Json.toJson(typeOfTrust) mustEqual json
       }
 
       "Heritage Maintenance Fund" in {
-        val json = JsString("Heritage Maintenance Fund")
+        val json        = JsString("Heritage Maintenance Fund")
         val typeOfTrust = json.as[TypeOfTrust]
         typeOfTrust mustEqual HeritageMaintenanceFund
         Json.toJson(typeOfTrust) mustEqual json
       }
 
       "Flat Management Company or Sinking Fund" in {
-        val json = JsString("Flat Management Company or Sinking Fund")
+        val json        = JsString("Flat Management Company or Sinking Fund")
         val typeOfTrust = json.as[TypeOfTrust]
         typeOfTrust mustEqual FlatManagementCompanyOrSinkingFund
         Json.toJson(typeOfTrust) mustEqual json
@@ -86,4 +86,5 @@ class TypeOfTrustSpec extends SpecBase{
       )
     }
   }
+
 }

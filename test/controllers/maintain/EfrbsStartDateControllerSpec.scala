@@ -30,7 +30,7 @@ import java.time.LocalDate
 
 class EfrbsStartDateControllerSpec extends SpecBase {
 
-  val formProvider = new DateFormProvider(frontendAppConfig)
+  val formProvider          = new DateFormProvider(frontendAppConfig)
   val form: Form[LocalDate] = formProvider.withPrefix("efrbsStartDate")
 
   lazy val efrbsStartDateRoute: String = routes.EfrbsStartDateController.onPageLoad().url
@@ -85,9 +85,9 @@ class EfrbsStartDateControllerSpec extends SpecBase {
 
       val request = FakeRequest(POST, efrbsStartDateRoute)
         .withFormUrlEncodedBody(
-          "value.day" -> validAnswer.getDayOfMonth.toString,
+          "value.day"   -> validAnswer.getDayOfMonth.toString,
           "value.month" -> validAnswer.getMonthValue.toString,
-          "value.year" -> validAnswer.getYear.toString
+          "value.year"  -> validAnswer.getYear.toString
         )
 
       val result = route(application, request).value
@@ -98,7 +98,6 @@ class EfrbsStartDateControllerSpec extends SpecBase {
 
       application.stop()
     }
-
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
@@ -142,9 +141,9 @@ class EfrbsStartDateControllerSpec extends SpecBase {
 
       val request = FakeRequest(POST, efrbsStartDateRoute)
         .withFormUrlEncodedBody(
-          "value.day" -> validAnswer.getDayOfMonth.toString,
+          "value.day"   -> validAnswer.getDayOfMonth.toString,
           "value.month" -> validAnswer.getMonthValue.toString,
-          "value.year" -> validAnswer.getYear.toString
+          "value.year"  -> validAnswer.getYear.toString
         )
 
       val result = route(application, request).value
@@ -156,4 +155,5 @@ class EfrbsStartDateControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

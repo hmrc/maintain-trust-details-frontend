@@ -30,44 +30,39 @@ import views.html.maintain.AgentCreatedTrustView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class AgentCreatedTrustController @Inject()(
-                                             override val messagesApi: MessagesApi,
-                                             yesNoFormProvider: YesNoFormProvider,
-                                             repository: PlaybackRepository,
-                                             navigator: Navigator,
-                                             actions: StandardActionSets,
-                                             val controllerComponents: MessagesControllerComponents,
-                                             view: AgentCreatedTrustView
-                                           )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class AgentCreatedTrustController @Inject() (
+  override val messagesApi: MessagesApi,
+  yesNoFormProvider: YesNoFormProvider,
+  repository: PlaybackRepository,
+  navigator: Navigator,
+  actions: StandardActionSets,
+  val controllerComponents: MessagesControllerComponents,
+  view: AgentCreatedTrustView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport {
 
   private val form: Form[Boolean] = yesNoFormProvider.withPrefix("agentCreatedTrustYesNo")
 
-  def onPageLoad(): Action[AnyContent] = actions.identifiedUserWithData {
-    implicit request =>
+  def onPageLoad(): Action[AnyContent] = actions.identifiedUserWithData { implicit request =>
+    val preparedForm = request.userAnswers.get(AgentCreatedTrustPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(AgentCreatedTrustPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm))
+    Ok(view(preparedForm))
   }
 
-  def onSubmit(): Action[AnyContent] = actions.identifiedUserWithData.async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors))),
-
-        value => {
+  def onSubmit(): Action[AnyContent] = actions.identifiedUserWithData.async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors))),
+        value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AgentCreatedTrustPage, value))
-            _ <- repository.set(updatedAnswers)
-          } yield {
-            Redirect(navigator.nextPage(AgentCreatedTrustPage, updatedAnswers))
-          }
-        }
+            _              <- repository.set(updatedAnswers)
+          } yield Redirect(navigator.nextPage(AgentCreatedTrustPage, updatedAnswers))
       )
   }
+
 }

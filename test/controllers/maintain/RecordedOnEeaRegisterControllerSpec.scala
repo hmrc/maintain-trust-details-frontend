@@ -29,7 +29,7 @@ import views.html.maintain.RecordedOnEeaRegisterView
 
 class RecordedOnEeaRegisterControllerSpec extends SpecBase with MockitoSugar {
 
-  val formProvider = new YesNoFormProvider()
+  val formProvider        = new YesNoFormProvider()
   val form: Form[Boolean] = formProvider.withPrefix("recordedOnEeaRegisterYesNo")
 
   lazy val trustEEAYesNoControllerRoute: String = routes.RecordedOnEeaRegisterController.onPageLoad().url
@@ -93,7 +93,6 @@ class RecordedOnEeaRegisterControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
 
-
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
@@ -148,4 +147,5 @@ class RecordedOnEeaRegisterControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
   }
+
 }

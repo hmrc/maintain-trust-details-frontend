@@ -28,11 +28,10 @@ case object ForPurposeOfSection218Page extends QuestionPage[Boolean] {
 
   override def toString: String = "forPurposeOfSection218"
 
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
       case Some(false) => userAnswers.remove(AgentCreatedTrustPage)
-      case _ => super.cleanup(value, userAnswers)
+      case _           => super.cleanup(value, userAnswers)
     }
-  }
 
 }

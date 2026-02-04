@@ -34,63 +34,62 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.util.Success
 
 @Singleton
-class IndexController @Inject()(
-                                 mcc: MessagesControllerComponents,
-                                 actions: StandardActionSets,
-                                 trustsStoreService: TrustsStoreService,
-                                 cacheRepository: PlaybackRepository,
-                                 appConfig: AppConfig,
-                                 connector: TrustsConnector,
-                                 extractor: TrustDetailsExtractor,
-                                 mapper: TrustDetailsMapper,
-                                 errorHandler: ErrorHandler
-                               )(implicit ec: ExecutionContext) extends FrontendController(mcc) with SessionLogging {
+class IndexController @Inject() (
+  mcc: MessagesControllerComponents,
+  actions: StandardActionSets,
+  trustsStoreService: TrustsStoreService,
+  cacheRepository: PlaybackRepository,
+  appConfig: AppConfig,
+  connector: TrustsConnector,
+  extractor: TrustDetailsExtractor,
+  mapper: TrustDetailsMapper,
+  errorHandler: ErrorHandler
+)(implicit ec: ExecutionContext)
+    extends FrontendController(mcc) with SessionLogging {
 
-  def onPageLoad(identifier: String): Action[AnyContent] = actions.authWithSavedSession(identifier).async {
-    implicit request =>
-
+  def onPageLoad(identifier: String): Action[AnyContent] =
+    actions.authWithSavedSession(identifier).async { implicit request =>
       (for {
-        trustDetails <- connector.getTrustDetails(identifier)
-        taxableMigrationFlag <- connector.getTrustMigrationFlag(identifier)
+        trustDetails                  <- connector.getTrustDetails(identifier)
+        taxableMigrationFlag          <- connector.getTrustMigrationFlag(identifier)
         registeredWithDeceasedSettlor <- connector.wasTrustRegisteredWithDeceasedSettlor(identifier)
-        trustName <- connector.getTrustName(identifier)
-        ua <- Future.fromTry {
-          request.userAnswers match {
-            case Some(userAnswers) if userAnswers.migratingFromNonTaxableToTaxable == taxableMigrationFlag.migratingFromNonTaxableToTaxable =>
-              infoLog("User is on the same type of journey as before. Persisting answers.", Some(identifier))
-              Success(userAnswers)
-            case _ =>
-              extractor(
-                answers = UserAnswers(
-                  internalId = request.user.internalId,
-                  identifier = identifier,
-                  sessionId = Session.id(hc),
-                  newId = s"${request.user.internalId}-$identifier-${Session.id(hc)}",
-                  migratingFromNonTaxableToTaxable = taxableMigrationFlag.migratingFromNonTaxableToTaxable,
-                  registeredWithDeceasedSettlor = registeredWithDeceasedSettlor
-                ),
-                trustDetails = trustDetails,
-                trustName = trustName
-              )
-          }
-        }
-        _ <- cacheRepository.set(ua)
-        _ <- trustsStoreService.updateTaskStatus(identifier, InProgress)
-      } yield {
-          if (mapper.areAnswersSubmittable(ua)) {
-            Redirect(controllers.maintain.routes.CheckDetailsController.onPageLoad())
+        trustName                     <- connector.getTrustName(identifier)
+        ua                            <- Future.fromTry {
+                                           request.userAnswers match {
+                                             case Some(userAnswers)
+                                                 if userAnswers.migratingFromNonTaxableToTaxable == taxableMigrationFlag.migratingFromNonTaxableToTaxable =>
+                                               infoLog("User is on the same type of journey as before. Persisting answers.", Some(identifier))
+                                               Success(userAnswers)
+                                             case _ =>
+                                               extractor(
+                                                 answers = UserAnswers(
+                                                   internalId = request.user.internalId,
+                                                   identifier = identifier,
+                                                   sessionId = Session.id(hc),
+                                                   newId = s"${request.user.internalId}-$identifier-${Session.id(hc)}",
+                                                   migratingFromNonTaxableToTaxable = taxableMigrationFlag.migratingFromNonTaxableToTaxable,
+                                                   registeredWithDeceasedSettlor = registeredWithDeceasedSettlor
+                                                 ),
+                                                 trustDetails = trustDetails,
+                                                 trustName = trustName
+                                               )
+                                           }
+                                         }
+        _                             <- cacheRepository.set(ua)
+        _                             <- trustsStoreService.updateTaskStatus(identifier, InProgress)
+      } yield
+        if (mapper.areAnswersSubmittable(ua)) {
+          Redirect(controllers.maintain.routes.CheckDetailsController.onPageLoad())
+        } else {
+          if (taxableMigrationFlag.migratingFromNonTaxableToTaxable) {
+            Redirect(controllers.maintain.routes.GovernedByUkLawController.onPageLoad())
           } else {
-            if (taxableMigrationFlag.migratingFromNonTaxableToTaxable) {
-              Redirect(controllers.maintain.routes.GovernedByUkLawController.onPageLoad())
-            } else {
-              Redirect(controllers.maintain.routes.BeforeYouContinueController.onPageLoad())
-            }
+            Redirect(controllers.maintain.routes.BeforeYouContinueController.onPageLoad())
           }
-      }) recoverWith {
-        case e =>
-          errorLog(s"Error setting up session: ${e.getMessage}", Some(identifier))
-          errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
+        }) recoverWith { case e =>
+        errorLog(s"Error setting up session: ${e.getMessage}", Some(identifier))
+        errorHandler.internalServerErrorTemplate.map(html => InternalServerError(html))
       }
-  }
+    }
 
 }

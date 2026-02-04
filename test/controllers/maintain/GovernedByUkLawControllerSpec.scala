@@ -29,7 +29,7 @@ import views.html.maintain.GovernedByUkLawView
 
 class GovernedByUkLawControllerSpec extends SpecBase with MockitoSugar {
 
-  val formProvider = new YesNoFormProvider()
+  val formProvider        = new YesNoFormProvider()
   val form: Form[Boolean] = formProvider.withPrefix("governedByUkLawYesNo")
 
   lazy val governedByUkLawRoute: String = routes.GovernedByUkLawController.onPageLoad().url
@@ -94,7 +94,6 @@ class GovernedByUkLawControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
 
-
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
@@ -147,4 +146,5 @@ class GovernedByUkLawControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
   }
+
 }

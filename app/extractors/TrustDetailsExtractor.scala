@@ -24,7 +24,8 @@ import scala.util.{Failure, Try}
 class TrustDetailsExtractor {
 
   def apply(answers: UserAnswers, trustDetails: TrustDetailsType, trustName: String): Try[UserAnswers] =
-    answers.deleteAtPath(pages.maintain.basePath)
+    answers
+      .deleteAtPath(pages.maintain.basePath)
       .flatMap(_.set(NamePage, trustName))
       .flatMap(_.set(StartDatePage, trustDetails.startDate))
       .flatMap(_.set(OwnsUkLandOrPropertyPage, trustDetails.trustUKProperty))
@@ -33,12 +34,12 @@ class TrustDetailsExtractor {
       .flatMap(_.set(BusinessRelationshipInUkPage, trustDetails.trustUKRelation))
       .flatMap(_.set(Schedule3aExemptYesNoPage, trustDetails.schedule3aExempt))
 
-  private def extractTrustUKResident(trustDetails: TrustDetailsType, answers: UserAnswers): Try[UserAnswers] = {
+  private def extractTrustUKResident(trustDetails: TrustDetailsType, answers: UserAnswers): Try[UserAnswers] =
     (trustDetails.trustUKResident, trustDetails.residentialStatus) match {
-      case (Some(value), _) => answers.set(TrustResidentInUkPage, value)
+      case (Some(value), _)                                => answers.set(TrustResidentInUkPage, value)
       case (_, Some(ResidentialStatusType(Some(_), None))) => answers.set(TrustResidentInUkPage, true)
       case (_, Some(ResidentialStatusType(None, Some(_)))) => answers.set(TrustResidentInUkPage, false)
-      case _ => Failure(new Throwable("Trust details in unexpected shape"))
+      case _                                               => Failure(new Throwable("Trust details in unexpected shape"))
     }
-  }
+
 }

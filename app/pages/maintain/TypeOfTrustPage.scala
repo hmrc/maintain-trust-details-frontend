@@ -29,16 +29,19 @@ case object TypeOfTrustPage extends QuestionPage[TypeOfTrust] {
 
   override def toString: String = "typeOfTrust"
 
-  override def cleanup(value: Option[TypeOfTrust], userAnswers: UserAnswers): Try[UserAnswers] = {
+  override def cleanup(value: Option[TypeOfTrust], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
-      case Some(typeOfTrust) => userAnswers
-        .removePageIfConditionMet(WhyDeedOfVariationCreatedPage, typeOfTrust != DeedOfVariationTrustOrFamilyArrangement)
-        .flatMap(_.removePageIfConditionMet(HoldoverReliefClaimedPage, typeOfTrust != InterVivosSettlement))
-        .flatMap(_.removePageIfConditionMet(EfrbsYesNoPage, typeOfTrust != EmploymentRelated))
-        .flatMap(_.removePageIfConditionMet(EfrbsStartDatePage, typeOfTrust != EmploymentRelated))
-      case _ =>
+      case Some(typeOfTrust) =>
+        userAnswers
+          .removePageIfConditionMet(
+            WhyDeedOfVariationCreatedPage,
+            typeOfTrust != DeedOfVariationTrustOrFamilyArrangement
+          )
+          .flatMap(_.removePageIfConditionMet(HoldoverReliefClaimedPage, typeOfTrust != InterVivosSettlement))
+          .flatMap(_.removePageIfConditionMet(EfrbsYesNoPage, typeOfTrust != EmploymentRelated))
+          .flatMap(_.removePageIfConditionMet(EfrbsStartDatePage, typeOfTrust != EmploymentRelated))
+      case _                 =>
         super.cleanup(value, userAnswers)
     }
-  }
 
 }

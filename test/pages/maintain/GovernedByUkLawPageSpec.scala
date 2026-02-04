@@ -33,8 +33,12 @@ class GovernedByUkLawPageSpec extends PageBehaviours {
       "YES selected" in {
 
         val userAnswers = emptyUserAnswers
-          .set(GovernedByUkLawPage, false).success.value
-          .set(GoverningCountryPage, "FR").success.value
+          .set(GovernedByUkLawPage, false)
+          .success
+          .value
+          .set(GoverningCountryPage, "FR")
+          .success
+          .value
 
         val cleanAnswers = userAnswers.set(GovernedByUkLawPage, true).success.value
 
@@ -42,4 +46,5 @@ class GovernedByUkLawPageSpec extends PageBehaviours {
       }
     }
   }
+
 }

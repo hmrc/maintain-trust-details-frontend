@@ -33,8 +33,12 @@ class PreviouslyResidentOffshorePageSpec extends PageBehaviours {
       "NO selected" in {
 
         val userAnswers = emptyUserAnswers
-          .set(PreviouslyResidentOffshorePage, true).success.value
-          .set(PreviouslyResidentOffshoreCountryPage, "FR").success.value
+          .set(PreviouslyResidentOffshorePage, true)
+          .success
+          .value
+          .set(PreviouslyResidentOffshoreCountryPage, "FR")
+          .success
+          .value
 
         val cleanAnswers = userAnswers.set(PreviouslyResidentOffshorePage, false).success.value
 
@@ -42,4 +46,5 @@ class PreviouslyResidentOffshorePageSpec extends PageBehaviours {
       }
     }
   }
+
 }

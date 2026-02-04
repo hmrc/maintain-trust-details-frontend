@@ -28,17 +28,17 @@ case object SetUpAfterSettlorDiedPage extends QuestionPage[Boolean] {
 
   override def toString: String = "setUpAfterSettlorDiedYesNo"
 
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
-      case Some(true) => userAnswers
-        .remove(TypeOfTrustPage)
-        .flatMap(_.remove(WhyDeedOfVariationCreatedPage))
-        .flatMap(_.remove(HoldoverReliefClaimedPage))
-        .flatMap(_.remove(EfrbsYesNoPage))
-        .flatMap(_.remove(EfrbsStartDatePage))
-      case _ =>
+      case Some(true) =>
+        userAnswers
+          .remove(TypeOfTrustPage)
+          .flatMap(_.remove(WhyDeedOfVariationCreatedPage))
+          .flatMap(_.remove(HoldoverReliefClaimedPage))
+          .flatMap(_.remove(EfrbsYesNoPage))
+          .flatMap(_.remove(EfrbsStartDatePage))
+      case _          =>
         super.cleanup(value, userAnswers)
     }
-  }
 
 }

@@ -22,12 +22,12 @@ import play.api.data.{Form, FormError}
 
 class EnumFormProviderSpec extends OptionFieldBehaviours {
 
-  val prefix = "typeOfTrust"
+  val prefix                  = "typeOfTrust"
   val form: Form[TypeOfTrust] = new EnumFormProvider()(prefix)
 
   "EnumFormProvider" must {
 
-    val fieldName = "value"
+    val fieldName   = "value"
     val requiredKey = s"$prefix.error.required"
 
     behave like optionsField[TypeOfTrust](
@@ -43,4 +43,5 @@ class EnumFormProviderSpec extends OptionFieldBehaviours {
       requiredError = FormError(fieldName, requiredKey)
     )
   }
+
 }

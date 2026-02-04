@@ -21,28 +21,28 @@ import models.TrusteesBased._
 import play.api.libs.json.{JsNull, JsString, Json}
 import viewmodels.RadioOption
 
-class TrusteesBasedSpec extends SpecBase{
+class TrusteesBasedSpec extends SpecBase {
 
   "TrusteesBased" must {
 
     "serialise and deserailise" when {
 
       "AllTrusteesUkBased" in {
-        val json = JsString("all-uk-based")
+        val json          = JsString("all-uk-based")
         val trusteesBased = json.as[TrusteesBased]
         trusteesBased mustEqual AllTrusteesUkBased
         Json.toJson(trusteesBased) mustEqual json
       }
 
       "NoTrusteesUkBased" in {
-        val json = JsString("none-uk-based")
+        val json          = JsString("none-uk-based")
         val trusteesBased = json.as[TrusteesBased]
         trusteesBased mustEqual NoTrusteesUkBased
         Json.toJson(trusteesBased) mustEqual json
       }
 
       "InternationalAndUkBasedTrustees" in {
-        val json = JsString("some-uk-based")
+        val json          = JsString("some-uk-based")
         val trusteesBased = json.as[TrusteesBased]
         trusteesBased mustEqual InternationalAndUkBasedTrustees
         Json.toJson(trusteesBased) mustEqual json
@@ -63,4 +63,5 @@ class TrusteesBasedSpec extends SpecBase{
       )
     }
   }
+
 }

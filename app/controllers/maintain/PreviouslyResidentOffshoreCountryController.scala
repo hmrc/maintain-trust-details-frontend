@@ -31,45 +31,40 @@ import views.html.maintain.PreviouslyResidentOffshoreCountryView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class PreviouslyResidentOffshoreCountryController @Inject()(
-                                                             override val messagesApi: MessagesApi,
-                                                             formProvider: CountryFormProvider,
-                                                             repository: PlaybackRepository,
-                                                             navigator: Navigator,
-                                                             actions: StandardActionSets,
-                                                             val controllerComponents: MessagesControllerComponents,
-                                                             view: PreviouslyResidentOffshoreCountryView,
-                                                             countryOptions: CountryOptions
-                                                           )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class PreviouslyResidentOffshoreCountryController @Inject() (
+  override val messagesApi: MessagesApi,
+  formProvider: CountryFormProvider,
+  repository: PlaybackRepository,
+  navigator: Navigator,
+  actions: StandardActionSets,
+  val controllerComponents: MessagesControllerComponents,
+  view: PreviouslyResidentOffshoreCountryView,
+  countryOptions: CountryOptions
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport {
 
   private val form: Form[String] = formProvider.withPrefix("previouslyResidentOffshoreCountry")
 
-  def onPageLoad(): Action[AnyContent] = actions.identifiedUserWithData {
-    implicit request =>
+  def onPageLoad(): Action[AnyContent] = actions.identifiedUserWithData { implicit request =>
+    val preparedForm = request.userAnswers.get(PreviouslyResidentOffshoreCountryPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(PreviouslyResidentOffshoreCountryPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, countryOptions.nonUkOptions))
+    Ok(view(preparedForm, countryOptions.nonUkOptions))
   }
 
-  def onSubmit(): Action[AnyContent] = actions.identifiedUserWithData.async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, countryOptions.nonUkOptions))),
-
-        value => {
+  def onSubmit(): Action[AnyContent] = actions.identifiedUserWithData.async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, countryOptions.nonUkOptions))),
+        value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(PreviouslyResidentOffshoreCountryPage, value))
-            _ <- repository.set(updatedAnswers)
-          } yield {
-            Redirect(navigator.nextPage(PreviouslyResidentOffshoreCountryPage, updatedAnswers))
-          }
-        }
+            _              <- repository.set(updatedAnswers)
+          } yield Redirect(navigator.nextPage(PreviouslyResidentOffshoreCountryPage, updatedAnswers))
       )
   }
+
 }

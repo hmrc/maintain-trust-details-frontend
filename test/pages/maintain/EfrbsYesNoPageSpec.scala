@@ -34,8 +34,12 @@ class EfrbsYesNoPageSpec extends PageBehaviours {
       "NO selected" in {
 
         val userAnswers = emptyUserAnswers
-          .set(EfrbsYesNoPage, true).success.value
-          .set(EfrbsStartDatePage, LocalDate.parse("1996-02-03")).success.value
+          .set(EfrbsYesNoPage, true)
+          .success
+          .value
+          .set(EfrbsStartDatePage, LocalDate.parse("1996-02-03"))
+          .success
+          .value
 
         val cleanAnswers = userAnswers.set(EfrbsYesNoPage, false).success.value
 
@@ -43,4 +47,5 @@ class EfrbsYesNoPageSpec extends PageBehaviours {
       }
     }
   }
+
 }

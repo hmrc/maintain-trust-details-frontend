@@ -30,42 +30,39 @@ import javax.inject.Inject
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class BusinessRelationshipInUkController @Inject()(
-                                                    override val messagesApi: MessagesApi,
-                                                    repository: PlaybackRepository,
-                                                    yesNoFormProvider: YesNoFormProvider,
-                                                    navigator: Navigator,
-                                                    actions: StandardActionSets,
-                                                    val controllerComponents: MessagesControllerComponents,
-                                                    view: BusinessRelationshipInUkView
-                                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class BusinessRelationshipInUkController @Inject() (
+  override val messagesApi: MessagesApi,
+  repository: PlaybackRepository,
+  yesNoFormProvider: YesNoFormProvider,
+  navigator: Navigator,
+  actions: StandardActionSets,
+  val controllerComponents: MessagesControllerComponents,
+  view: BusinessRelationshipInUkView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport {
 
   private val form: Form[Boolean] = yesNoFormProvider.withPrefix("businessRelationshipInUkYesNo")
 
-  def onPageLoad(): Action[AnyContent] = actions.identifiedUserWithData {
-    implicit request =>
+  def onPageLoad(): Action[AnyContent] = actions.identifiedUserWithData { implicit request =>
+    val preparedForm = request.userAnswers.get(BusinessRelationshipInUkPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(BusinessRelationshipInUkPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm))
+    Ok(view(preparedForm))
   }
 
-  def onSubmit(): Action[AnyContent] = actions.identifiedUserWithData.async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors))),
-
-        value => {
+  def onSubmit(): Action[AnyContent] = actions.identifiedUserWithData.async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors))),
+        value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(BusinessRelationshipInUkPage, value))
-            _ <- repository.set(updatedAnswers)
+            _              <- repository.set(updatedAnswers)
           } yield Redirect(navigator.nextPage(BusinessRelationshipInUkPage, updatedAnswers))
-        }
       )
   }
+
 }

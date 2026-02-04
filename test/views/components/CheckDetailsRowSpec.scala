@@ -25,12 +25,17 @@ class CheckDetailsRowSpec extends SpecBase {
   "render as a row with details" in {
 
     val checkDetailsRow = app.injector.instanceOf[views.html.components.CheckDetailsRow]
-    val ansRow = AnswerRow(messages("startDate.checkYourAnswersLabel"),
-      Html("1 January 2000"), canEdit = false, changeUrl = Some("/change-url"))
+    val ansRow          = AnswerRow(
+      messages("startDate.checkYourAnswersLabel"),
+      Html("1 January 2000"),
+      canEdit = false,
+      changeUrl = Some("/change-url")
+    )
 
     val result = checkDetailsRow.apply(ansRow)(messages)
 
     result.body must include("govuk-summary-list__row")
     result.body must include("When was the trust created")
   }
+
 }

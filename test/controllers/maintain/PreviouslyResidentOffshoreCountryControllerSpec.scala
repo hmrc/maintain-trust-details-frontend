@@ -30,10 +30,11 @@ import views.html.maintain.PreviouslyResidentOffshoreCountryView
 
 class PreviouslyResidentOffshoreCountryControllerSpec extends SpecBase with MockitoSugar {
 
-  val formProvider = new CountryFormProvider()
+  val formProvider       = new CountryFormProvider()
   val form: Form[String] = formProvider.withPrefix("previouslyResidentOffshoreCountry")
 
-  lazy val previouslyResidentOffshoreCountryRoute: String = routes.PreviouslyResidentOffshoreCountryController.onPageLoad().url
+  lazy val previouslyResidentOffshoreCountryRoute: String =
+    routes.PreviouslyResidentOffshoreCountryController.onPageLoad().url
 
   val validAnswer: String = "FR"
 
@@ -97,7 +98,6 @@ class PreviouslyResidentOffshoreCountryControllerSpec extends SpecBase with Mock
       application.stop()
     }
 
-
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
@@ -150,4 +150,5 @@ class PreviouslyResidentOffshoreCountryControllerSpec extends SpecBase with Mock
       application.stop()
     }
   }
+
 }

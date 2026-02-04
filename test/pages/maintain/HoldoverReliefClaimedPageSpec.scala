@@ -28,4 +28,5 @@ class HoldoverReliefClaimedPageSpec extends PageBehaviours {
 
     beRemovable[Boolean](HoldoverReliefClaimedPage)
   }
+
 }

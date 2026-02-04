@@ -28,4 +28,5 @@ class BusinessRelationshipInUkPageSpec extends PageBehaviours {
 
     beRemovable[Boolean](BusinessRelationshipInUkPage)
   }
+
 }

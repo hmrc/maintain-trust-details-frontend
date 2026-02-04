@@ -22,12 +22,10 @@ import views.ViewSpecBase
 
 trait ViewBehaviours extends ViewSpecBase {
 
-  private def findBannerTitle(view: HtmlFormat.Appendable):String =
+  private def findBannerTitle(view: HtmlFormat.Appendable): String =
     asDocument(view).getElementsByClass("govuk-service-navigation__service-name").text().trim
 
-  def normalPage(view: HtmlFormat.Appendable,
-                 messageKeyPrefix: String,
-                 expectedGuidanceKeys: String*): Unit = {
+  def normalPage(view: HtmlFormat.Appendable, messageKeyPrefix: String, expectedGuidanceKeys: String*): Unit =
 
     "behave like a normal page" when {
 
@@ -62,13 +60,14 @@ trait ViewBehaviours extends ViewSpecBase {
         }
       }
     }
-  }
 
-  def normalPageTitleWithCaption(view: HtmlFormat.Appendable,
-                                 messageKeyPrefix: String,
-                                 messageKeyParam: String,
-                                 captionParam: String,
-                                 expectedGuidanceKeys: String*): Unit = {
+  def normalPageTitleWithCaption(
+    view: HtmlFormat.Appendable,
+    messageKeyPrefix: String,
+    messageKeyParam: String,
+    captionParam: String,
+    expectedGuidanceKeys: String*
+  ): Unit =
 
     "behave like a normal page" when {
 
@@ -87,7 +86,13 @@ trait ViewBehaviours extends ViewSpecBase {
         "display the correct page title with caption" in {
 
           val doc = asDocument(view)
-          assertPageTitleWithCaptionEqualsMessages(doc, s"$messageKeyPrefix.caption",  captionParam, s"$messageKeyPrefix.heading", messageKeyParam)
+          assertPageTitleWithCaptionEqualsMessages(
+            doc,
+            s"$messageKeyPrefix.caption",
+            captionParam,
+            s"$messageKeyPrefix.heading",
+            messageKeyParam
+          )
         }
 
         "display the correct guidance" in {
@@ -103,12 +108,13 @@ trait ViewBehaviours extends ViewSpecBase {
         }
       }
     }
-  }
 
-  def dynamicTitlePage(view: HtmlFormat.Appendable,
-                       messageKeyPrefix: String,
-                       messageKeyParam: String,
-                       expectedGuidanceKeys: String*): Unit = {
+  def dynamicTitlePage(
+    view: HtmlFormat.Appendable,
+    messageKeyPrefix: String,
+    messageKeyParam: String,
+    expectedGuidanceKeys: String*
+  ): Unit =
 
     "behave like a dynamic title page" when {
 
@@ -116,7 +122,7 @@ trait ViewBehaviours extends ViewSpecBase {
 
         "have the correct banner title" in {
 
-          val doc = asDocument(view)
+          val doc         = asDocument(view)
           val bannerTitle = doc.getElementsByClass("hmrc-header__service-name hmrc-header__service-name--linked")
           bannerTitle.html() mustBe messages("service.name")
         }
@@ -146,42 +152,32 @@ trait ViewBehaviours extends ViewSpecBase {
         }
       }
     }
-  }
 
-  def pageWithHint[A](form: Form[A],
-                      createView: Form[A] => HtmlFormat.Appendable,
-                      expectedHintKey: String): Unit = {
+  def pageWithHint[A](form: Form[A], createView: Form[A] => HtmlFormat.Appendable, expectedHintKey: String): Unit =
 
     "behave like a page with hint text" in {
 
       val doc = asDocument(createView(form))
       assertContainsHint(doc, "value", Some(messages(expectedHintKey)))
     }
-  }
 
-  def pageWithDynamicHint(view: HtmlFormat.Appendable,
-                          expectedHintKey: String,
-                          expectedHintParam: String): Unit = {
+  def pageWithDynamicHint(view: HtmlFormat.Appendable, expectedHintKey: String, expectedHintParam: String): Unit =
 
     "behave like a page with hint text" in {
 
       val doc = asDocument(view)
       assertContainsHint(doc, "value", Some(messages(expectedHintKey + ".hint", expectedHintParam)))
     }
-  }
 
-  def pageWithDynamicText(view: HtmlFormat.Appendable,
-                          expectedTextKey: String,
-                          expectedTextParam: String): Unit = {
+  def pageWithDynamicText(view: HtmlFormat.Appendable, expectedTextKey: String, expectedTextParam: String): Unit =
 
     "behave like a page with dynamic text" in {
 
       val doc = asDocument(view)
       assertContainsText(doc, messages(expectedTextKey, expectedTextParam))
     }
-  }
 
-  def pageWithBackLink(view: HtmlFormat.Appendable): Unit = {
+  def pageWithBackLink(view: HtmlFormat.Appendable): Unit =
 
     "behave like a page with a back link" must {
 
@@ -191,9 +187,8 @@ trait ViewBehaviours extends ViewSpecBase {
         assertRenderedById(doc, "back-link")
       }
     }
-  }
 
-  def pageWithASubmitButton(view: HtmlFormat.Appendable): Unit = {
+  def pageWithASubmitButton(view: HtmlFormat.Appendable): Unit =
 
     "behave like a page with a submit button" must {
       "have a submit button" in {
@@ -201,9 +196,8 @@ trait ViewBehaviours extends ViewSpecBase {
         assertRenderedById(doc, "submit")
       }
     }
-  }
 
-  def pageWithContinueButton(view: HtmlFormat.Appendable, url: String): Unit = {
+  def pageWithContinueButton(view: HtmlFormat.Appendable, url: String): Unit =
 
     "behave like a page with a Continue button" must {
       "have a continue button" in {
@@ -216,5 +210,5 @@ trait ViewBehaviours extends ViewSpecBase {
         )
       }
     }
-  }
+
 }

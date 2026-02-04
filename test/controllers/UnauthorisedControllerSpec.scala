@@ -39,7 +39,7 @@ import views.html.UnauthorisedView
 
 class UnauthorisedControllerSpec extends SpecBase {
   implicit val cc: MessagesControllerComponents = injector.instanceOf[MessagesControllerComponents]
-  val view: UnauthorisedView = app.injector.instanceOf[UnauthorisedView]
+  val view: UnauthorisedView                    = app.injector.instanceOf[UnauthorisedView]
 
   "UnauthorisedController" must {
 
@@ -51,4 +51,5 @@ class UnauthorisedControllerSpec extends SpecBase {
     }
 
   }
+
 }

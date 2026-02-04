@@ -24,6 +24,7 @@ class ButtonSpec extends SpecBase {
     val button = app.injector.instanceOf[views.html.components.Button]
     val result = button.apply()(messages)
 
-    result.body must include ("Continue")
+    result.body must include("Continue")
   }
+
 }

@@ -29,7 +29,7 @@ import views.html.maintain.AdministeredInUkView
 
 class AdministeredInUkControllerSpec extends SpecBase with MockitoSugar {
 
-  val formProvider = new YesNoFormProvider()
+  val formProvider        = new YesNoFormProvider()
   val form: Form[Boolean] = formProvider.withPrefix("administeredInUkYesNo")
 
   lazy val administeredInUkRoute: String = routes.AdministeredInUkController.onPageLoad().url
@@ -92,7 +92,6 @@ class AdministeredInUkControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
 
-
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
@@ -145,4 +144,5 @@ class AdministeredInUkControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
   }
+
 }

@@ -157,13 +157,13 @@ class ConstraintsSpec extends AnyWordSpec with Matchers with Constraints {
     }
 
     "return Valid when date is equal to maximum" in {
-      val today = LocalDate.now()
+      val today  = LocalDate.now()
       val result = maxDate(today, "error.max")(today)
       result mustEqual Valid
     }
 
     "return Invalid when date is after maximum" in {
-      val today = LocalDate.now()
+      val today  = LocalDate.now()
       val result = maxDate(today, "error.max")(today.plusDays(1))
       result mustEqual Invalid("error.max")
     }
@@ -172,19 +172,19 @@ class ConstraintsSpec extends AnyWordSpec with Matchers with Constraints {
   "minDate" must {
 
     "return Valid when date is after minimum" in {
-      val today = LocalDate.now()
+      val today  = LocalDate.now()
       val result = minDate(today.minusDays(1), "error.min")(today)
       result mustEqual Valid
     }
 
     "return Valid when date is equal to minimum" in {
-      val today = LocalDate.now()
+      val today  = LocalDate.now()
       val result = minDate(today, "error.min")(today)
       result mustEqual Valid
     }
 
     "return Invalid when date is before minimum" in {
-      val today = LocalDate.now()
+      val today  = LocalDate.now()
       val result = minDate(today, "error.min")(today.minusDays(1))
       result mustEqual Invalid("error.min")
     }
@@ -220,4 +220,5 @@ class ConstraintsSpec extends AnyWordSpec with Matchers with Constraints {
       result mustEqual Invalid("error.nonEmpty", "value")
     }
   }
+
 }

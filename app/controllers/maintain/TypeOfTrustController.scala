@@ -31,43 +31,38 @@ import views.html.maintain.TypeOfTrustView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class TypeOfTrustController @Inject()(
-                                       override val messagesApi: MessagesApi,
-                                       standardActionSets: StandardActionSets,
-                                       repository: PlaybackRepository,
-                                       navigator: Navigator,
-                                       formProvider: EnumFormProvider,
-                                       val controllerComponents: MessagesControllerComponents,
-                                       view: TypeOfTrustView
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class TypeOfTrustController @Inject() (
+  override val messagesApi: MessagesApi,
+  standardActionSets: StandardActionSets,
+  repository: PlaybackRepository,
+  navigator: Navigator,
+  formProvider: EnumFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: TypeOfTrustView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport {
 
   private val form: Form[TypeOfTrust] = formProvider("typeOfTrust")
 
-  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForIdentifier {
-    implicit request =>
-      val preparedForm = request.userAnswers.get(TypeOfTrustPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
+  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForIdentifier { implicit request =>
+    val preparedForm = request.userAnswers.get(TypeOfTrustPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      Ok(view(preparedForm))
+    Ok(view(preparedForm))
   }
 
-  def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForIdentifier.async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors))),
-
-        value => {
+  def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForIdentifier.async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors))),
+        value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(TypeOfTrustPage, value))
-            _ <- repository.set(updatedAnswers)
-          } yield {
-            Redirect(navigator.nextPage(TypeOfTrustPage, updatedAnswers))
-          }
-        }
+            _              <- repository.set(updatedAnswers)
+          } yield Redirect(navigator.nextPage(TypeOfTrustPage, updatedAnswers))
       )
   }
 

@@ -28,7 +28,7 @@ import views.html.maintain.EfrbsYesNoView
 
 class EfrbsYesNoControllerSpec extends SpecBase {
 
-  val formProvider = new YesNoFormProvider()
+  val formProvider        = new YesNoFormProvider()
   val form: Form[Boolean] = formProvider.withPrefix("efrbsYesNo")
 
   lazy val efrbsYesNoRoute: String = routes.EfrbsYesNoController.onPageLoad().url
@@ -93,7 +93,6 @@ class EfrbsYesNoControllerSpec extends SpecBase {
       application.stop()
     }
 
-
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
@@ -146,4 +145,5 @@ class EfrbsYesNoControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

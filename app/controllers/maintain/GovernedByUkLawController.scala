@@ -30,44 +30,39 @@ import views.html.maintain.GovernedByUkLawView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class GovernedByUkLawController @Inject()(
-                                           override val messagesApi: MessagesApi,
-                                           yesNoFormProvider: YesNoFormProvider,
-                                           repository: PlaybackRepository,
-                                           navigator: Navigator,
-                                           actions: StandardActionSets,
-                                           val controllerComponents: MessagesControllerComponents,
-                                           view: GovernedByUkLawView
-                                         )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class GovernedByUkLawController @Inject() (
+  override val messagesApi: MessagesApi,
+  yesNoFormProvider: YesNoFormProvider,
+  repository: PlaybackRepository,
+  navigator: Navigator,
+  actions: StandardActionSets,
+  val controllerComponents: MessagesControllerComponents,
+  view: GovernedByUkLawView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport {
 
   private val form: Form[Boolean] = yesNoFormProvider.withPrefix("governedByUkLawYesNo")
 
-  def onPageLoad(): Action[AnyContent] = actions.identifiedUserWithData {
-    implicit request =>
+  def onPageLoad(): Action[AnyContent] = actions.identifiedUserWithData { implicit request =>
+    val preparedForm = request.userAnswers.get(GovernedByUkLawPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(GovernedByUkLawPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm))
+    Ok(view(preparedForm))
   }
 
-  def onSubmit(): Action[AnyContent] = actions.identifiedUserWithData.async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors))),
-
-        value => {
+  def onSubmit(): Action[AnyContent] = actions.identifiedUserWithData.async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors))),
+        value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(GovernedByUkLawPage, value))
-            _ <- repository.set(updatedAnswers)
-          } yield {
-            Redirect(navigator.nextPage(GovernedByUkLawPage, updatedAnswers))
-          }
-        }
+            _              <- repository.set(updatedAnswers)
+          } yield Redirect(navigator.nextPage(GovernedByUkLawPage, updatedAnswers))
       )
   }
+
 }

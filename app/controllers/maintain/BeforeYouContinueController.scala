@@ -22,13 +22,14 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import views.html.maintain.BeforeYouContinueView
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 
-class BeforeYouContinueController @Inject()(
-                                             override val messagesApi: MessagesApi,
-                                             val controllerComponents: MessagesControllerComponents,
-                                             view: BeforeYouContinueView
-                                           ) extends FrontendBaseController with I18nSupport {
+class BeforeYouContinueController @Inject() (
+  override val messagesApi: MessagesApi,
+  val controllerComponents: MessagesControllerComponents,
+  view: BeforeYouContinueView
+) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(): Action[AnyContent] = Action { implicit request =>
     Ok(view())
   }
+
 }

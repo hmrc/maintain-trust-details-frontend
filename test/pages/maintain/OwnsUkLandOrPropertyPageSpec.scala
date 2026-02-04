@@ -28,4 +28,5 @@ class OwnsUkLandOrPropertyPageSpec extends PageBehaviours {
 
     beRemovable[Boolean](OwnsUkLandOrPropertyPage)
   }
+
 }

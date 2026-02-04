@@ -31,43 +31,39 @@ import views.html.maintain.WhereTrusteesBasedView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class WhereTrusteesBasedController @Inject()(
-                                              override val messagesApi: MessagesApi,
-                                              standardActionSets: StandardActionSets,
-                                              repository: PlaybackRepository,
-                                              navigator: Navigator,
-                                              formProvider: EnumFormProvider,
-                                              val controllerComponents: MessagesControllerComponents,
-                                              view: WhereTrusteesBasedView
-                                            )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class WhereTrusteesBasedController @Inject() (
+  override val messagesApi: MessagesApi,
+  standardActionSets: StandardActionSets,
+  repository: PlaybackRepository,
+  navigator: Navigator,
+  formProvider: EnumFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: WhereTrusteesBasedView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController with I18nSupport {
 
   private val form: Form[TrusteesBased] = formProvider("whereTrusteesBased")
 
-  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForIdentifier {
-    implicit request =>
-      val preparedForm = request.userAnswers.get(WhereTrusteesBasedPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
+  def onPageLoad(): Action[AnyContent] = standardActionSets.verifiedForIdentifier { implicit request =>
+    val preparedForm = request.userAnswers.get(WhereTrusteesBasedPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      Ok(view(preparedForm))
+    Ok(view(preparedForm))
   }
 
-  def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForIdentifier.async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors))),
-
-        value => {
+  def onSubmit(): Action[AnyContent] = standardActionSets.verifiedForIdentifier.async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors))),
+        value =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(WhereTrusteesBasedPage, value))
-            _ <- repository.set(updatedAnswers)
-          } yield {
-            Redirect(navigator.nextPage(WhereTrusteesBasedPage, updatedAnswers))
-          }
-        }
+            _              <- repository.set(updatedAnswers)
+          } yield Redirect(navigator.nextPage(WhereTrusteesBasedPage, updatedAnswers))
       )
   }
+
 }

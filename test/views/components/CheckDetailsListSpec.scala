@@ -24,11 +24,17 @@ class CheckDetailsListSpec extends SpecBase {
 
   "render as a summary list" in {
     val checkDetailsRow = app.injector.instanceOf[views.html.components.CheckDetailsList]
-    val ansRow = AnswerSection(
+    val ansRow          = AnswerSection(
       headingKey = None,
       rows = Seq(
-        AnswerRow(messages("startDate.checkYourAnswersLabel"), Html("1 January 2000"), canEdit = false, changeUrl = Some("/change-url")),
-        AnswerRow(messages("governedByUkLawYesNo.checkYourAnswersLabel"), Html("No"), Some("/change-url"))),
+        AnswerRow(
+          messages("startDate.checkYourAnswersLabel"),
+          Html("1 January 2000"),
+          canEdit = false,
+          changeUrl = Some("/change-url")
+        ),
+        AnswerRow(messages("governedByUkLawYesNo.checkYourAnswersLabel"), Html("No"), Some("/change-url"))
+      ),
       sectionKey = None
     )
 
@@ -36,4 +42,5 @@ class CheckDetailsListSpec extends SpecBase {
     result.body must include("govuk-summary-list__value")
     result.body must include("govuk-link")
   }
+
 }

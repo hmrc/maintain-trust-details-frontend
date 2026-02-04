@@ -28,4 +28,5 @@ class AdministrationCountryPageSpec extends PageBehaviours {
 
     beRemovable[String](AdministrationCountryPage)
   }
+
 }

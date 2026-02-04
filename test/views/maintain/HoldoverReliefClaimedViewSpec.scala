@@ -39,7 +39,9 @@ class HoldoverReliefClaimedViewSpec extends YesNoViewBehaviours {
     behave like normalPage(
       view = applyView(form),
       messageKeyPrefix = messageKeyPrefix,
-      expectedGuidanceKeys = "paragraph1", "bullet1", "bullet2"
+      expectedGuidanceKeys = "paragraph1",
+      "bullet1",
+      "bullet2"
     )
 
     behave like pageWithBackLink(applyView(form))
@@ -54,4 +56,5 @@ class HoldoverReliefClaimedViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

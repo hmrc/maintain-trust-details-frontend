@@ -46,8 +46,12 @@ class TrustsStoreServiceSpec extends SpecBase {
 
       whenReady(result) { res =>
         res.status mustBe OK
-        verify(mockConnector).updateTaskStatus(ArgumentMatchers.eq("identifier"), ArgumentMatchers.eq(Completed))(any(), any())
+        verify(mockConnector).updateTaskStatus(ArgumentMatchers.eq("identifier"), ArgumentMatchers.eq(Completed))(
+          any(),
+          any()
+        )
       }
     }
   }
+
 }

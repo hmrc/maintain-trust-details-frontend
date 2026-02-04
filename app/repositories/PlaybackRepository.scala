@@ -31,34 +31,34 @@ import scala.concurrent.duration.SECONDS
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class PlaybackRepository @Inject()(
-                                    val mongo: MongoComponent,
-                                    val config: AppConfig,
-                                    implicit val ec: ExecutionContext
-                                  )
-  extends PlayMongoRepository[UserAnswers](
-    mongoComponent = mongo,
-    collectionName = "user-answers",
-    domainFormat = UserAnswers.formats,
-    indexes = Seq(
-      IndexModel(
-        ascending("updatedAt"),
-        IndexOptions()
-          .unique(false)
-          .name("user-answers-updated-at-index")
-          .expireAfter(config.mongoPlaybackTTL, SECONDS)
+class PlaybackRepository @Inject() (
+  val mongo: MongoComponent,
+  val config: AppConfig,
+  implicit val ec: ExecutionContext
+) extends PlayMongoRepository[UserAnswers](
+      mongoComponent = mongo,
+      collectionName = "user-answers",
+      domainFormat = UserAnswers.formats,
+      indexes = Seq(
+        IndexModel(
+          ascending("updatedAt"),
+          IndexOptions()
+            .unique(false)
+            .name("user-answers-updated-at-index")
+            .expireAfter(config.mongoPlaybackTTL, SECONDS)
+        ),
+        IndexModel(
+          ascending("newId"),
+          IndexOptions()
+            .unique(false)
+            .name("internal-id-and-utr-and-sessionId-compound-index")
+        )
       ),
-      IndexModel(
-        ascending("newId"),
-        IndexOptions()
-          .unique(false)
-          .name("internal-id-and-utr-and-sessionId-compound-index")
-      )
-    ),
-    replaceIndexes = config.mongoReplaceIndexes
-  ){
+      replaceIndexes = config.mongoReplaceIndexes
+    ) {
 
-  private def selector(internalId: String, identifier: String, sessionId: String): Bson = Filters.eq("newId", s"$internalId-$identifier-$sessionId")
+  private def selector(internalId: String, identifier: String, sessionId: String): Bson =
+    Filters.eq("newId", s"$internalId-$identifier-$sessionId")
 
   def get(internalId: String, identifier: String, sessionId: String): Future[Option[UserAnswers]] = {
     val modifier = Updates.set("updatedAt", LocalDateTime.now())
@@ -74,9 +74,14 @@ class PlaybackRepository @Inject()(
     val updatedObject = userAnswers.copy(updatedAt = LocalDateTime.now)
 
     val updateOptions = ReplaceOptions().upsert(true)
-    collection.replaceOne(selector(userAnswers.internalId, userAnswers.identifier,  userAnswers.sessionId),
-      updatedObject,
-      updateOptions
-    ).headOption().map(_.exists(_.wasAcknowledged()))
+    collection
+      .replaceOne(
+        selector(userAnswers.internalId, userAnswers.identifier, userAnswers.sessionId),
+        updatedObject,
+        updateOptions
+      )
+      .headOption()
+      .map(_.exists(_.wasAcknowledged()))
   }
+
 }

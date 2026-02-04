@@ -7,7 +7,7 @@ ThisBuild / majorVersion := 0
 
 lazy val microservice = Project(appName, file("."))
   .enablePlugins(play.sbt.PlayScala, SbtDistributablesPlugin)
-  .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
+  .disablePlugins(JUnitXmlReportPlugin) // Required to prevent https://github.com/scalatest/scalatest/issues/1427
   .settings(
     CodeCoverageSettings(),
     inConfig(Test)(testSettings),
@@ -26,12 +26,14 @@ lazy val microservice = Project(appName, file("."))
     // concatenate js
     Concat.groups := Seq(
       "javascripts/maintaintrustdetailsfrontend-app.js" ->
-        group(Seq(
-          "javascripts/maintaintrustdetailsfrontend.js",
-          "javascripts/autocomplete.js",
-          "javascripts/libraries/location-autocomplete.min.js",
-          "javascripts/iebacklink.js"
-        ))
+        group(
+          Seq(
+            "javascripts/maintaintrustdetailsfrontend.js",
+            "javascripts/autocomplete.js",
+            "javascripts/libraries/location-autocomplete.min.js",
+            "javascripts/iebacklink.js"
+          )
+        )
     ),
     // prevent removal of unused code which generates warning errors due to use of third-party libs
     uglifyCompressOptions := Seq("unused=false", "dead_code=false"),
@@ -59,3 +61,5 @@ lazy val it = project
   .enablePlugins(PlayScala)
   .dependsOn(microservice % "test->test")
   .settings(DefaultBuildSettings.itSettings())
+
+addCommandAlias("scalafmtAll", "all scalafmtSbt scalafmt Test/scalafmt it/Test/scalafmt")

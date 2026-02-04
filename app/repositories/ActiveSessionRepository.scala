@@ -31,32 +31,31 @@ import scala.concurrent.duration.SECONDS
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ActiveSessionRepository @Inject()(
-                                         val mongo: MongoComponent,
-                                         val config: AppConfig,
-                                         implicit val ec: ExecutionContext
-                                       )
-  extends PlayMongoRepository[ActiveSession](
-    mongoComponent = mongo,
-    collectionName = "session",
-    domainFormat = ActiveSession.formats,
-    indexes = Seq(
-      IndexModel(
-        ascending("updatedAt"),
-        IndexOptions()
-          .unique(false)
-          .name("session-updated-at-index")
-          .expireAfter(config.mongoSessionTTL, SECONDS)
+class ActiveSessionRepository @Inject() (
+  val mongo: MongoComponent,
+  val config: AppConfig,
+  implicit val ec: ExecutionContext
+) extends PlayMongoRepository[ActiveSession](
+      mongoComponent = mongo,
+      collectionName = "session",
+      domainFormat = ActiveSession.formats,
+      indexes = Seq(
+        IndexModel(
+          ascending("updatedAt"),
+          IndexOptions()
+            .unique(false)
+            .name("session-updated-at-index")
+            .expireAfter(config.mongoSessionTTL, SECONDS)
+        ),
+        IndexModel(
+          ascending("identifier"),
+          IndexOptions()
+            .unique(false)
+            .name("identifier-index")
+        )
       ),
-      IndexModel(
-        ascending("identifier"),
-        IndexOptions()
-          .unique(false)
-          .name("identifier-index")
-      )
-    ),
-    replaceIndexes = config.mongoReplaceIndexes
-  ) {
+      replaceIndexes = config.mongoReplaceIndexes
+    ) {
 
   private def selector(internalId: String): Bson = Filters.eq("internalId", internalId)
 
@@ -75,9 +74,10 @@ class ActiveSessionRepository @Inject()(
     val updatedObject = session.copy(updatedAt = LocalDateTime.now)
     val updateOptions = ReplaceOptions().upsert(true)
 
-    collection.replaceOne(
-      selector(session.internalId),
-      updatedObject,
-      updateOptions).headOption().map(_.exists(_.wasAcknowledged()))
+    collection
+      .replaceOne(selector(session.internalId), updatedObject, updateOptions)
+      .headOption()
+      .map(_.exists(_.wasAcknowledged()))
   }
+
 }

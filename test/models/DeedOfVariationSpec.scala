@@ -21,28 +21,28 @@ import models.DeedOfVariation._
 import play.api.libs.json.{JsNull, JsString, Json}
 import viewmodels.RadioOption
 
-class DeedOfVariationSpec extends SpecBase{
+class DeedOfVariationSpec extends SpecBase {
 
   "DeedOfVariation" must {
 
     "serialise and deserailise" when {
 
       "Previously there was only an absolute interest under the will" in {
-        val json = JsString("Previously there was only an absolute interest under the will")
+        val json            = JsString("Previously there was only an absolute interest under the will")
         val deedOfVariation = json.as[DeedOfVariation]
         deedOfVariation mustEqual PreviouslyAbsoluteInterestUnderWill
         Json.toJson(deedOfVariation) mustEqual json
       }
 
       "Replaced the will trust" in {
-        val json = JsString("Replaced the will trust")
+        val json            = JsString("Replaced the will trust")
         val deedOfVariation = json.as[DeedOfVariation]
         deedOfVariation mustEqual ReplacedWillTrust
         Json.toJson(deedOfVariation) mustEqual json
       }
 
       "Addition to the will trust" in {
-        val json = JsString("Addition to the will trust")
+        val json            = JsString("Addition to the will trust")
         val deedOfVariation = json.as[DeedOfVariation]
         deedOfVariation mustEqual AdditionToWillTrust
         Json.toJson(deedOfVariation) mustEqual json
@@ -62,4 +62,5 @@ class DeedOfVariationSpec extends SpecBase{
       )
     }
   }
+
 }
