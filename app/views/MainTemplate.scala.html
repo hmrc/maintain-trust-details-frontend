@@ -18,17 +18,14 @@
 @import views.ViewUtils._
 @import uk.gov.hmrc.hmrcfrontend.views.viewmodels.hmrcstandardpage._
 @import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcStandardPage
-@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcAccessibleAutocompleteCss
-@import uk.gov.hmrc.hmrcfrontend.views.html.helpers.HmrcAccessibleAutocompleteJavascript
+@import views.html.helper.CSPNonce
 
 @this(
     appConfig: AppConfig,
     hmrcStandardPage: HmrcStandardPage,
     hmrcTimeoutDialogHelper: HmrcTimeoutDialogHelper,
     govukBackLink: GovukBackLink,
-    hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper,
-    autocompleteCss: HmrcAccessibleAutocompleteCss,
-    autocompleteJavascript: HmrcAccessibleAutocompleteJavascript
+    hmrcReportTechnicalIssueHelper: HmrcReportTechnicalIssueHelper
 )
 
 @(
@@ -55,7 +52,7 @@
             keepAliveButtonText = Some(messages("timeout.keep-alive-button"))
         )
     }
-    @autocompleteCss()
+    <link @{CSPNonce.attr} href='@controllers.routes.Assets.versioned("stylesheets/application.css")' media="all" rel="stylesheet" type="text/css" />
 }
 
 @beforeContentBlock = {
