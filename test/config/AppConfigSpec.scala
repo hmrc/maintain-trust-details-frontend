@@ -70,6 +70,10 @@ class AppConfigSpec extends SpecBase {
       appConfig.helplineUrl mustBe "https://www.gov.uk/government/organisations/hm-revenue-customs/contact/trusts"
     }
 
+    "have the correct logout" in {
+      appConfig.logoutUrl mustBe "http://localhost:9514/feedback/trusts?useServiceNavigation"
+    }
+
   }
 
 }

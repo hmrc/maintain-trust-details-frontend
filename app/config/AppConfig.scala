@@ -36,9 +36,8 @@ class AppConfig @Inject() (
   val welshLanguageSupportEnabled: Boolean =
     config.getOptional[Boolean]("features.welsh-language-support").getOrElse(false)
 
-  val en: String            = "en"
-  val cy: String            = "cy"
-  val defaultLanguage: Lang = Lang(en)
+  val en: String = "en"
+  val cy: String = "cy"
 
   def languageMap: Map[String, Lang] = Map(
     "english" -> Lang(en),
@@ -54,7 +53,7 @@ class AppConfig @Inject() (
 
   lazy val loginUrl: String                  = config.get[String]("urls.login")
   lazy val loginContinueUrl: String          = config.get[String]("urls.loginContinue")
-  lazy val logoutUrl: String                 = config.get[String]("urls.logout")
+  lazy val logoutUrl: String                 = s"${config.get[String]("urls.logout")}?useServiceNavigation"
   lazy val maintainATrustOverviewUrl: String = config.get[String]("urls.maintainATrustOverview")
 
   lazy val trustsUrl: String = servicesConfig.baseUrl("trusts")
