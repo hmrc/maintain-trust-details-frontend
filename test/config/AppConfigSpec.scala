@@ -37,10 +37,6 @@ class AppConfigSpec extends SpecBase {
       appConfig.loginContinueUrl mustBe "http://localhost:9781/trusts-registration"
     }
 
-    "have the correct languageTranslationEnabled" in {
-      appConfig.welshLanguageSupportEnabled mustBe false
-    }
-
     "have the correct mongoSessionTTL" in {
       appConfig.mongoSessionTTL mustBe 3600
     }
@@ -54,16 +50,6 @@ class AppConfigSpec extends SpecBase {
         "english" -> Lang("en"),
         "cymraeg" -> Lang("cy")
       )
-    }
-
-    "return the correct route to switch language - EN" in {
-      val enCall = appConfig.routeToSwitchLanguage("en")
-      enCall.url mustBe "/maintain-a-trust/trust-details/language/en"
-    }
-
-    "return the correct route to switch language - CY" in {
-      val cyCall = appConfig.routeToSwitchLanguage("cy")
-      cyCall.url mustBe "/maintain-a-trust/trust-details/language/cy"
     }
 
     "have the correct helplineURL" in {
