@@ -16,10 +16,8 @@
 
 package config
 
-import controllers.routes
 import play.api.Configuration
 import play.api.i18n.{Lang, Messages}
-import play.api.mvc.Call
 import uk.gov.hmrc.hmrcfrontend.config.ContactFrontendConfig
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
@@ -33,20 +31,13 @@ class AppConfig @Inject() (
   contactFrontendConfig: ContactFrontendConfig
 ) {
 
-  val welshLanguageSupportEnabled: Boolean =
-    config.getOptional[Boolean]("features.welsh-language-support").getOrElse(false)
-
-  val en: String            = "en"
-  val cy: String            = "cy"
-  val defaultLanguage: Lang = Lang(en)
+  val en: String = "en"
+  val cy: String = "cy"
 
   def languageMap: Map[String, Lang] = Map(
     "english" -> Lang(en),
     "cymraeg" -> Lang(cy)
   )
-
-  def routeToSwitchLanguage: String => Call =
-    (lang: String) => routes.LanguageSwitchController.switchToLanguage(lang)
 
   val appName: String = config.get[String]("appName")
 
@@ -54,7 +45,7 @@ class AppConfig @Inject() (
 
   lazy val loginUrl: String                  = config.get[String]("urls.login")
   lazy val loginContinueUrl: String          = config.get[String]("urls.loginContinue")
-  lazy val logoutUrl: String                 = config.get[String]("urls.logout")
+  lazy val logoutUrl: String                 = s"${config.get[String]("urls.logout")}?useServiceNavigation"
   lazy val maintainATrustOverviewUrl: String = config.get[String]("urls.maintainATrustOverview")
 
   lazy val trustsUrl: String = servicesConfig.baseUrl("trusts")
@@ -65,9 +56,6 @@ class AppConfig @Inject() (
   lazy val logoutAudit: Boolean = config.get[Boolean]("features.auditing.logout")
 
   lazy val trustsAuthUrl: String = servicesConfig.baseUrl("trusts-auth")
-
-  val betaFeedbackUrl =
-    s"${contactFrontendConfig.baseUrl.get}/contact/beta-feedback?service=${contactFrontendConfig.serviceId.get}"
 
   lazy val countdownLength: Int = config.get[Int]("timeout.countdown")
   lazy val timeoutLength: Int   = config.get[Int]("timeout.length")

@@ -25,20 +25,12 @@ class AppConfigSpec extends SpecBase {
 
   "FrontendAppConfig" must {
 
-    "have the correct betaFeedbackUrl" in {
-      appConfig.betaFeedbackUrl mustBe "http://localhost:9250/contact/beta-feedback?service=trusts"
-    }
-
     "have the correct loginUrl" in {
       appConfig.loginUrl mustBe "http://localhost:9949/auth-login-stub/gg-sign-in"
     }
 
     "have the correct loginContinueUrl" in {
       appConfig.loginContinueUrl mustBe "http://localhost:9781/trusts-registration"
-    }
-
-    "have the correct languageTranslationEnabled" in {
-      appConfig.welshLanguageSupportEnabled mustBe false
     }
 
     "have the correct mongoSessionTTL" in {
@@ -56,18 +48,12 @@ class AppConfigSpec extends SpecBase {
       )
     }
 
-    "return the correct route to switch language - EN" in {
-      val enCall = appConfig.routeToSwitchLanguage("en")
-      enCall.url mustBe "/maintain-a-trust/trust-details/language/en"
-    }
-
-    "return the correct route to switch language - CY" in {
-      val cyCall = appConfig.routeToSwitchLanguage("cy")
-      cyCall.url mustBe "/maintain-a-trust/trust-details/language/cy"
-    }
-
     "have the correct helplineURL" in {
       appConfig.helplineUrl mustBe "https://www.gov.uk/government/organisations/hm-revenue-customs/contact/trusts"
+    }
+
+    "have the correct logout" in {
+      appConfig.logoutUrl mustBe "http://localhost:9514/feedback/trusts?useServiceNavigation"
     }
 
   }
