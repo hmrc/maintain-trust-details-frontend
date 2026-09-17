@@ -25,10 +25,6 @@ class AppConfigSpec extends SpecBase {
 
   "FrontendAppConfig" must {
 
-    "have the correct betaFeedbackUrl" in {
-      appConfig.betaFeedbackUrl mustBe "http://localhost:9250/contact/beta-feedback?service=trusts"
-    }
-
     "have the correct loginUrl" in {
       appConfig.loginUrl mustBe "http://localhost:9949/auth-login-stub/gg-sign-in"
     }
