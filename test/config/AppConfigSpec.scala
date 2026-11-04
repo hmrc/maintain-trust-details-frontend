@@ -53,7 +53,7 @@ class AppConfigSpec extends SpecBase {
     }
 
     "have the correct logout" in {
-      appConfig.logoutUrl mustBe "http://localhost:9514/feedback/trusts?useServiceNavigation"
+      appConfig.logoutUrl mustBe "/gg/sign-out"
     }
 
   }
